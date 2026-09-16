@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1A1618">
+<title>Descuentos y Ajustes — WIN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{
+  --orange:#F26522; --orange-d:#D9541A; --orange-l:#FFF1EA;
+  --ink:#1A1618; --ink-2:#4A4346; --ink-3:#8A8285;
+  --bg:#F2F3F5; --surface:#FFFFFF; --line:#E6E8EB; --line-2:#F0F1F3;
+  --ok:#0E8A5F; --ok-bg:#E9F7F1;
+  --warn:#A8620B; --warn-bg:#FFF6E8;
+  --err:#C0281C; --err-bg:#FDEDEB;
+  --r-s:10px; --r-m:13px; --r-l:18px;
+  --sh-1:0 1px 2px rgba(26,22,24,.05);
+  --sh-2:0 2px 8px rgba(26,22,24,.06),0 10px 24px rgba(26,22,24,.06);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;height:100%}
+body{
+  background:#E8EAED;color:var(--ink);
+  font-family:'Inter',-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased;
+}
+button,input,select,textarea{font-family:inherit}
+
+.phone{max-width:460px;margin:0 auto;background:var(--bg);height:100dvh;overflow:hidden;display:flex;flex-direction:column;position:relative}
+@media(min-width:500px){.phone{box-shadow:0 0 0 1px var(--line),0 20px 60px rgba(26,22,24,.14)}}
+
+/* HEADER compacto */
+.top{background:var(--ink);color:#fff;flex:none;padding:calc(9px + env(safe-area-inset-top)) 14px 9px;display:flex;align-items:center;gap:10px}
+.logo{width:30px;height:30px;border-radius:9px;background:var(--orange);display:grid;place-items:center;flex:none;font-weight:800;font-size:11.5px;color:#fff}
+.top .t{flex:1;min-width:0}
+.top .t h1{margin:0;font-size:13px;font-weight:700;letter-spacing:-.2px;line-height:1.2}
+.top .t p{margin:0;font-size:9.5px;color:#9A9295;letter-spacing:.4px;text-transform:uppercase;font-weight:500}
+.lockbtn{width:34px;height:34px;border-radius:10px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#fff;display:grid;place-items:center;cursor:pointer;flex:none}
+.lockbtn:active{background:var(--orange);border-color:var(--orange)}
+.lockbtn svg{width:15px;height:15px}
+
+main{flex:1;overflow-y:auto;padding:12px 12px 16px;-webkit-overflow-scrolling:touch}
+.panel{display:none;animation:fade .2s ease}
+.panel.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+/* TAB BAR */
+.tabbar{flex:none;z-index:60;background:rgba(255,255,255,.95);backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+.tabbar button{border:0;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 2px;font-size:9.5px;font-weight:700;color:var(--ink-3)}
+.tabbar button svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.tabbar button.on{color:var(--orange-d)}
+.tabbar button.on svg{stroke-width:2.2}
+
+/* RESULTADO compacto */
+.res{background:var(--ink);border-radius:var(--r-l);padding:14px;color:#fff;box-shadow:var(--sh-2);margin-bottom:10px}
+.res .hd{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.res .cap{font-size:9.5px;letter-spacing:1.1px;text-transform:uppercase;color:#948C8F;font-weight:700}
+.res .big{font-size:33px;font-weight:800;letter-spacing:-1.3px;line-height:1;margin:3px 0 0;color:var(--orange);font-variant-numeric:tabular-nums}
+.res .big.zero{color:#6E6669}
+.res .fin{text-align:right;flex:none}
+.res .fin .k{font-size:9.5px;letter-spacing:.6px;text-transform:uppercase;color:#948C8F;font-weight:700}
+.res .fin .v{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.4px;margin-top:3px}
+.res .fx{font-size:10.5px;color:#948C8F;margin-top:6px;font-variant-numeric:tabular-nums}
+.res .rows{border-top:1px solid rgba(255,255,255,.13);margin-top:10px;padding-top:9px;display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}
+.res .rw{display:flex;justify-content:space-between;gap:8px;font-size:11.5px;min-width:0}
+.res .rw span:first-child{color:#948C8F;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.res .rw span:last-child{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* CARD */
+.card{background:var(--surface);border-radius:var(--r-l);box-shadow:var(--sh-2);padding:13px;margin-bottom:10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.span2{grid-column:1/-1}
+
+/* CAMPOS */
+.field{min-width:0}
+.field > label{display:flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--ink-3);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.field > label .pen{color:var(--orange);font-size:9.5px}
+.ctl{width:100%;height:42px;border:1.5px solid var(--line);border-radius:var(--r-m);padding:0 12px;font-size:16px;font-weight:600;color:var(--ink);background:var(--surface);transition:border-color .15s,box-shadow .15s}
+.ctl:focus{outline:0;border-color:var(--orange);box-shadow:0 0 0 3px rgba(242,101,34,.14)}
+select.ctl{appearance:none;-webkit-appearance:none;padding-right:32px;
+  background-image:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238A8285' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 11px center;background-size:15px}
+.money{position:relative}
+.money .cur{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-weight:700;color:var(--ink-3);font-size:13px;pointer-events:none}
+.money input{padding-left:36px;font-size:17px;font-weight:800}
+.money.edit input{background:#FFFDF6;border-color:#EBD6AE}
+.money.edit input:focus{border-color:var(--orange);background:#fff}
+.seg{display:flex;gap:3px;background:var(--line-2);padding:3px;border-radius:var(--r-m);height:42px}
+.seg button{flex:1;min-width:0;border:0;border-radius:var(--r-s);background:transparent;cursor:pointer;font-size:11px;font-weight:700;color:var(--ink-2);transition:.15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 4px}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(26,22,24,.14)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:8px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);font-size:12px;font-weight:700;color:var(--ink-2);cursor:pointer;transition:.15s}
+.chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.chips.mini .chip{padding:7px 0;flex:1 0 calc(20% - 6px);text-align:center;font-size:11.5px}
+.stepper{display:flex;align-items:center;border:1.5px solid var(--line);border-radius:var(--r-m);overflow:hidden;height:42px}
+.stepper button{width:44px;height:100%;border:0;background:var(--line-2);color:var(--ink);font-size:19px;font-weight:700;cursor:pointer;flex:none}
+.stepper button:active{background:var(--orange);color:#fff}
+.stepper input{flex:1;min-width:0;height:100%;border:0;text-align:center;font-size:17px;font-weight:800;background:var(--surface);color:var(--ink)}
+.stepper input:focus{outline:0}
+
+/* AVISOS */
+.msg{border-radius:var(--r-m);padding:9px 11px;font-size:11.5px;font-weight:500;display:flex;gap:8px;align-items:flex-start;margin-bottom:10px;line-height:1.4}
+.msg .ic{flex:none;font-weight:800}
+.msg b{font-weight:800}
+.m-ok{background:var(--ok-bg);color:var(--ok)}
+.m-warn{background:var(--warn-bg);color:var(--warn)}
+.m-err{background:var(--err-bg);color:var(--err)}
+.msg ul{margin:5px 0 0;padding-left:15px;font-weight:400}
+
+/* NOTA COLAPSABLE */
+.tip{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);margin-bottom:10px;overflow:hidden}
+.tip>summary{padding:10px 12px;font-size:11.5px;font-weight:700;color:var(--ink-2);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tip>summary::-webkit-details-marker{display:none}
+.tip>summary::after{content:"";width:7px;height:7px;border-right:2px solid var(--ink-3);border-bottom:2px solid var(--ink-3);transform:rotate(45deg);flex:none;margin-right:3px}
+.tip[open]>summary::after{transform:rotate(-135deg)}
+.tip .tc{padding:0 12px 12px;font-size:11.5px;color:var(--ink-2);line-height:1.5}
+.tip .tc p{margin:0 0 7px}.tip .tc p:last-child{margin:0}
+.tip b{color:var(--orange-d)}
+.hint{font-size:10.5px;color:var(--ink-3);margin-top:5px}
+
+/* BOTONES */
+.btn{width:100%;height:46px;border:0;border-radius:var(--r-m);font-size:13.5px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
+.btn-p{background:var(--orange);color:#fff;box-shadow:0 4px 12px rgba(242,101,34,.26)}
+.btn-p:active{background:var(--orange-d)}
+.btn-o{background:var(--surface);color:var(--ink);border:1.5px solid var(--line)}
+
+/* PLANTILLA */
+.pre{width:100%;min-height:112px;border:1.5px solid var(--line);border-radius:var(--r-m);padding:11px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px;line-height:1.55;background:#FAFBFC;color:var(--ink-2);resize:vertical}
+.pre:focus{outline:0;border-color:var(--orange)}
+.done{font-size:11.5px;color:var(--ok);font-weight:700;text-align:center;margin-top:7px;min-height:15px}
+.pill{display:inline-flex;align-items:center;background:var(--orange-l);color:var(--orange-d);border-radius:999px;padding:4px 10px;font-size:11px;font-weight:800}
+
+/* MODAL */
+.ov{position:fixed;inset:0;background:rgba(26,22,24,.62);display:none;z-index:100;overflow:auto}
+.ov.on{display:block}
+.sheet{background:var(--bg);max-width:460px;margin:0 auto;min-height:100dvh}
+.sheet .sh{background:var(--ink);color:#fff;padding:calc(13px + env(safe-area-inset-top)) 15px 13px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
+.sheet .sh h3{margin:0;font-size:12px;letter-spacing:.9px;text-transform:uppercase;font-weight:700}
+.sheet .sh button{background:none;border:0;color:#fff;font-size:26px;cursor:pointer;line-height:1;padding:0 4px}
+.sheet .sb{padding:14px 12px calc(36px + env(safe-area-inset-bottom))}
+.gate{text-align:center;padding:34px 10px}
+.gate .ring{width:68px;height:68px;border-radius:50%;background:var(--orange-l);display:grid;place-items:center;margin:0 auto 14px}
+.gate .ring svg{width:27px;height:27px;stroke:var(--orange-d);fill:none;stroke-width:1.9;stroke-linecap:round}
+.gate h4{margin:0 0 4px;font-size:16px;font-weight:800}
+.gate p{margin:0 0 18px;font-size:12px;color:var(--ink-3)}
+.gate input{width:100%;height:48px;border:1.5px solid var(--line);border-radius:var(--r-m);text-align:center;font-size:16px;letter-spacing:3px;margin-bottom:10px;background:#fff}
+.gate input:focus{outline:0;border-color:var(--orange);box-shadow:0 0 0 3px rgba(242,101,34,.14)}
+.drop{border:2px dashed #CDD3D9;border-radius:var(--r-l);padding:26px 14px;text-align:center;background:var(--surface);cursor:pointer}
+.drop:active{border-color:var(--orange);background:var(--orange-l)}
+.drop .b{font-size:14px;font-weight:800;margin-bottom:2px}
+.drop .s{font-size:11px;color:var(--ink-3)}
+.acc{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);margin-top:10px;overflow:hidden}
+.acc>summary{padding:13px;font-weight:700;font-size:12.5px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.acc>summary::-webkit-details-marker{display:none}
+.acc>summary::after{content:"";width:7px;height:7px;border-right:2px solid var(--ink-3);border-bottom:2px solid var(--ink-3);transform:rotate(45deg);margin-right:4px}
+.acc[open]>summary::after{transform:rotate(-135deg)}
+.acc .ac{padding:0 13px 13px;font-size:12px;color:var(--ink-2);line-height:1.5}
+.acc .ac p{margin:0 0 8px}
+.acc .ac ol,.acc .ac ul{margin:0 0 8px;padding-left:17px}
+table.sp{width:100%;border-collapse:collapse;font-size:10.5px}
+table.sp th,table.sp td{border:1px solid var(--line);padding:5px 7px;text-align:left;vertical-align:top}
+table.sp th{background:#F7F8F9;font-size:9px;text-transform:uppercase;letter-spacing:.4px;position:sticky;top:0}
+code{background:var(--line-2);padding:1px 5px;border-radius:4px;font-size:10.5px}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:11px}
+.kpi div{background:#F7F8F9;border-radius:var(--r-s);padding:8px 4px;text-align:center}
+.kpi b{display:block;font-size:16px;color:var(--orange-d);font-weight:800}
+.kpi span{font-size:8.5px;color:var(--ink-3);font-weight:600}
+.scroll{max-height:300px;overflow:auto;border:1px solid var(--line);border-radius:var(--r-s)}
+.mut{color:var(--ink-3);font-size:11px}
+.src{font-size:9px;color:var(--ink-3);text-align:center;padding:2px 12px 0}
+</style>
+</head>
+<body>
+<div class="phone">
+
+<div class="top">
+  <div class="logo">WIN</div>
+  <div class="t"><h1>Descuentos y Ajustes</h1><p>Atención al Cliente</p></div>
+  <button class="lockbtn" onclick="abrirAdmin()" aria-label="Actualizar planes y precios">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="10.5" width="16" height="11" rx="2.5"/><path d="M8 10.5V7a4 4 0 018 0v3.5"/></svg>
+  </button>
+</div>
+
+<main id="scroller">
+
+<!-- ═══════ INTERNET ═══════ -->
+<section class="panel on" id="p-internet">
+  <div class="res">
+    <div class="hd">
+      <div><div class="cap">Monto a descontar</div><div class="big zero" id="t_monto">S/ 0.00</div></div>
+      <div class="fin"><div class="k">Final a pagar</div><div class="v" id="t_final">S/ 0.00</div></div>
+    </div>
+    <div class="fx" id="t_formula"></div>
+    <div class="rows">
+      <div class="rw"><span>Precio regular</span><span id="t_reg">S/ 0.00</span></div>
+      <div class="rw"><span>Días</span><span id="t_d">0</span></div>
+      <div class="rw"><span>% del cargo fijo</span><span id="t_pct">0 %</span></div>
+    </div>
+  </div>
+  <div id="t_msg"></div>
+  <div class="card">
+    <div class="grid2">
+      <div class="field"><label>Tipo</label><div class="seg" data-seg="t_tipo"></div><select id="t_tipo" hidden></select></div>
+      <div class="field"><label>Motivo</label><div class="seg" data-seg="t_motivo"></div><select id="t_motivo" hidden></select></div>
+      <div class="field span2"><label>Plan</label><select class="ctl" id="t_plan"></select></div>
+      <div class="field"><label>Costo <span class="pen">✎</span></label>
+        <div class="money edit"><span class="cur">S/</span><input class="ctl" id="t_costo" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0.00"></div></div>
+      <div class="field"><label>Días de afectación</label>
+        <div class="stepper"><button type="button" onclick="step('t_dias',-1)" aria-label="Menos">−</button>
+        <input id="t_dias" type="number" inputmode="numeric" min="0" max="31" step="1" value="1">
+        <button type="button" onclick="step('t_dias',1)" aria-label="Más">+</button></div></div>
+    </div>
+  </div>
+  <details class="tip"><summary>Reglas de pérdida total del servicio</summary><div class="tc">
+    <p><b>Motivo fundado:</b> solo se descuenta en base a las afectaciones. Si el cliente tuvo <b>15 a más días</b> sin servicio, se descuenta el <b>cargo fijo completo</b>.</p>
+    <p>Descuentos <b>≥ S/ 89.00</b> requieren aprobación del Coordinador/Supervisor. El AJUSTE lo autoriza el supervisor, solo en casos excepcionales.</p>
+  </div></details>
+</section>
+
+<!-- ═══════ SVA ═══════ -->
+<section class="panel" id="p-sva">
+  <div class="res">
+    <div class="hd">
+      <div><div class="cap">Monto a descontar</div><div class="big zero" id="s_monto">S/ 0.00</div></div>
+      <div class="fin"><div class="k">Final a pagar</div><div class="v" id="s_final">S/ 0.00</div></div>
+    </div>
+    <div class="fx" id="s_formula"></div>
+    <div class="rows">
+      <div class="rw"><span>Precio regular</span><span id="s_reg">S/ 0.00</span></div>
+      <div class="rw"><span>Días</span><span id="s_d">0</span></div>
+      <div class="rw"><span>% del cargo</span><span id="s_pct">0 %</span></div>
+    </div>
+  </div>
+  <div id="s_msg"></div>
+  <div class="card">
+    <div class="grid2">
+      <div class="field"><label>Tipo</label><div class="seg" data-seg="s_tipo"></div><select id="s_tipo" hidden></select></div>
+      <div class="field"><label>Motivo</label><div class="seg" data-seg="s_motivo"></div><select id="s_motivo" hidden></select></div>
+      <div class="field span2"><label>SVA</label><select class="ctl" id="s_sva"></select></div>
+      <div class="field"><label>Costo <span class="pen">✎</span></label>
+        <div class="money edit"><span class="cur">S/</span><input class="ctl" id="s_costo" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0.00"></div></div>
+      <div class="field"><label>Días a descontar</label>
+        <div class="stepper"><button type="button" onclick="step('s_dias',-1)" aria-label="Menos">−</button>
+        <input id="s_dias" type="number" inputmode="numeric" min="0" max="31" step="1" value="1">
+        <button type="button" onclick="step('s_dias',1)" aria-label="Más">+</button></div></div>
+    </div>
+  </div>
+  <details class="tip"><summary>Regla del SVA</summary><div class="tc">
+    <p>El SVA usa divisor de <b>31 días</b> (Internet usa 30), tal como está definido en el Excel fuente.</p></div></details>
+</section>
+
+<!-- ═══════ RETENCIONES ═══════ -->
+<section class="panel" id="p-ret">
+  <div class="res">
+    <div class="hd">
+      <div><div class="cap">Monto a devolver</div><div class="big zero" id="d_monto">S/ 0.00</div></div>
+      <div class="fin"><div class="k">Total a pagar</div><div class="v" id="d_final">S/ 0.00</div></div>
+    </div>
+    <div class="fx" id="d_formula"></div>
+    <div class="rows">
+      <div class="rw"><span>Importe de recibo</span><span id="d_reg">S/ 0.00</span></div>
+      <div class="rw"><span>% devolución</span><span id="d_p">0 %</span></div>
+    </div>
+  </div>
+  <div id="d_msg"></div>
+  <div class="card">
+    <div class="grid2">
+      <div class="field span2"><label>Concepto</label><select class="ctl" id="d_concepto"></select></div>
+      <div class="field span2"><label>Importe de recibo <span class="pen">✎ editable</span></label>
+        <div class="money edit"><span class="cur">S/</span><input class="ctl" id="d_importe" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0.00"></div></div>
+      <div class="field span2"><label>% de devolución</label><div class="chips mini" data-chips="d_pct"></div><select id="d_pct" hidden></select></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ PLANTILLA RETENCIONES ═══════ -->
+<section class="panel" id="p-plantilla">
+  <div class="card" style="padding-bottom:9px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px">
+      <select class="ctl" id="pl_origen" style="height:38px;font-size:13px;flex:1;min-width:0">
+        <option value="total">Internet — Pérdida total</option>
+        <option value="sva">SVA</option>
+        <option value="pct">Retenciones (% del recibo)</option>
+      </select>
+      <span class="pill" id="pl_pill" style="font-size:12.5px;padding:7px 12px;flex:none">S/ 0.00</span>
+    </div>
+    <textarea class="pre" id="pl_out" readonly></textarea>
+    <button class="btn btn-p" style="margin-top:9px" onclick="copiarPlantilla()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>
+      COPIAR PLANTILLA</button>
+    <div class="done" id="pl_copy"></div>
+  </div>
+  <div class="card">
+    <div class="grid2">
+      <div class="field"><label>Código de pedido</label><input class="ctl" id="pl_cod" placeholder="por emitir"></div>
+      <div class="field"><label>N.° recibo</label><input class="ctl" id="pl_recibo" placeholder="NO EMITIDO"></div>
+      <div class="field"><label>Mes a devolver</label><select class="ctl" id="pl_mes"></select></div>
+      <div class="field"><label>Cantidad de meses</label>
+        <div class="stepper"><button type="button" onclick="step('pl_meses',-1)" aria-label="Menos">−</button>
+        <input id="pl_meses" type="number" inputmode="numeric" min="1" value="1">
+        <button type="button" onclick="step('pl_meses',1)" aria-label="Más">+</button></div></div>
+      <div class="field"><label>Tipo de devolución</label><select class="ctl" id="pl_tipodev"></select></div>
+      <div class="field"><label>Ajuste monto total</label><select class="ctl" id="pl_ajuste"></select></div>
+      <div class="field span2"><label>Motivo devolución</label><select class="ctl" id="pl_motdev"></select></div>
+      <div class="field span2"><label>Sub motivo devolución</label><select class="ctl" id="pl_submot"></select></div>
+      <div class="field"><label>Jefe aprobador</label><select class="ctl" id="pl_aprob"></select></div>
+      <div class="field"><label>Área responsable</label><select class="ctl" id="pl_area"></select></div>
+      <div class="field span2"><label>Glosa</label><select class="ctl" id="pl_glosa"></select></div>
+      <div class="field span2"><label>Observación</label><input class="ctl" id="pl_obs" placeholder="Detalle del caso"></div>
+    </div>
+  </div>
+</section>
+
+<div class="src" id="dataStamp"></div>
+</main>
+
+<nav class="tabbar" id="tabbar">
+  <button class="on" data-p="internet">
+    <svg viewBox="0 0 24 24"><path d="M2 8.5a15 15 0 0120 0"/><path d="M5 12.5a10.5 10.5 0 0114 0"/><path d="M8.5 16.3a5.5 5.5 0 017 0"/><circle cx="12" cy="20" r="1.1" fill="currentColor" stroke="none"/></svg>
+    Internet</button>
+  <button data-p="sva">
+    <svg viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="13" rx="2.2"/><path d="M8 20.5h8"/><path d="M12 17v3.5"/></svg>
+    SVA</button>
+  <button data-p="ret">
+    <svg viewBox="0 0 24 24"><path d="M19 5L5 19"/><circle cx="7.5" cy="7.5" r="2.6"/><circle cx="16.5" cy="16.5" r="2.6"/></svg>
+    Retenciones</button>
+  <button data-p="plantilla">
+    <svg viewBox="0 0 24 24"><path d="M14 2.5H7a2 2 0 00-2 2v15a2 2 0 002 2h10a2 2 0 002-2V7.5z"/><path d="M14 2.5v5h5"/><path d="M9 13h6M9 17h4"/></svg>
+    Plantilla</button>
+</nav>
+</div>
+
+<!-- ═══════ ADMIN ═══════ -->
+<div class="ov" id="ov">
+  <div class="sheet">
+    <div class="sh"><h3 id="mTitle">Acceso restringido</h3><button onclick="cerrarAdmin()" aria-label="Cerrar">&times;</button></div>
+    <div class="sb">
+      <div id="gate" class="gate">
+        <div class="ring"><svg viewBox="0 0 24 24"><rect x="4" y="10.5" width="16" height="11" rx="2.5"/><path d="M8 10.5V7a4 4 0 018 0v3.5"/></svg></div>
+        <h4>Actualizar planes y precios</h4>
+        <p>Ingresa la contraseña de administrador.</p>
+        <input type="password" id="pwd" placeholder="Contraseña" autocomplete="off">
+        <button class="btn btn-p" onclick="validarPwd()">INGRESAR</button>
+        <div id="pwdMsg" style="margin-top:12px"></div>
+      </div>
+      <div id="adminPanel" style="display:none">
+        <div class="drop" id="drop" onclick="document.getElementById('file').click()">
+          <div class="b">Cargar archivo</div><div class="s">Toca para elegir · .xlsx · .xls · .csv</div>
+        </div>
+        <input type="file" id="file" accept=".xlsx,.xls,.csv" style="display:none">
+        <div id="valOut" style="margin-top:11px"></div>
+        <button class="btn btn-o" style="margin-top:11px" onclick="descargarPlantilla()">Descargar plantilla con los datos actuales</button>
+        <details class="acc"><summary>Datos cargados</summary><div class="ac">
+          <div class="kpi" id="k_kpi"></div>
+          <p class="mut">La app lee la hoja <b>BD_CALCULADORA</b>. El <b>ESTADO</b> se calcula por la presencia de precio.</p>
+          <b style="font-size:11.5px">Planes</b><div class="scroll" id="k_planes"></div>
+          <b style="font-size:11.5px;display:block;margin-top:11px">SVA</b><div class="scroll" id="k_sva"></div>
+          <b style="font-size:11.5px;display:block;margin-top:11px">Catálogos y reglas</b><div class="scroll" id="k_listas"></div>
+        </div></details>
+        <details class="acc"><summary>Cómo actualizar</summary><div class="ac">
+          <ol>
+            <li>Abre el Excel y ve a la hoja <b>BD_CALCULADORA</b> (o descarga una copia arriba).</li>
+            <li>Edita las filas. Deja el <code>PRECIO</code> vacío si un plan o SVA no tiene precio.</li>
+            <li>Vuelve aquí y carga el archivo.</li>
+            <li>Si hay errores no se reemplaza nada y se listan.</li>
+          </ol>
+          <table class="sp">
+            <tr><th>Columna</th><th>Qué contiene</th></tr>
+            <tr><td><code>CATEGORIA</code></td><td>PLAN · SVA · PORCENTAJE_DEVOLUCION · CATALOGO · REGLA</td></tr>
+            <tr><td><code>PRODUCTO</code></td><td>INTERNET / SVA / DEVOLUCION. En CATALOGO es el nombre del campo.</td></tr>
+            <tr><td><code>ITEM</code></td><td>Nombre del plan, del SVA o el valor de la lista.</td></tr>
+            <tr><td><code>PRECIO</code></td><td>Cargo fijo. Vacío = sin precio.</td></tr>
+            <tr><td><code>ESTADO</code></td><td>Se recalcula solo: con precio = VIGENTE, sin precio = NO VIGENTE.</td></tr>
+            <tr><td><code>PADRE</code></td><td>Solo para SUBMOTIVO DEVOLUCION: el motivo del que depende.</td></tr>
+          </table>
+          <p style="margin-top:8px">Ningún plan ni SVA se elimina por no tener precio: se muestra como <b>NO VIGENTE</b> y el asesor digita el cargo del recibo.</p>
+        </div></details>
+        <details class="acc"><summary>Observaciones de los Excel</summary><div class="ac">
+          <p><b>1.</b> En la hoja PLANES las columnas C (38 planes) y D (20 precios) eran listas independientes. Se emparejaron por fila, como confirma 750 Mbps → S/ 109.00 (fila 17) y 850 Mbps → S/ 119.00 (fila 18). Quedan 28 planes vigentes y 11 sin precio.</p>
+          <p><b>2.</b> Nombres repetidos con precios distintos: Residencial_400 Mbps (79.00 / 115.83 / 59.50), Residencial_450 Mbps (89.00 / 30.00), Residencial_500 Mbps (99.00 / 69.50) y Residencial_1000 Mbps (119.00 / sin precio).</p>
+          <p><b>3.</b> Internet divide entre 30 y SVA entre 31. Se respetaron ambos.</p>
+          <p><b>4.</b> La celda del monto de pérdida total (D18) estaba vacía. Se tomó la fórmula del respaldo CONTINGENCIA DESCUENTOS3A. La regla de los 15 días solo existía como texto.</p>
+          <p><b>5.</b> El bloque de S/ 55.64 tenía el monto escrito a mano (la fórmula daría S/ 1.15). No se replicó.</p>
+          <p><b>6.</b> El Excel de devoluciones no trae planes, precios ni SVA: aporta la plantilla, los porcentajes y los catálogos.</p>
+          <p><b>7.</b> GAMER 600 y NUEVOS PLANES GAMER 600 son nombres distintos en hojas distintas; no se fusionaron.</p>
+          <p><b>8.</b> Fórmulas rotas con #REF!: CALCULADORA!D271, CONTINGENCIA3A!F34/G33 y los nombres CAMBIOPLAN, ERROR, GLOSA, TEMAS, TEMAS2. No se usaron.</p>
+          <p><b>9.</b> El módulo de avería parcial y sus tramos de porcentaje fueron retirados de la app por indicación del área. Los tramos se siguen leyendo del archivo sin usarse.</p>
+        </div></details>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═════ CAPA 1 — DATOS ═════ */
+const WIN_DATA = {
+ "origen": "BD_CALCULADORA — PLANTILLA DEVOLUCIONES 2026 ATC",
+ "planes": [
+  {
+   "plan": "Residencial_400 Mbps",
+   "velocidad": "400 Mbps",
+   "precio": 79,
+   "estado": "VIGENTE",
+   "obs": "Nombre repetido en la fuente con precios distintos"
+  },
+  {
+   "plan": "Residencial_450 Mbps",
+   "velocidad": "450 Mbps",
+   "precio": 89,
+   "estado": "VIGENTE",
+   "obs": "Nombre repetido en la fuente con precios distintos"
+  },
+  {
+   "plan": "Residencial_500 Mbps",
+   "velocidad": "500 Mbps",
+   "precio": 99,
+   "estado": "VIGENTE",
+   "obs": "Nombre repetido en la fuente con precios distintos"
+  },
+  {
+   "plan": "Residencial_300 Mbps",
+   "velocidad": "300 Mbps",
+   "precio": 69,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "plan": "Residencial_400 Mbps",
+   "velocidad": "400 Mbps",
+   "precio": 115.83,
+   "estado": "VIGENTE",
+   "obs": "Nombre repetido en la fuente con precios distintos"
+  },
+  {
+   "plan": "Residencial_450 Mbps",
+   "velocidad": "450 Mbps",
+   "precio": 30,
+   "estado": "VIGENTE",
+   "obs": "Nombre repetido en la fuente con precios distintos"
+  },
+  {
+   "plan": "Residencial_1000 Mbps",
+   "velocidad": "1000 Mbps",
+   "precio": 119,
+   "estado": "VIGENTE",
+   "obs": "Nombre repetido en la fuente con precios distintos"
+  },
+  {
+   "plan": "Residencial_100 Mbps",
+   "velocidad": "100 Mbps",
+   "precio": 129,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "plan": "Residencial_120 Mbps",
+   "velocidad": "120 Mbps",
+   "precio": 139,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "plan": "Residencial_140 Mbps",
+   "velocidad": "140 Mbps",
+   "precio": 109,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "plan": "Residencial_150 Mbps",
+   "velocidad": "150 Mbps",
+   "precio": 179,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "plan": "Residencial_180 Mbps",
+   "velocidad": "180 Mbps",
+   "precio": 69.5,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "plan": "Residencial_200 Mbps",
+   "velocidad": "200 Mbps",
+   "precio": 259,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "plan": "Residencial_210 Mbps",
+   "velocidad": "210 Mbps",
+   "precio": 289,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "plan": "Residencial_240 Mbps",
+   "velocidad": "240 Mbps",
+   "precio": 459,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "plan": "Residencial_750 Mbps",
+   "velocidad": "750 Mbps",
+   "precio": 109,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "plan": "Residencial_850Mbps",
+   "velocidad": "850 Mbps",
+   "precio": 119,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "plan": "Residencial_400 Mbps",
+   "velocidad": "400 Mbps",
+   "precio": 59.5,
+   "estado": "VIGENTE",
+   "obs": "Nombre repetido en la fuente con precios distintos"
+  },
+  {
+   "plan": "Residencial_500 Mbps",
+   "velocidad": "500 Mbps",
+   "precio": 69.5,
+   "estado": "VIGENTE",
+   "obs": "Nombre repetido en la fuente con precios distintos"
+  },
+  {
+   "plan": "Residencial_600 Mbps",
+   "velocidad": "600 Mbps",
+   "precio": 179,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "plan": "Residencial_650 Mbps",
+   "velocidad": "650 Mbps",
+   "precio": null,
+   "estado": "NO VIGENTE",
+   "obs": ""
+  },
+  {
+   "plan": "Residencial_700 Mbps",
+   "velocidad": "700 Mbps",
+   "precio": null,
+   "estado": "NO VIGENTE",
+   "obs": ""
+  },
+  {
+   "plan": "Residencial_800 Mbps",
+   "velocidad": "800 Mbps",
+   "precio": null,
+   "estado": "NO VIGENTE",
+   "obs": ""
+  },
+  {
+   "plan": "Residencial_1000 Mbps",
+   "velocidad": "1000 Mbps",
+   "precio": null,
+   "estado": "NO VIGENTE",
+   "obs": "Nombre repetido en la fuente con precios distintos"
+  },
+  {
+   "plan": "Residencial_350 Mbps",
+   "velocidad": "350 Mbps",
+   "precio": null,
+   "estado": "NO VIGENTE",
+   "obs": ""
+  },
+  {
+   "plan": "GAMER 50",
+   "velocidad": "",
+   "precio": null,
+   "estado": "NO VIGENTE",
+   "obs": ""
+  },
+  {
+   "plan": "NUEVOS PLANES GAMER 100",
+   "velocidad": "",
+   "precio": 129,
+   "estado": "VIGENTE",
+   "obs": "Precio de la tabla PLAN GAMER (hoja SVA)"
+  },
+  {
+   "plan": "NUEVOS PLANES GAMER 150",
+   "velocidad": "",
+   "precio": 149,
+   "estado": "VIGENTE",
+   "obs": "Precio de la tabla PLAN GAMER (hoja SVA)"
+  },
+  {
+   "plan": "NUEVOS PLANES GAMER 200",
+   "velocidad": "",
+   "precio": 159,
+   "estado": "VIGENTE",
+   "obs": "Precio de la tabla PLAN GAMER (hoja SVA)"
+  },
+  {
+   "plan": "NUEVOS PLANES GAMER 250",
+   "velocidad": "",
+   "precio": null,
+   "estado": "NO VIGENTE",
+   "obs": ""
+  },
+  {
+   "plan": "NUEVOS PLANES GAMER 300",
+   "velocidad": "",
+   "precio": 199,
+   "estado": "VIGENTE",
+   "obs": "Precio de la tabla PLAN GAMER (hoja SVA)"
+  },
+  {
+   "plan": "NUEVOS PLANES GAMER 350",
+   "velocidad": "",
+   "precio": 129,
+   "estado": "VIGENTE",
+   "obs": "Precio de la tabla PLAN GAMER (hoja SVA)"
+  },
+  {
+   "plan": "NUEVOS PLANES GAMER 400",
+   "velocidad": "",
+   "precio": 159,
+   "estado": "VIGENTE",
+   "obs": "Precio de la tabla PLAN GAMER (hoja SVA)"
+  },
+  {
+   "plan": "GAMER 600",
+   "velocidad": "",
+   "precio": null,
+   "estado": "NO VIGENTE",
+   "obs": ""
+  },
+  {
+   "plan": "WIN 1.5 GB",
+   "velocidad": "1.5 GB",
+   "precio": null,
+   "estado": "NO VIGENTE",
+   "obs": ""
+  },
+  {
+   "plan": "WIN 2.0 GB",
+   "velocidad": "2.0 GB",
+   "precio": null,
+   "estado": "NO VIGENTE",
+   "obs": ""
+  },
+  {
+   "plan": "WIN 2.5 GB",
+   "velocidad": "2.5 GB",
+   "precio": null,
+   "estado": "NO VIGENTE",
+   "obs": ""
+  },
+  {
+   "plan": "NUEVOS PLANES GAMER 600",
+   "velocidad": "",
+   "precio": 159,
+   "estado": "VIGENTE",
+   "obs": "Precio de la tabla PLAN GAMER (hoja SVA)"
+  },
+  {
+   "plan": "NUEVOS PLANES GAMER 1000",
+   "velocidad": "",
+   "precio": 189,
+   "estado": "VIGENTE",
+   "obs": "Precio de la tabla PLAN GAMER (hoja SVA)"
+  }
+ ],
+ "sva": [
+  {
+   "sva": "DGO BÁSICO",
+   "precio": 54,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "sva": "DGO FULL",
+   "precio": 76,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "sva": "DGO L1 MAX",
+   "precio": 54,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "sva": "LIGA 1 MAX",
+   "precio": 45,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "sva": "FONO WIN",
+   "precio": 10,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "sva": "WIN TV BÁSICO",
+   "precio": 15,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "sva": "WIN TV PLUS",
+   "precio": 25,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "sva": "WIN BOX1",
+   "precio": 15,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "sva": "WINBOX2",
+   "precio": 30,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "sva": "MESH ALQUILER 1",
+   "precio": 15,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "sva": "MESH ALQUILER 2",
+   "precio": 20,
+   "estado": "VIGENTE",
+   "obs": ""
+  },
+  {
+   "sva": "WIN TV PLUS - PROMO",
+   "precio": 15,
+   "estado": "VIGENTE",
+   "obs": ""
+  }
+ ],
+ "tramos": [
+  {
+   "etiqueta": "1 - 5 (35%)",
+   "diaMin": 1,
+   "diaMax": 5,
+   "pct": 0.35
+  },
+  {
+   "etiqueta": "6 - 9 (40%)",
+   "diaMin": 6,
+   "diaMax": 9,
+   "pct": 0.4
+  },
+  {
+   "etiqueta": "10 a más (50%)",
+   "diaMin": 10,
+   "diaMax": 999,
+   "pct": 0.5
+  }
+ ],
+ "pctDevolucion": [
+  0.05,
+  0.1,
+  0.15,
+  0.2,
+  0.25,
+  0.3,
+  0.35,
+  0.4,
+  0.45,
+  0.5,
+  0.55,
+  0.6,
+  0.65,
+  0.7,
+  0.75,
+  0.8,
+  0.85,
+  0.9,
+  1.0
+ ],
+ "catalogos": {
+  "TIPO DEVOLUCION": [
+   "POR SATISFACCIÓN",
+   "POR ERROR DETECTABLE",
+   "POR SAR"
+  ],
+  "TIPO (GLOSA)": [
+   "T",
+   "A",
+   "BOT",
+   "REC"
+  ],
+  "MES A DEVOLVER": [
+   "NOVIEMBRE|2025",
+   "DICIEMBRE|2025",
+   "ENERO|2026",
+   "FEBRERO|2026",
+   "MARZO|2026",
+   "ABRIL|2026",
+   "MAYO|2026",
+   "JUNIO|2026",
+   "JULIO|2026",
+   "AGOSTO|2026",
+   "SEPTIEMBRE|2026",
+   "OCTUBRE|2026",
+   "NOVIEMBRE|2026",
+   "DICIEMBRE|2026"
+  ],
+  "MOTIVO DEVOLUCION": [
+   "CAMBIO_PLAN",
+   "CAMBIO_DATOS_TITULARIDAD",
+   "ACTIVACION_ACCESO",
+   "FRAUDE",
+   "INSTALACION",
+   "RECIBO",
+   "SERVICIOS_ADICIONALES",
+   "SUSPENSION_TEMPORAL/RECONEXION",
+   "TRASLADO",
+   "PROMOCIONES",
+   "BAJA_CANCELACION",
+   "COBRANZA",
+   "FALLA_SERVICIO",
+   "PROBLEMAS_ECONOMICOS",
+   "ERROR DETECTABLE",
+   "CAMBIO_PLAN - REPOSICIONAMIENTO"
+  ],
+  "APROBADOR": [
+   "MANUEL RIVAS",
+   "LADY PLACENCIA",
+   "IRENE FERNANDEZ",
+   "CHRISTOPHER SANCHEZ",
+   "CHRISTIAN LOAYZA",
+   "CARLOS LOPEZ",
+   "MARIBEL VILLEGAS",
+   "SEREBIAS ALVAREZ",
+   "MAYRA GARCÍA",
+   "EVELYN HURTADO",
+   "HENRY PEZO",
+   "YENCY ZATAN",
+   "SAMANTHA SANCHEZ",
+   "STEPHANIE VARGAS",
+   "JHONNY LEÓN (OJT)",
+   "PEDRO HERRERA (OJT)",
+   "PAUL VALENCIA (OJT)"
+  ],
+  "OBSERVACION / GLOSA": [
+   "CORRESPONDE A AJUSTE NO APLICADO CON FECHA:",
+   "CORRESPONDE A DESCUENTO NO APLICADO CON FECHA:",
+   "DÍAS AFECTADOS POR AVERÍAS:",
+   "FAVOR DE DEJAR SIN EFECTO LA GESTIÓN DE AJTS/DSCTO INGRESADA CON FECHA",
+   "DESCRIPCIÓN: COLOCA LA DESCRIPCIÓN AQUÍ"
+  ],
+  "AJUSTE TOTAL": [
+   "SÍ",
+   "NO"
+  ],
+  "AREA RESPONSABLE": [
+   "COMERCIAL",
+   "ATC",
+   "FIDELIZACIÓN",
+   "AVERIA",
+   "CLIENTE",
+   "BO",
+   "SISTEMA",
+   "FACTURACIÓN"
+  ],
+  "CONCEPTO": [
+   "AJSTE — Devolución a un recibo emitido",
+   "DSCTO — Devolución a un recibo no emitido"
+  ]
+ },
+ "submotivos": {
+  "CAMBIO_PLAN": [
+   "CON SOLICITUD REGISTRADA - DEMORA EJECUCION",
+   "CON SOLICITUD REGISTRADA - EJECUCION INCOMPLETA",
+   "CON SOLICITUD REGISTRADA - ERROR EN ASIGNACION",
+   "CON SOLICITUD REGISTRADA - NO SOLICITO",
+   "SIN SOLICITUD REGISTRADA - REITERATIVO"
+  ],
+  "CAMBIO_DATOS_TITULARIDAD": [
+   "CON SOLICITUD REGISTRADA - DEMORA EJECUCION",
+   "CON SOLICITUD REGISTRADA - EJECUCION INCOMPLETA",
+   "CON SOLICITUD REGISTRADA - ERROR EN EL REGISTRO",
+   "CON SOLICITUD REGISTRADA - FALTO DOCUMENTACION",
+   "CON SOLICITUD REGISTRADA - NO SOLICITO",
+   "SIN SOLICITUD REGISTRADA - REITERATIVO"
+  ],
+  "ACTIVACION_ACCESO": [
+   "APP - NO CARGA SERVICIO",
+   "APP - NO PERMITE ACCESO",
+   "CARGO - DIAS GRATUITOS FACTURADOS",
+   "CARGO - NO CONTRATO EL SERVICIO",
+   "CARGO - SERVICIO NO ACTIVO Y ESTA FACTURANDO",
+   "CREDENCIALES - NO LLEGA",
+   "CREDENCIALES - NO PERMITE ACCEDER",
+   "CREDENCIALES - NO PERMITE REGISTRARSE",
+   "EQUIPO - EN MAL ESTADO",
+   "EQUIPO - MAL CONFIGURADO",
+   "EQUIPO - NO LLEGA",
+   "EQUIPO - NO RECOGEN",
+   "TELEFONIA - NO PERMITE COMUNICACIÓN",
+   "TELEFONIA - PROBLEMAS CON LA PORTABILIDAD",
+   "TELEFONIA - SIN ASIGNACION DE NUMERO",
+   "USO - DIFICULTAD CON EL USO",
+   "USO - INCOMPATIBLE CON TV",
+   "USO - PREFIERE POR FIBRA NO STREAMING",
+   "USO - NO SE VISUALIZAN CANALES"
+  ],
+  "FRAUDE": [
+   "CLIENTE DESCONOCE CONTRATACION"
+  ],
+  "INSTALACION": [
+   "INSTALACION - DAÑO EN LA PROPIEDAD DEL CLIETE",
+   "CARGO - COSTO OFRECIDO DIFERENTE",
+   "CARGO - ERROR EN CUOTAS PIDIO AL CONTADO",
+   "CARGO - ERROR CONTADO PIDIO EN CUOTAS",
+   "CON SOLICITUD REGISTRADA - DEMORA EJECUCION",
+   "SIN SOLICITUD REGISTRADA - REITERATIVO",
+   "CARGO - SIN DISPONIBILIDAD TECNICA",
+   "INSTALACION - INCONVENIENTES CON ACCESORIOS Y CABLES"
+  ],
+  "RECIBO": [
+   "RECIBO - CARGO DOBLE DE RENTA",
+   "RECIBO - CARGO DOBLE DE CUOTA INSTALACION",
+   "RECIBO - EMISION DOBLE",
+   "RECIBO - FACTURADO SIN SERVICIO",
+   "OFRECIMIENTO - AJUSTE NO APLICADO",
+   "OFRECIMIENTO - DESCUENTO NO APLICADO"
+  ],
+  "SERVICIOS_ADICIONALES": [
+   "CON SOLICITUD REGISTRADA - DEMORA EJECUCION",
+   "CON SOLICITUD REGISTRADA - EJECUCION INCOMPLETA",
+   "CON SOLICITUD REGISTRADA - ERROR EN EL REGISTRO",
+   "CON SOLICITUD REGISTRADA - NO SOLICITO",
+   "SIN SOLICITUD REGISTRADA - REITERATIVO",
+   "CARGO - COSTO SERVICIO DIFERENTE OFRECIDO",
+   "CARGO - NO DESEA REALIZAR PAGO",
+   "SERVICIO - PROBLEMA CONTINUA"
+  ],
+  "SUSPENSION_TEMPORAL/RECONEXION": [
+   "CON SOLICITUD REGISTRADA - DEMORA EJECUCION",
+   "SIN SOLICITUD REGISTRADA - REITERATIVO",
+   "CON SOLICITUD REGISTRADA - EJECUCION INCOMPLETA",
+   "CON SOLICITUD REGISTRADA - NO SOLICITO",
+   "CON SOLICITUD REGISTRADA - ERROR EN EL REGISTRO",
+   "CON SOLICITUD REGISTRADA - NO SOLICITO RECONEXION ANTICIPADA"
+  ],
+  "TRASLADO": [
+   "CON SOLICITUD REGISTRADA - DEMORA EJECUCION",
+   "CON SOLICITUD REGISTRADA - NO SOLICITO",
+   "CARGO - COSTO SERVICIO DIFERENTE OFRECIDO",
+   "VT - DAÑO EN PROPIEDAD DURANTE VISITA",
+   "CON SOLICITUD REGISTRADA - ERROR EN DIRECCION DE REGISTRO",
+   "CARGO - NO DESEA REALIZAR PAGO",
+   "SIN SOLICITUD REGISTRADA - REITERATIVO",
+   "CON SOLICITUD REGISTRADA - EJECUCION INCOMPLETA",
+   "CON SOLICITUD REGISTRADA - ERROR EN EL REGISTRO"
+  ],
+  "PROMOCIONES": [
+   "CARGO - COSTO SERVICIO DIFERENTE OFRECIDO EN VENTA/CROSS",
+   "CARGO - DESCUENTO OFRECIDO EN VENTA/CROSS NO APLICADO",
+   "SERVICIO - VELOCIDAD DIFERENTE OFRECIDA EN VENTA/CROSS"
+  ],
+  "BAJA_CANCELACION": [
+   "CON SOLICITUD REGISTRADA - DEMORA EJECUCION",
+   "CON SOLICITUD REGISTRADA - DESCONOCE SUSPENSION APC",
+   "CON SOLICITUD REGISTRADA - EJECUCION INCOMPLETA",
+   "CON SOLICITUD REGISTRADA - NO SOLICITO ANULACION",
+   "SIN SOLICITUD REGISTRADA - REITERATIVO"
+  ],
+  "COBRANZA": [
+   "RECONEXION - DEMORA",
+   "RECONEXION - NO RECONOCE CARGO RECONEXION",
+   "CLIENTE - PAGO DOBLE",
+   "CLIENTE - PAGO OTRO SERVICIO",
+   "RESCATE - DESCUENTO OFRECIDO NO APLICADO"
+  ],
+  "FALLA_SERVICIO": [
+   "DESMATRICULADO",
+   "ANCHO DE BANDA",
+   "INTERMITENCIA",
+   "LENTITUD",
+   "LOS ROJO",
+   "LOS VERDE",
+   "MASIVO",
+   "NO ALCANZA VELOCIDAD CONTRATADA",
+   "PROBLEMA CON WIFI",
+   "VT - DEMORA EN VISITA",
+   "VT - DAÑO EN PROPIEDAD DURANTE VISITA",
+   "VT - DESCONECTAN CTO",
+   "VT - UBICACIÓN DE ROUTER",
+   "VT - PROBLEMA ROUTER / ACCESORIOS"
+  ],
+  "PROBLEMAS_ECONOMICOS": [
+   "CLIENTE - NO PUEDE PAGAR SU SERVICIO",
+   "CLIENTE - NO HA USADO EL SERVICIO",
+   "CLIENTE - NO CUENTA CON TRABAJO",
+   "CLIENTE - INSATISFECHO CON EL SERVICIO",
+   "COMPETENCIA - MEJOR OFERTA"
+  ],
+  "ERROR DETECTABLE": [
+   "RECIBO MAL EMITIDO"
+  ],
+  "CAMBIO_PLAN - REPOSICIONAMIENTO": [
+   "REPOSICIONAMIENTO_CAMBIO DE TARIFA"
+  ]
+ },
+ "listas": {
+  "TIPO": [
+   "AJUSTE",
+   "DESCUENTO"
+  ],
+  "MOTIVO": [
+   "FUNDADO",
+   "EVALUACIÓN DE DESCUENTO"
+  ]
+ },
+ "reglas": {
+  "DIVISOR_DIAS_INTERNET": 30,
+  "DIVISOR_DIAS_SVA": 31,
+  "DIAS_DESCUENTO_TOTAL": 15,
+  "UMBRAL_APROBACION": 89
+ }
+};
+function estadoDe(p){ const n=Number(p);
+  return (p===null||p===undefined||p===""||isNaN(n)||n<=0)?"NO VIGENTE":"VIGENTE"; }
+
+/* ═════ CAPA 2 — CÁLCULO ═════ */
+const CALC = {
+  perdidaTotal(costo,dias,R){
+    costo=+costo||0; dias=+dias||0;
+    if(dias>=R.DIAS_DESCUENTO_TOTAL)
+      return {monto:costo,total:true,formula:`Cargo fijo completo (${dias} ≥ ${R.DIAS_DESCUENTO_TOTAL} días)`};
+    return {monto:costo/R.DIVISOR_DIAS_INTERNET*dias,total:false,
+            formula:`${fmt(costo)} ÷ ${R.DIVISOR_DIAS_INTERNET} × ${dias} día(s)`};
+  },
+  sva(costo,dias,R){
+    costo=+costo||0; dias=+dias||0;
+    return {monto:costo/R.DIVISOR_DIAS_SVA*dias, formula:`${fmt(costo)} ÷ ${R.DIVISOR_DIAS_SVA} × ${dias} día(s)`};
+  },
+  porcentajeRecibo(importe,pct){
+    importe=+importe||0; pct=+pct||0;
+    const m=importe*pct;
+    return {monto:m,total:Math.max(0,importe-m),formula:`${fmt(importe)} × ${(pct*100).toFixed(0)}% ÷ 100`};
+  },
+  requiereAprobacion(m,R){ return (+m||0)>=R.UMBRAL_APROBACION; }
+};
+
+/* ═════ CAPA 3 — INTERFAZ ═════ */
+const $ = id => document.getElementById(id);
+const fmt = n => "S/ " + (Math.round((+n||0)*100)/100).toFixed(2);
+const r2  = n => Math.round((+n||0)*100)/100;
+
+function fill(sel,arr,{getVal=v=>v,getLab=v=>v,blank=null}={}){
+  const el = typeof sel==="string" ? $(sel) : sel;
+  if(!el) return;
+  const prev=el.value;
+  el.innerHTML=(blank!==null?`<option value="">${blank}</option>`:"")+
+    (arr||[]).map(v=>`<option value="${String(getVal(v)).replace(/"/g,'&quot;')}">${getLab(v)}</option>`).join("");
+  if(prev && [...el.options].some(o=>o.value===prev)) el.value=prev;
+}
+function pintar(selId,tipo){
+  const sel=$(selId), host=document.querySelector(`[data-${tipo}="${selId}"]`);
+  if(!sel||!host) return;
+  host.innerHTML=[...sel.options].map(o=>
+    `<button type="button" class="${tipo==="chips"?"chip":""}${o.value===sel.value?" on":""}" data-v="${o.value.replace(/"/g,'&quot;')}">${o.textContent}</button>`).join("");
+  host.querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    sel.value=b.dataset.v;
+    host.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));
+    sel.dispatchEvent(new Event("change",{bubbles:true}));
+  });
+}
+function step(id,d){
+  const el=$(id);
+  const min=el.min!==""?+el.min:0, max=el.max!==""?+el.max:9999;
+  el.value=Math.min(max,Math.max(min,(+el.value||0)+d));
+  el.dispatchEvent(new Event("change",{bubbles:true}));
+}
+const labelPlan = p => estadoDe(p.precio)==="VIGENTE" ? `${p.plan} · ${fmt(p.precio)}` : `${p.plan} · NO VIGENTE`;
+const labelSva  = s => estadoDe(s.precio)==="VIGENTE" ? `${s.sva} · ${fmt(s.precio)}`  : `${s.sva} · NO VIGENTE`;
+function planSel(id){ const i=parseInt($(id).value,10); return isNaN(i)?null:WIN_DATA.planes[i]||null; }
+function svaSel(id){  const i=parseInt($(id).value,10); return isNaN(i)?null:WIN_DATA.sva[i]||null; }
+
+function buildUI(){
+  const D=WIN_DATA, C=D.catalogos||{};
+  ["t_tipo","s_tipo"].forEach(id=>fill(id,D.listas.TIPO));
+  ["t_motivo","s_motivo"].forEach(id=>fill(id,D.listas.MOTIVO));
+  fill("t_plan",D.planes.map((p,i)=>({p,i})),{getVal:o=>String(o.i),getLab:o=>labelPlan(o.p),blank:"Selecciona el plan"});
+  fill("s_sva",D.sva.map((x,i)=>({x,i})),{getVal:o=>String(o.i),getLab:o=>labelSva(o.x),blank:"Selecciona el SVA"});
+  fill("d_concepto",C["CONCEPTO"]||[],{blank:(C["CONCEPTO"]||[]).length?null:"Sin conceptos"});
+  fill("d_pct",D.pctDevolucion||[],{getVal:v=>String(v),getLab:v=>(v*100).toFixed(0)+"%"});
+  fill("pl_mes",C["MES A DEVOLVER"]||[]);
+  fill("pl_tipodev",C["TIPO DEVOLUCION"]||[]);
+  fill("pl_motdev",C["MOTIVO DEVOLUCION"]||[]);
+  fill("pl_aprob",C["APROBADOR"]||[],{blank:"Selecciona"});
+  fill("pl_area",C["AREA RESPONSABLE"]||[],{blank:"Selecciona"});
+  fill("pl_glosa",C["OBSERVACION / GLOSA"]||[],{blank:"Sin glosa"});
+  fill("pl_ajuste",C["AJUSTE TOTAL"]||[]);
+  refreshSubmotivos();
+  $("t_tipo").value="AJUSTE";    $("t_motivo").value="FUNDADO";
+  $("s_tipo").value="DESCUENTO"; $("s_motivo").value="FUNDADO";
+  ["t_tipo","t_motivo","s_tipo","s_motivo"].forEach(id=>pintar(id,"seg"));
+  pintar("d_pct","chips");
+  $("dataStamp").textContent="Fuente: "+D.origen;
+  renderDatos(); recalc();
+}
+function refreshSubmotivos(){
+  const l=(WIN_DATA.submotivos||{})[$("pl_motdev").value]||[];
+  fill("pl_submot",l,{blank:l.length?null:"Sin submotivos"});
+}
+function sugerirPrecio(planId,costoId){
+  const p=planSel(planId); if(!p) return;
+  $(costoId).value=(estadoDe(p.precio)==="VIGENTE")?p.precio:"";
+}
+function msg(el,tipo,html){
+  const ic = tipo==="ok" ? "✓" : tipo==="err" ? "✕" : "!";
+  $(el).innerHTML = html ? `<div class="msg m-${tipo}"><span class="ic">${ic}</span><div>${html}</div></div>` : "";
+}
+function bigVal(id,v){ const e=$(id); e.textContent=fmt(v); e.classList.toggle("zero",!(+v>0)); }
+
+function recalc(){
+  const R=WIN_DATA.reglas;
+
+  /* Internet — pérdida total */
+  const tc=+$("t_costo").value||0, td=+$("t_dias").value||0;
+  const rt=CALC.perdidaTotal(tc,td,R);
+  bigVal("t_monto",rt.monto);
+  $("t_reg").textContent=fmt(tc); $("t_d").textContent=td+" día(s)";
+  $("t_pct").textContent=tc>0?((rt.monto/tc)*100).toFixed(1)+" %":"0 %";
+  $("t_final").textContent=fmt(Math.max(0,tc-rt.monto));
+  $("t_formula").textContent=tc>0?rt.formula:"Selecciona el plan o escribe el costo a mano.";
+  let mt="";
+  const tp=planSel("t_plan");
+  if(tp&&estadoDe(tp.precio)==="NO VIGENTE") mt+=`El plan <b>${tp.plan}</b> está <b>NO VIGENTE</b> (sin precio en la fuente). Escribe el cargo fijo del recibo. `;
+  if(td>31) mt+="Los días superan un mes de facturación. ";
+  if(rt.total) mt+=`Afectación de ${R.DIAS_DESCUENTO_TOTAL} días o más: corresponde el <b>cargo fijo completo</b>. `;
+  if(rt.monto>tc&&tc>0) mt+="El monto supera el cargo fijo del plan. ";
+  if(CALC.requiereAprobacion(rt.monto,R)) mt+=`Requiere aprobación del Coordinador/Supervisor (≥ ${fmt(R.UMBRAL_APROBACION)}). `;
+  if($("t_tipo").value==="AJUSTE") mt+="El AJUSTE debe ser autorizado por supervisor.";
+  msg("t_msg",(rt.monto>tc&&tc>0)?"err":(mt?"warn":"ok"),mt||(tc>0?"Cálculo válido. Sin aprobación adicional requerida.":""));
+
+  /* SVA */
+  const sc=+$("s_costo").value||0, sd=+$("s_dias").value||0;
+  const rs=CALC.sva(sc,sd,R);
+  bigVal("s_monto",rs.monto);
+  $("s_reg").textContent=fmt(sc); $("s_d").textContent=sd+" día(s)";
+  $("s_pct").textContent=sc>0?((rs.monto/sc)*100).toFixed(1)+" %":"0 %";
+  $("s_final").textContent=fmt(Math.max(0,sc-rs.monto));
+  $("s_formula").textContent=sc>0?rs.formula:"Selecciona el SVA o escribe el costo a mano.";
+  let ms="";
+  const sx=svaSel("s_sva");
+  if(sx&&estadoDe(sx.precio)==="NO VIGENTE") ms+=`El SVA <b>${sx.sva}</b> está <b>NO VIGENTE</b> (sin precio en la fuente). Escribe el cargo del recibo. `;
+  if(sd>31) ms+="Los días superan un mes de facturación. ";
+  if(rs.monto>sc&&sc>0) ms+="El monto supera el cargo fijo del SVA. ";
+  if(CALC.requiereAprobacion(rs.monto,R)) ms+=`Requiere aprobación del Coordinador/Supervisor (≥ ${fmt(R.UMBRAL_APROBACION)}).`;
+  msg("s_msg",(rs.monto>sc&&sc>0)?"err":(ms?"warn":"ok"),ms||(sc>0?"Cálculo válido. Sin aprobación adicional requerida.":""));
+
+  /* Retenciones */
+  const di=+$("d_importe").value||0, dp=+$("d_pct").value||0;
+  const rd=CALC.porcentajeRecibo(di,dp);
+  bigVal("d_monto",rd.monto);
+  $("d_reg").textContent=fmt(di); $("d_p").textContent=(dp*100).toFixed(0)+" %";
+  $("d_final").textContent=fmt(rd.total);
+  $("d_formula").textContent=di>0?rd.formula:"Escribe el importe del recibo y elige el porcentaje.";
+  let md="";
+  if(CALC.requiereAprobacion(rd.monto,R)) md+=`Requiere aprobación del Coordinador/Supervisor (≥ ${fmt(R.UMBRAL_APROBACION)}). `;
+  if(dp>=1) md+="Devolución del 100 % del recibo.";
+  msg("d_msg",md?"warn":"ok",md||(di>0?"Cálculo válido. Sin aprobación adicional requerida.":""));
+
+  buildPlantilla({total:rt,sva:rs,pct:rd});
+}
+
+function buildPlantilla(res){
+  const o=$("pl_origen").value;
+  let monto,det;
+  if(o==="total"){ monto=res.total.monto; const p=planSel("t_plan");
+    det=`Pérdida total del servicio — ${p?p.plan:"(plan no seleccionado)"} — ${$("t_dias").value||0} día(s) de afectación`; }
+  else if(o==="sva"){ monto=res.sva.monto; const x=svaSel("s_sva");
+    det=`SVA ${x?x.sva:"(no seleccionado)"} — ${$("s_dias").value||0} día(s) a descontar`; }
+  else { monto=res.pct.monto; const cn=$("d_concepto").value;
+    det=`${cn?cn+" — ":""}Devolución del ${((+$("d_pct").value||0)*100).toFixed(0)}% sobre un recibo de ${fmt($("d_importe").value)}`; }
+  $("pl_pill").textContent=fmt(monto);
+  const obs=[$("pl_glosa").value.trim(),det,$("pl_obs").value.trim()].filter(Boolean).join(" ");
+  $("pl_out").value=
+`|CODIGO DE PEDIDO|${$("pl_cod").value.trim()||"por emitir"}
+|No. RECIBO|${$("pl_recibo").value.trim()||"NO EMITIDO"}
+|MONTO A DEVOLVER S/|${r2(monto).toFixed(2)}
+|MES INICIO A DEVOLVER|${$("pl_mes").value}
+|CANTIDAD DE MESES|${$("pl_meses").value||1}
+|TIPO|${$("pl_tipodev").value}
+|MOTIVO DEVOLUCION|${$("pl_motdev").value}
+|SUB MOTIVO DEVOLUCION|${$("pl_submot").value}
+|AJUSTE DEL MONTO TOTAL|${$("pl_ajuste").value}
+|NOMBRE JEFE APROBADOR|${$("pl_aprob").value||"(nombre del Super/Coordi)"}
+|OBS|${obs}
+|AREA RESPONSABLE|${$("pl_area").value}`;
+}
+function copiarPlantilla(){
+  const ta=$("pl_out"); ta.removeAttribute("readonly");
+  ta.select(); ta.setSelectionRange(0,99999);
+  let ok=false; try{ ok=document.execCommand("copy"); }catch(e){}
+  ta.setAttribute("readonly","readonly");
+  if(!ok&&navigator.clipboard){ navigator.clipboard.writeText(ta.value); ok=true; }
+  $("pl_copy").textContent = ok ? "✓ Plantilla copiada" : "Mantén presionado el texto y copia";
+  setTimeout(()=>$("pl_copy").textContent="",2600);
+}
+
+function tbl(head,rows){
+  return `<table class="sp"><tr>${head.map(h=>`<th>${h}</th>`).join("")}</tr>`+
+    rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")+`</table>`;
+}
+function renderDatos(){
+  const D=WIN_DATA;
+  const vig=a=>a.filter(x=>estadoDe(x.precio)==="VIGENTE").length;
+  const badge=pr=>estadoDe(pr)==="VIGENTE"?'<b style="color:#0E8A5F">VIGENTE</b>':'<b style="color:#C0281C">NO VIG.</b>';
+  $("k_kpi").innerHTML=
+    `<div><b>${D.planes.length}</b><span>planes</span></div><div><b>${vig(D.planes)}</b><span>vigentes</span></div>`+
+    `<div><b>${D.planes.length-vig(D.planes)}</b><span>no vig.</span></div><div><b>${D.sva.length}</b><span>SVA</span></div>`;
+  $("k_planes").innerHTML=tbl(["Plan","Precio","Estado"],D.planes.map(p=>[
+    p.plan,estadoDe(p.precio)==="VIGENTE"?fmt(p.precio):'<span class="mut">sin precio</span>',badge(p.precio)]));
+  $("k_sva").innerHTML=tbl(["SVA","Precio","Estado"],D.sva.map(x=>[
+    x.sva,estadoDe(x.precio)==="VIGENTE"?fmt(x.precio):'<span class="mut">sin precio</span>',badge(x.precio)]));
+  const rows=[];
+  Object.entries(D.catalogos||{}).forEach(([k,v])=>rows.push([k,v.length]));
+  rows.push(["SUBMOTIVO DEVOLUCION",Object.values(D.submotivos||{}).reduce((a,b)=>a+b.length,0)]);
+  rows.push(["PORCENTAJE_DEVOLUCION",(D.pctDevolucion||[]).length]);
+  Object.entries(D.reglas).forEach(([k,v])=>rows.push(["REGLA · "+k,v]));
+  $("k_listas").innerHTML=tbl(["Campo / Parámetro","N.º / Valor"],rows);
+}
+
+/* NAVEGACIÓN */
+const TAB2BLOQUE={internet:"total",sva:"sva",ret:"pct"};
+document.querySelectorAll("#tabbar button").forEach(b=>b.onclick=()=>show(b.dataset.p));
+function show(p){
+  document.querySelectorAll("#tabbar button").forEach(b=>b.classList.toggle("on",b.dataset.p===p));
+  document.querySelectorAll(".panel").forEach(el=>el.classList.toggle("on",el.id==="p-"+p));
+  if(TAB2BLOQUE[p]) $("pl_origen").value=TAB2BLOQUE[p];
+  recalc();
+  $("scroller").scrollTo({top:0,behavior:"instant"});
+}
+
+/* ADMIN — la clave está en el archivo: es una barrera de uso, no seguridad real */
+const PWD_B64="QWRtaW4yMTAxKio=";
+let adminOk=false;
+function abrirAdmin(){
+  $("ov").classList.add("on"); document.body.style.overflow="hidden";
+  $("valOut").innerHTML=""; $("pwdMsg").innerHTML="";
+  if(adminOk){ $("gate").style.display="none"; $("adminPanel").style.display="block"; $("mTitle").textContent="Actualizar planes y precios"; }
+  else{ $("gate").style.display="block"; $("adminPanel").style.display="none"; $("mTitle").textContent="Acceso restringido"; $("pwd").value=""; setTimeout(()=>$("pwd").focus(),160); }
+}
+function cerrarAdmin(){ $("ov").classList.remove("on"); document.body.style.overflow=""; }
+function validarPwd(){
+  if($("pwd").value===atob(PWD_B64)){
+    adminOk=true; $("gate").style.display="none"; $("adminPanel").style.display="block";
+    $("mTitle").textContent="Actualizar planes y precios";
+  }else{
+    $("pwdMsg").innerHTML='<div class="msg m-err" style="margin:0"><span class="ic">✕</span><div>Contraseña incorrecta.</div></div>';
+    $("pwd").value=""; $("pwd").focus();
+  }
+}
+$("pwd").addEventListener("keydown",e=>{ if(e.key==="Enter") validarPwd(); });
+$("ov").addEventListener("click",e=>{ if(e.target===$("ov")) cerrarAdmin(); });
+
+/* ═════ CARGA Y VALIDACIÓN ═════ */
+const norm=s=>String(s??"").trim().toUpperCase()
+  .normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Z0-9]+/g," ").trim();
+function num(v){
+  if(v===null||v===undefined||String(v).trim()==="") return NaN;
+  const n=Number(String(v).replace(/S\/\.?/ig,"").replace(/\s/g,"").replace(/,/g,".").replace(/%$/,""));
+  return isNaN(n)?NaN:n;
+}
+function activo(v){
+  if(v===undefined||v===null||String(v).trim()==="") return true;
+  return !/^INACTIVO|^NO$|^0$|^BAJA/.test(norm(v));
+}
+function findCol(h,names){ for(const n of names){ const i=h.findIndex(x=>norm(x)===norm(n)); if(i>=0) return i; } return -1; }
+function sheetRows(wb,wanted){
+  const key=wb.SheetNames.find(n=>norm(n)===norm(wanted));
+  if(!key) return null;
+  const aoa=XLSX.utils.sheet_to_json(wb.Sheets[key],{header:1,defval:""});
+  const hi=aoa.findIndex(r=>r.some(c=>String(c).trim()!==""));
+  if(hi<0) return {headers:[],rows:[]};
+  return {headers:aoa[hi].map(h=>String(h)),rows:aoa.slice(hi+1).filter(r=>r.some(c=>String(c).trim()!==""))};
+}
+function leerBDCalculadora(wb){
+  const sh=sheetRows(wb,"BD_CALCULADORA");
+  if(!sh) return null;
+  const errors=[],warns=[],nuevo={};
+  const cCat=findCol(sh.headers,["CATEGORIA","CATEGORÍA"]), cPro=findCol(sh.headers,["PRODUCTO"]);
+  const cIte=findCol(sh.headers,["ITEM","ÍTEM","PLAN","NOMBRE"]), cVel=findCol(sh.headers,["VELOCIDAD"]);
+  const cPre=findCol(sh.headers,["PRECIO","CARGO FIJO"]), cPad=findCol(sh.headers,["PADRE","MOTIVO PADRE","DEPENDE DE"]);
+  const cObs=findCol(sh.headers,["OBSERVACION","OBSERVACIÓN"]), cEst=findCol(sh.headers,["ACTIVO"]);
+  const falt=[];
+  if(cCat<0) falt.push('"CATEGORIA"'); if(cIte<0) falt.push('"ITEM"'); if(cPre<0) falt.push('"PRECIO"');
+  if(falt.length){ errors.push(`Hoja BD_CALCULADORA: faltan columnas obligatorias ${falt.join(", ")}.`); return {errors,warns,nuevo,hojas:[]}; }
+  const planes=[],sva=[],tramos=[],pctDev=[],catalogos={},submot={},reglas={};
+  const vP=new Set(),vS=new Set();
+  sh.rows.forEach((r,i)=>{
+    const ln=i+2;
+    if(cEst>=0&&!activo(r[cEst])) return;
+    const cat=norm(r[cCat]).replace(/ /g,"_"), item=String(r[cIte]??"").trim(), bruto=String(r[cPre]??"").trim();
+    let precio=bruto===""?null:num(bruto);
+    if(bruto!==""&&isNaN(precio)){ errors.push(`Fila ${ln} ("${item||"sin nombre"}"): precio inválido — "${bruto}" no es un número.`); return; }
+    if(precio!==null&&precio<0){ errors.push(`Fila ${ln} ("${item}"): precio negativo (${precio}).`); return; }
+    if(!cat) return;
+    if(cat!=="CATALOGO"&&cat!=="REGLA"&&!item){ errors.push(`Fila ${ln}: registro incompleto — la columna ITEM está vacía (categoría ${r[cCat]}).`); return; }
+    if(cat==="PLAN"){
+      const k=item+"|"+(precio===null?"":precio);
+      if(vP.has(k)){ warns.push(`Fila ${ln}: el plan "${item}" con el mismo precio está repetido; se ignoró.`); return; }
+      vP.add(k); planes.push({plan:item,velocidad:cVel>=0?String(r[cVel]??"").trim():"",precio,estado:estadoDe(precio),obs:cObs>=0?String(r[cObs]??"").trim():""});
+    }else if(cat==="SVA"){
+      const k=item+"|"+(precio===null?"":precio);
+      if(vS.has(k)){ warns.push(`Fila ${ln}: el SVA "${item}" con el mismo precio está repetido; se ignoró.`); return; }
+      vS.add(k); sva.push({sva:item,precio,estado:estadoDe(precio),obs:cObs>=0?String(r[cObs]??"").trim():""});
+    }else if(cat==="TRAMO_DESCUENTO"){
+      let pv=precio; if(pv===null) return;
+      if(pv>1) pv=pv/100;
+      const m=String(item).match(/(\d+)\s*-\s*(\d+)/), m2=String(item).match(/(\d+)/);
+      tramos.push({etiqueta:item,diaMin:m?+m[1]:(m2?+m2[1]:0),diaMax:m?+m[2]:999,pct:pv});
+    }else if(cat==="PORCENTAJE_DEVOLUCION"){
+      if(precio===null){ warns.push(`Fila ${ln}: % de devolución sin valor; se ignoró.`); return; }
+      const v=precio>1?precio/100:precio;
+      if(!pctDev.includes(v)) pctDev.push(v);
+    }else if(cat==="CATALOGO"){
+      const campo=cPro>=0?String(r[cPro]??"").trim().toUpperCase():"", padre=cPad>=0?String(r[cPad]??"").trim():"";
+      if(!campo||!item){ warns.push(`Fila ${ln}: catálogo incompleto (falta PRODUCTO o ITEM); se ignoró.`); return; }
+      if(/SUBMOTIVO/.test(campo)){
+        if(!padre){ warns.push(`Fila ${ln}: submotivo "${item}" sin MOTIVO en la columna PADRE; se ignoró.`); return; }
+        submot[padre]=submot[padre]||[]; if(!submot[padre].includes(item)) submot[padre].push(item);
+      }else{ catalogos[campo]=catalogos[campo]||[]; if(!catalogos[campo].includes(item)) catalogos[campo].push(item); }
+    }else if(cat==="REGLA"){
+      const k=norm(item).replace(/ /g,"_");
+      if(!k) return;
+      if(!(k in WIN_DATA.reglas)){ warns.push(`Fila ${ln}: parámetro "${item}" no reconocido; se ignoró.`); return; }
+      if(precio===null||precio<=0){ errors.push(`Fila ${ln}: la regla "${item}" debe tener un valor numérico mayor a 0.`); return; }
+      reglas[k]=precio;
+    }else warns.push(`Fila ${ln}: categoría "${r[cCat]}" no reconocida; se ignoró.`);
+  });
+  if(!planes.length) errors.push("No se encontró ningún registro con CATEGORIA = PLAN.");
+  if(!sva.length)    errors.push("No se encontró ningún registro con CATEGORIA = SVA.");
+  const porNombre={};
+  planes.forEach(p=>{ porNombre[p.plan]=porNombre[p.plan]||new Set(); porNombre[p.plan].add(p.precio); });
+  Object.entries(porNombre).forEach(([n,set])=>{ if(set.size>1) warns.push(`El plan "${n}" aparece con ${set.size} precios distintos; se muestran todas las opciones.`); });
+  if(errors.length) return {errors,warns,nuevo,hojas:[]};
+  nuevo.planes=planes; nuevo.sva=sva;
+  if(tramos.length) nuevo.tramos=tramos.sort((a,b)=>a.diaMin-b.diaMin);
+  if(pctDev.length) nuevo.pctDevolucion=pctDev.sort((a,b)=>a-b);
+  if(Object.keys(catalogos).length) nuevo.catalogos=Object.assign({},WIN_DATA.catalogos,catalogos);
+  if(Object.keys(submot).length)    nuevo.submotivos=Object.assign({},WIN_DATA.submotivos,submot);
+  if(Object.keys(reglas).length)    nuevo.reglas=Object.assign({},WIN_DATA.reglas,reglas);
+  return {errors,warns,nuevo,hojas:Object.keys(nuevo)};
+}
+function validarYCargar(wb){
+  const errors=[],warns=[],nuevo={};
+  const sp=sheetRows(wb,"PLANES");
+  if(sp){
+    const cP=findCol(sp.headers,["PLAN","PLANES","NOMBRE DEL PLAN"]);
+    const cC=findCol(sp.headers,["CARGO FIJO","PRECIO","COSTO DEL PLAN","COSTO"]);
+    const cE=findCol(sp.headers,["ESTADO"]);
+    if(cP<0) errors.push('Hoja PLANES: falta la columna obligatoria "PLAN".');
+    else{
+      const out=[],vis=new Set();
+      sp.rows.forEach((r,i)=>{
+        const ln=i+2;
+        if(cE>=0&&!activo(r[cE])) return;
+        const nombre=String(r[cP]??"").trim();
+        if(!nombre){ errors.push(`Hoja PLANES, fila ${ln}: nombre vacío.`); return; }
+        let precio=null;
+        if(cC>=0&&String(r[cC]??"").trim()!==""){
+          const n=num(r[cC]);
+          if(isNaN(n)){ errors.push(`Hoja PLANES, fila ${ln} ("${nombre}"): cargo fijo inválido.`); return; }
+          if(n<0){ errors.push(`Hoja PLANES, fila ${ln} ("${nombre}"): cargo fijo negativo.`); return; }
+          precio=n;
+        }
+        const k=nombre+"|"+(precio===null?"":precio);
+        if(vis.has(k)){ warns.push(`Hoja PLANES, fila ${ln}: "${nombre}" repetido; se ignoró.`); return; }
+        vis.add(k); out.push({plan:nombre,velocidad:"",precio,estado:estadoDe(precio),obs:""});
+      });
+      if(!out.length) errors.push("Hoja PLANES: no quedó ningún plan válido."); else nuevo.planes=out;
+    }
+  }
+  const ss=sheetRows(wb,"SVA");
+  if(ss){
+    const cS=findCol(ss.headers,["SVA","SERVICIO","NOMBRE"]);
+    const cC=findCol(ss.headers,["CARGO FIJO","PRECIO","COSTO DEL SVA","COSTO"]);
+    const cE=findCol(ss.headers,["ESTADO"]);
+    if(cS<0) errors.push('Hoja SVA: falta la columna obligatoria "SVA".');
+    else{
+      const out=[],vis=new Set();
+      ss.rows.forEach((r,i)=>{
+        const ln=i+2;
+        if(cE>=0&&!activo(r[cE])) return;
+        const nombre=String(r[cS]??"").trim();
+        if(!nombre){ errors.push(`Hoja SVA, fila ${ln}: nombre vacío.`); return; }
+        let precio=null;
+        if(cC>=0&&String(r[cC]??"").trim()!==""){
+          const n=num(r[cC]);
+          if(isNaN(n)){ errors.push(`Hoja SVA, fila ${ln} ("${nombre}"): cargo fijo inválido.`); return; }
+          if(n<0){ errors.push(`Hoja SVA, fila ${ln} ("${nombre}"): cargo fijo negativo.`); return; }
+          precio=n;
+        }
+        const k=nombre+"|"+(precio===null?"":precio);
+        if(vis.has(k)){ warns.push(`Hoja SVA, fila ${ln}: "${nombre}" repetido; se ignoró.`); return; }
+        vis.add(k); out.push({sva:nombre,precio,estado:estadoDe(precio),obs:""});
+      });
+      if(!out.length) errors.push("Hoja SVA: no quedó ningún SVA válido."); else nuevo.sva=out;
+    }
+  }
+  const sl=sheetRows(wb,"LISTAS");
+  if(sl){
+    const cC=findCol(sl.headers,["CAMPO","LISTA"]), cV=findCol(sl.headers,["VALOR","OPCION"]);
+    if(cC<0||cV<0) errors.push('Hoja LISTAS: faltan columnas obligatorias ("CAMPO" y/o "VALOR").');
+    else{
+      const out={};
+      sl.rows.forEach(r=>{
+        const campo=String(r[cC]??"").trim().toUpperCase(), val=String(r[cV]??"").trim();
+        if(!campo||!val) return;
+        out[campo]=out[campo]||[]; if(!out[campo].includes(val)) out[campo].push(val);
+      });
+      if(Object.keys(out).length) nuevo.catalogos=Object.assign({},WIN_DATA.catalogos,out);
+    }
+  }
+  const sr=sheetRows(wb,"REGLAS");
+  if(sr){
+    const cP=findCol(sr.headers,["PARAMETRO","REGLA","CAMPO"]), cV=findCol(sr.headers,["VALOR"]);
+    if(cP<0||cV<0) errors.push('Hoja REGLAS: faltan columnas obligatorias ("PARAMETRO" y/o "VALOR").');
+    else{
+      const out={};
+      sr.rows.forEach((r,i)=>{
+        const ln=i+2, k=norm(r[cP]).replace(/ /g,"_"), n=num(r[cV]);
+        if(!k) return;
+        if(!(k in WIN_DATA.reglas)){ warns.push(`Hoja REGLAS, fila ${ln}: "${r[cP]}" no reconocido; se ignoró.`); return; }
+        if(isNaN(n)||n<=0){ errors.push(`Hoja REGLAS, fila ${ln}: "${r[cP]}" debe ser un número mayor a 0.`); return; }
+        out[k]=n;
+      });
+      if(Object.keys(out).length) nuevo.reglas=Object.assign({},WIN_DATA.reglas,out);
+    }
+  }
+  if(!sp&&!ss&&!sl&&!sr)
+    errors.push("El archivo no contiene la hoja BD_CALCULADORA ni las hojas del formato anterior (PLANES, SVA, LISTAS, REGLAS).");
+  return {errors,warns,nuevo,hojas:Object.keys(nuevo)};
+}
+function procesarArchivo(file){
+  const rd=new FileReader();
+  rd.onload=e=>{
+    let wb;
+    try{ wb=XLSX.read(new Uint8Array(e.target.result),{type:"array"}); }
+    catch(err){ $("valOut").innerHTML='<div class="msg m-err"><span class="ic">✕</span><div>No se pudo leer el archivo. Verifica que sea .xlsx, .xls o .csv válido.</div></div>'; return; }
+    const v=leerBDCalculadora(wb)||validarYCargar(wb);
+    if(v.errors.length){
+      $("valOut").innerHTML=
+        `<div class="msg m-err"><span class="ic">✕</span><div><b>No se actualizó nada.</b> ${v.errors.length} error(es). Los datos actuales se mantienen.<ul>`+
+        v.errors.slice(0,30).map(e=>`<li>${e}</li>`).join("")+
+        (v.errors.length>30?`<li>… y ${v.errors.length-30} más.</li>`:"")+`</ul></div></div>`+
+        (v.warns.length?`<div class="msg m-warn"><span class="ic">!</span><div>Avisos:<ul>${v.warns.slice(0,10).map(w=>`<li>${w}</li>`).join("")}</ul></div></div>`:"");
+      return;
+    }
+    Object.assign(WIN_DATA,v.nuevo); WIN_DATA.origen=file.name;
+    buildUI();
+    const vg=WIN_DATA.planes.filter(p=>estadoDe(p.precio)==="VIGENTE").length;
+    $("valOut").innerHTML=
+      `<div class="msg m-ok"><span class="ic">✓</span><div><b>Datos actualizados correctamente.</b><br>`+
+      `${WIN_DATA.planes.length} planes (${vg} vigentes, ${WIN_DATA.planes.length-vg} no vigentes) · ${WIN_DATA.sva.length} SVA.</div></div>`+
+      (v.warns.length?`<div class="msg m-warn"><span class="ic">!</span><div>Avisos (no bloquean):<ul>${v.warns.slice(0,10).map(w=>`<li>${w}</li>`).join("")}</ul></div></div>`:"");
+  };
+  rd.readAsArrayBuffer(file);
+}
+$("file").addEventListener("change",e=>{ if(e.target.files[0]) procesarArchivo(e.target.files[0]); });
+
+function descargarPlantilla(){
+  const D=WIN_DATA, wb=XLSX.utils.book_new();
+  const rows=[["CATEGORIA","PRODUCTO","ITEM","VELOCIDAD","PRECIO","ESTADO","PADRE","OBSERVACION"]];
+  D.planes.forEach(p=>rows.push(["PLAN","INTERNET",p.plan,p.velocidad||"",p.precio==null?"":p.precio,estadoDe(p.precio),"",p.obs||""]));
+  D.sva.forEach(x=>rows.push(["SVA","SVA",x.sva,"",x.precio==null?"":x.precio,estadoDe(x.precio),"",x.obs||""]));
+  (D.tramos||[]).forEach(t=>rows.push(["TRAMO_DESCUENTO","INTERNET",t.etiqueta,"",t.pct,"VIGENTE","","No usado por la app"]));
+  (D.pctDevolucion||[]).forEach(v=>rows.push(["PORCENTAJE_DEVOLUCION","DEVOLUCION",(v*100).toFixed(0)+"%","",v,"VIGENTE","",""]));
+  Object.entries(D.catalogos||{}).forEach(([c,vs])=>vs.forEach(v=>rows.push(["CATALOGO",c,v,"","","VIGENTE","",""])));
+  Object.entries(D.submotivos||{}).forEach(([pa,vs])=>vs.forEach(v=>rows.push(["CATALOGO","SUBMOTIVO DEVOLUCION",v,"","","VIGENTE",pa,"Depende del motivo en PADRE"])));
+  Object.entries(D.reglas).forEach(([k,v])=>rows.push(["REGLA","CALCULO",k,"",v,"VIGENTE","",""]));
+  const ws=XLSX.utils.aoa_to_sheet(rows);
+  ws["!cols"]=[{wch:22},{wch:30},{wch:46},{wch:12},{wch:11},{wch:13},{wch:34},{wch:50}];
+  XLSX.utils.book_append_sheet(wb,ws,"BD_CALCULADORA");
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([
+    ["PLANTILLA DE ACTUALIZACION — CALCULADORA WIN"],[],
+    ["1) Edita la hoja BD_CALCULADORA."],["2) Guarda el archivo."],
+    ["3) En la app entra al candado, pon la contraseña y carga este archivo."],
+    ["4) Si hay errores se listan y NO se reemplazan los datos actuales."],[],
+    ["COLUMNA","QUE CONTIENE"],
+    ["CATEGORIA","PLAN · SVA · PORCENTAJE_DEVOLUCION · CATALOGO · REGLA"],
+    ["PRODUCTO","INTERNET / SVA / DEVOLUCION. En CATALOGO es el nombre del campo."],
+    ["ITEM","Nombre del plan, del SVA o el valor de la lista."],
+    ["PRECIO","Cargo fijo. DEJALO VACIO si no tiene precio."],
+    ["ESTADO","Se recalcula solo: con precio = VIGENTE, sin precio = NO VIGENTE."],
+    ["PADRE","Solo para SUBMOTIVO DEVOLUCION: el motivo del que depende."],[],
+    ["EJEMPLO DE FILA"],
+    ["PLAN","INTERNET","Residencial_750 Mbps","750 Mbps",109,"VIGENTE"],
+    ["PLAN","INTERNET","Residencial_650 Mbps","","","NO VIGENTE"]]),"INSTRUCTIVO");
+  XLSX.writeFile(wb,"BD_CALCULADORA_actualizacion.xlsx");
+}
+
+/* LISTENERS */
+const AUTO=new Set(["t_tipo","t_motivo","t_dias","t_costo","s_tipo","s_motivo","s_dias","s_costo",
+ "d_importe","d_pct","d_concepto","pl_origen","pl_cod","pl_recibo","pl_mes","pl_meses","pl_submot",
+ "pl_ajuste","pl_aprob","pl_area","pl_glosa","pl_tipodev","pl_obs"]);
+["input","change"].forEach(ev=>document.addEventListener(ev,e=>{ if(AUTO.has(e.target.id)) recalc(); }));
+$("t_plan").addEventListener("change",()=>{ sugerirPrecio("t_plan","t_costo"); recalc(); });
+$("s_sva").addEventListener("change",()=>{
+  const x=svaSel("s_sva");
+  if(x) $("s_costo").value=(estadoDe(x.precio)==="VIGENTE")?x.precio:"";
+  recalc();
+});
+$("pl_motdev").addEventListener("change",()=>{ refreshSubmotivos(); recalc(); });
+
+buildUI();
+</script>
+</body>
+</html>
