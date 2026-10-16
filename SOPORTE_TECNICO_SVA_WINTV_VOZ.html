@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Soporte técnico SVA WINTV — Canal VOZ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --or:#FF5A0A; --or-dark:#D94800; --or-tint:#FFF1E9;
+  --ye:#FFC200; --ye-tint:#FFF8E1;
+  --bk:#1A1A1A; --wh:#FFFFFF; --bg:#F5F5F5; --gln:#E5E5E5; --ts:#595959;
+  --blu:#1D4ED8; --blu-tint:#EAF2FD; --rd:#DC2626;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:inherit;}
+html,body{height:100%;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--bk);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow:hidden;}
+button,input{font-family:'Inter',sans-serif;}
+
+/* ═══ CABECERA ═══ */
+.flow-header{display:flex;align-items:center;gap:14px;background:var(--bk);padding:10px 22px;border-bottom:3px solid var(--or);height:64px;flex-shrink:0;}
+.fh-logo img{height:30px;display:block;}
+.fh-tt{display:flex;flex-direction:column;line-height:1.2;min-width:0;}
+.fh-code{font-size:12.5px;font-weight:700;letter-spacing:.14em;color:var(--ye);text-transform:uppercase;}
+.fh-title{font-size:17px;font-weight:700;color:#fff;white-space:nowrap;}
+.fh-chan{background:var(--or);color:#fff;font-size:13px;font-weight:800;letter-spacing:.1em;padding:5px 11px;border-radius:999px;text-transform:uppercase;white-space:nowrap;}
+.fh-sp{flex:1;}
+.fh-search{position:relative;}
+.fh-search input{width:270px;background:#2A2A2A;border:1.5px solid #3D3D3D;color:#fff;border-radius:999px;padding:8px 14px 8px 34px;font-size:14.5px;outline:none;transition:.2s;}
+.fh-search input:focus{border-color:var(--or);background:#333;width:310px;}
+.fh-search input::placeholder{color:#8A8A8A;}
+.fh-search .ic{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;opacity:.7;}
+.sug{position:absolute;top:calc(100% + 8px);left:0;width:440px;max-width:min(440px,90vw);background:var(--wh);
+  border:1.5px solid var(--gln);border-radius:13px;box-shadow:0 14px 40px rgba(0,0,0,.28);overflow:hidden;z-index:95;display:none;}
+.sug.on{display:block;}
+.sg{display:flex;gap:11px;width:100%;background:none;border:none;border-bottom:1px solid #F0F0F0;text-align:left;
+  cursor:pointer;padding:10px 13px;transition:.14s;align-items:flex-start;}
+.sg:last-child{border-bottom:none;}
+.sg:hover,.sg.on{background:var(--or-tint);}
+.sg-b{min-width:0;display:flex;flex-direction:column;}
+.sg-t{font-size:15px;font-weight:700;color:var(--bk);line-height:1.32;}
+.sg-m{font-size:12.5px;font-weight:600;color:#A5A5A5;margin-top:2px;}
+.sg-s{font-size:13.5px;color:var(--ts);margin-top:4px;line-height:1.4;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.sg-s mark{background:#FFE9B3;color:#5A4300;font-weight:700;padding:0 1px;border-radius:2px;}
+.sg-none{padding:13px;font-size:14.5px;color:var(--ts);}
+.sg-more{padding:8px 13px;background:#FAFAFA;border-top:1px solid #F0F0F0;font-size:12.5px;color:#8A8A8A;}
+.fh-btn{background:#2A2A2A;border:1.5px solid #3D3D3D;color:#EDEDED;border-radius:8px;padding:8px 13px;font-size:14px;font-weight:600;cursor:pointer;transition:.18s;white-space:nowrap;}
+.fh-btn:hover{background:var(--or);border-color:var(--or);color:#fff;}
+.fh-btn.map{border-color:#5A5A5A;}
+.fh-btn.start{border-color:#5A5A5A;display:flex;align-items:center;gap:7px;}
+.fh-btn.start .n{width:19px;height:19px;border-radius:50%;background:#3D3D3D;color:#EDEDED;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;transition:.18s;}
+.fh-btn.start:hover .n{background:rgba(0,0,0,.25);color:#fff;}
+.fh-btn.start.on{background:var(--or);border-color:var(--or);color:#fff;}
+.fh-btn.start.on .n{background:rgba(0,0,0,.22);color:#fff;}
+.fh-btn.map.on{background:var(--or);border-color:var(--or);color:#fff;}
+.ix-toggle{display:none;}
+
+/* ═══ MIGA DE PAN ═══ */
+.crumb{display:flex;align-items:center;gap:9px;background:var(--wh);border-bottom:1.5px solid var(--gln);padding:0 22px;height:38px;flex-shrink:0;font-size:14px;overflow:hidden;}
+.crumb .cph{font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--or);white-space:nowrap;}
+.crumb .sep{color:#C9C9C9;}
+.crumb .cst{color:var(--bk);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.crumb .meta{margin-left:auto;color:var(--ts);white-space:nowrap;font-size:13.5px;}
+.crumb .meta b{color:var(--bk);}
+
+/* ═══ CUERPO ═══ */
+.body{display:flex;height:calc(100vh - 105px);}
+
+/* ── ÍNDICE INTERACTIVO (lateral) ── */
+.ix{flex:0 0 250px;min-width:250px;max-width:280px;background:var(--wh);border-right:1.5px solid var(--gln);display:flex;flex-direction:column;}
+.ix-head{padding:13px 16px 10px;flex-shrink:0;}
+.ix-k{font-size:10.5px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#A5A5A5;}
+.ix-prog{margin-top:9px;height:4px;border-radius:999px;background:var(--gln);overflow:hidden;}
+.ix-prog i{display:block;height:100%;background:var(--or);border-radius:999px;transition:width .3s ease;width:0;}
+.ix-pct{font-size:12.5px;font-weight:700;color:var(--ts);margin-top:6px;}
+.ix-up{width:100%;margin-top:9px;background:#FAFAFA;border:1.5px dashed var(--gln);border-radius:8px;padding:6px 8px;
+  font-size:12.2px;font-weight:600;color:#8A8A8A;cursor:pointer;text-align:left;transition:.16s;line-height:1.35;}
+.ix-up:hover{border-color:var(--or);color:var(--or-dark);background:var(--or-tint);}
+.ix-up.on{border-style:solid;border-color:var(--or);background:var(--or-tint);color:var(--or-dark);}
+.ix-body{flex:1;overflow-y:auto;padding:2px 12px 26px;scrollbar-width:thin;}
+.ix-body::-webkit-scrollbar{width:6px;}
+.ix-body::-webkit-scrollbar-thumb{background:#E2E2E2;border-radius:10px;}
+
+.ctx-empty{font-size:14px;color:#8A8A8A;background:#FAFAFA;border:1.5px dashed var(--gln);border-radius:10px;padding:11px 12px;margin-top:4px;line-height:1.45;}
+.ctx-ph{margin-top:12px;display:flex;flex-direction:column;gap:6px;}
+.ctx-ph-cur{margin-top:0;padding-bottom:14px;border-bottom:1.5px solid var(--gln);margin-bottom:2px;}
+.ctx-phb{display:flex;align-items:center;gap:9px;background:rgba(15,9,8,.20);border:1.5px solid #0F0908;border-radius:9px;
+  padding:8px 10px;font-size:13.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#0F0908;cursor:pointer;transition:.16s;}
+.ctx-phb:hover{border-color:var(--or);color:var(--or-dark);background:rgba(15,9,8,.28);}
+.ctx-phb .d{width:22px;height:22px;border-radius:50%;border:2px solid #0F0908;display:flex;align-items:center;
+  justify-content:center;font-size:10.5px;color:#0F0908;flex-shrink:0;}
+.ctx-phb.cur{background:#0F0908;border-color:var(--or);color:#fff;}
+.ctx-phb.cur:hover{background:#0F0908;border-color:var(--or);color:#fff;}
+.ctx-phb.cur .d{border-color:var(--or);color:#fff;}
+
+.ctx-fase{display:flex;align-items:center;gap:10px;margin:6px 0 14px;padding-bottom:12px;border-bottom:1.5px solid var(--gln);}
+.ctx-fase .d{width:30px;height:30px;border-radius:50%;background:var(--or);color:#fff;font-size:13.5px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 0 4px rgba(255,90,10,.18);}
+.ctx-fase .tt{display:flex;flex-direction:column;min-width:0;}
+.ctx-fase .tt b{font-size:15px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--bk);line-height:1.25;}
+.ctx-fase .tt i{font-size:12.5px;font-style:normal;font-weight:600;color:var(--or-dark);margin-top:1px;}
+
+.ctx-k{font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#A5A5A5;margin:14px 0 7px;}
+.ctx-k.cur{color:var(--or);}
+.ctx-none{font-size:13px;color:#A5A5A5;font-style:italic;padding:2px 2px 4px;}
+
+.ctx-s{display:flex;gap:8px;width:100%;background:rgba(15,9,8,.10);border:1.5px solid #0F0908;border-radius:9px;
+  text-align:left;cursor:pointer;padding:8px 10px;margin-bottom:6px;transition:.16s;align-items:flex-start;}
+.ctx-s:hover{border-color:var(--or);background:rgba(15,9,8,.18);}
+.ctx-s .ar{font-size:14px;font-weight:800;color:#0F0908;flex-shrink:0;line-height:1.4;}
+.ctx-s:hover .ar{color:var(--or);}
+.ctx-s .tx{min-width:0;display:flex;flex-direction:column;}
+.ctx-s .sl{font-size:13.8px;font-weight:600;color:#0F0908;line-height:1.32;}
+.ctx-s:hover .sl{color:var(--bk);}
+.ctx-s .cd{font-size:10.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--or);margin-top:3px;}
+
+.ctx-now{background:var(--or-tint);border:2px solid var(--or);border-radius:10px;padding:10px 12px;
+  display:flex;flex-direction:column;box-shadow:0 2px 10px rgba(255,90,10,.14);}
+.ctx-now .sl{font-size:15px;font-weight:800;color:var(--bk);line-height:1.32;}
+.ctx-now .ac{font-size:12.5px;font-weight:600;color:var(--or-dark);margin-top:4px;}
+
+/* sub-secciones del paso activo (scroll-spy) */
+.ix-secs{margin:3px 0 4px 18px;border-left:1.5px dashed #E2E2E2;padding-left:9px;}
+.ix-sec{display:block;width:100%;background:none;border:none;text-align:left;cursor:pointer;
+  font-size:12.6px;font-weight:600;color:#9A9A9A;padding:3px 4px;line-height:1.3;transition:.15s;border-radius:5px;}
+.ix-sec:hover{color:var(--bk);background:#FAFAFA;}
+.ix-sec.on{color:var(--or-dark);background:var(--or-tint);font-weight:800;}
+
+/* ═══ PANEL PRINCIPAL ═══ */
+.panel{flex:1;min-width:0;background:var(--wh);display:flex;flex-direction:column;}
+.pn-head{background:var(--bk);padding:16px 34px;border-bottom:3px solid var(--ye);flex-shrink:0;display:flex;align-items:flex-start;gap:20px;transition:box-shadow .3s;}
+.pn-head.flash{box-shadow:inset 0 0 0 3px var(--or);}
+.pn-head .txt{min-width:0;flex:1;}
+.pn-head .k{font-size:12.5px;font-weight:800;letter-spacing:.16em;color:var(--ye);text-transform:uppercase;}
+.pn-head .t{font-size:27px;font-weight:800;color:#fff;margin-top:3px;line-height:1.22;letter-spacing:-.015em;}
+.pn-head .m{font-size:14.5px;color:#B5B5B5;margin-top:6px;}
+.pn-nav{display:flex;gap:7px;flex-shrink:0;padding-top:4px;}
+.pn-nav button{background:#2A2A2A;border:1.5px solid #3D3D3D;color:#EDEDED;border-radius:9px;padding:9px 14px;font-size:14.5px;font-weight:700;cursor:pointer;transition:.16s;white-space:nowrap;}
+.pn-nav button:hover:not(:disabled){background:var(--or);border-color:var(--or);color:#fff;}
+.pn-nav button:disabled{opacity:.32;cursor:default;}
+
+.pn-scroll{flex:1;overflow-y:auto;scrollbar-width:thin;scroll-behavior:smooth;}
+.pn-scroll::-webkit-scrollbar{width:9px;}
+.pn-scroll::-webkit-scrollbar-thumb{background:#DDD;border-radius:10px;}
+.pn-grid{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:32px;padding:26px 34px 70px;max-width:1560px;}
+@media(max-width:1240px){.pn-grid{grid-template-columns:minmax(0,1fr);}}
+.pn-main{min-width:0;font-size:17.5px;}
+.pn-side{min-width:0;}
+.pn-side .box{border:1.5px solid var(--gln);border-radius:12px;overflow:hidden;margin-bottom:16px;}
+.pn-side .box>.bt{background:#FAFAFA;border-bottom:1.5px solid var(--gln);padding:9px 14px;font-size:12.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ts);}
+.pn-side .box>.bb{padding:12px 14px;}
+.metar{display:flex;gap:10px;font-size:15px;padding:4px 0;}
+.metar b{color:var(--ts);font-weight:700;min-width:64px;}
+.gobtn{display:block;width:100%;background:var(--wh);border:1.5px solid var(--gln);border-radius:10px;padding:11px 13px;font-size:15.2px;font-weight:600;color:var(--bk);cursor:pointer;transition:.16s;text-align:left;margin-bottom:8px;line-height:1.4;}
+.gobtn:last-child{margin-bottom:0;}
+.gobtn:hover{border-color:var(--or);background:var(--or-tint);color:var(--or-dark);}
+.gobtn .cond{display:block;font-size:12.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--or);margin-bottom:2px;}
+.gobtn.back{font-size:14.4px;font-weight:500;color:var(--ts);padding:8px 12px;}
+
+/* contenido */
+.asesor-label{display:inline-block;font-size:12.5px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--or-dark);background:var(--or-tint);border-radius:5px;padding:4px 9px;margin:20px 0 8px;}
+.tag{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  border-radius:4px;padding:1px 6px;margin-right:7px;vertical-align:1px;}
+.tag.t-no{background:var(--ye-tint);color:#8A6100;box-shadow:inset 0 0 0 1px #F0DCA0;}
+.tag.t-wr{background:#FEF2F2;color:#B91C1C;box-shadow:inset 0 0 0 1px #F6C9C9;}
+.speech{background:#fff;border:1.5px solid #EDEDED;border-left:5px solid var(--or);border-radius:0 10px 10px 0;padding:15px 18px;font-size:17.5px;color:#000;white-space:pre-line;box-shadow:0 1px 4px rgba(0,0,0,.05);line-height:1.62;}
+.accion{background:#FAFAFA;border-left:5px solid var(--ye);border-radius:0 10px 10px 0;padding:14px 18px;font-size:17px;margin:12px 0;}
+.note{display:flex;gap:11px;align-items:flex-start;background:var(--ye-tint);border-left:5px solid var(--ye);border-radius:0 10px 10px 0;padding:13px 16px;font-size:16.3px;margin:12px 0;}
+.note .ni{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--ye);color:#5A4300;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+.warn{background:#FEF2F2;border-left:5px solid var(--rd);border-radius:0 10px 10px 0;padding:13px 17px;font-size:16.3px;color:#B91C1C;margin:12px 0;}
+.warn b{color:#8C1616;}
+.info{background:var(--blu-tint);border-left:5px solid var(--blu);border-radius:0 10px 10px 0;padding:13px 17px;font-size:16.5px;margin:12px 0;}
+.pn-main ul{margin:10px 0 10px 6px;padding-left:20px;font-size:17px;}
+.pn-main ul li{margin:5px 0;}
+.pn-main p{font-size:17.5px;margin:10px 0;}
+.pn-side ul{margin:6px 0 6px 2px;padding-left:17px;font-size:15px;}
+.pn-side p{font-size:15px;}
+.pn-side .speech{font-size:15px;padding:10px 12px;}
+.pn-side .note,.pn-side .info,.pn-side .warn{font-size:14.5px;padding:10px 12px;}
+.tipif{border:1.5px solid var(--gln);border-radius:11px;overflow:hidden;margin:13px 0;}
+.tipif-title{background:#EFEFEF;padding:9px 14px;font-size:13.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#4A4A4A;}
+.tipif-row{display:flex;border-top:1px solid #EFEFEF;font-size:16px;}
+.tipif-k{width:124px;flex-shrink:0;padding:8px 13px;background:#FAFAFA;font-weight:700;color:var(--ts);}
+.tipif-v{padding:8px 13px;flex:1;}
+.tipif-code{padding:10px 14px;background:#1A1A1A;color:#FFD9C2;font-size:15.4px;white-space:pre-line;font-weight:600;}
+.sect{font-size:13.5px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:var(--ts);margin:24px 0 8px;padding:0 0 7px;border-bottom:1.5px solid var(--gln);scroll-margin-top:14px;transition:background .35s,color .35s,padding .35s;border-radius:6px;}
+.sect.flash{background:var(--or-tint);color:var(--or-dark);padding:7px 10px;border-bottom-color:#FFCFB3;}
+
+.dec-bar{margin-top:34px;padding-top:20px;border-top:2px solid var(--gln);}
+.dec-k{font-size:13px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--or);margin-bottom:11px;}
+.dec-row{display:flex;flex-wrap:wrap;gap:11px;}
+.dec-b{flex:1 1 230px;min-width:210px;display:flex;flex-direction:column;position:relative;
+  background:#FFFFFF;border:1.5px solid rgba(15,9,8,.40);border-left:5px solid #0F0908;border-radius:0 11px 11px 0;
+  padding:12px 34px 12px 14px;text-align:left;cursor:pointer;transition:.16s;box-shadow:0 1px 3px rgba(0,0,0,.05);}
+.dec-b:hover{box-shadow:0 6px 18px rgba(0,0,0,.14);transform:translateY(-1px);}
+.dec-b .cond{font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;}
+/* fondos con la paleta WIN al 15% de opacidad · 30% al pasar el cursor */
+.dec-b .cond{color:#0F0908;}
+.dec-b .lab{color:#0F0908;}
+.dec-b.c0{background:rgba(255,90,10,.15);border-color:rgba(255,90,10,.40);border-left-color:#FF5A0A;}
+.dec-b.c0:hover{background:rgba(255,90,10,.30);}
+.dec-b.c1{background:rgba(255,194,0,.15);border-color:rgba(255,194,0,.40);border-left-color:#FFC200;}
+.dec-b.c1:hover{background:rgba(255,194,0,.30);}
+.dec-b.c2{background:rgba(15,9,8,.15);border-color:rgba(15,9,8,.40);border-left-color:#0F0908;}
+.dec-b.c2:hover{background:rgba(15,9,8,.30);}
+.dec-b .lab{font-size:16px;font-weight:700;line-height:1.34;margin-top:3px;}
+.dec-b .arr{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:18px;font-weight:800;color:rgba(15,9,8,.40);transition:.16s;}
+.dec-b:hover .arr{color:#0F0908;right:10px;}
+.dec-end{font-size:16px;color:var(--ts);background:#FAFAFA;border:1.5px dashed var(--gln);border-radius:11px;padding:13px 16px;}
+.dec-util{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px;}
+.dec-util button{background:none;border:1.5px solid var(--gln);border-radius:9px;padding:7px 12px;
+  font-size:14px;font-weight:600;color:var(--ts);cursor:pointer;transition:.16s;}
+.dec-util button:hover{border-color:var(--or);color:var(--or-dark);background:var(--or-tint);}
+.pn-grid.solo{grid-template-columns:minmax(0,1fr);}
+.pn-grid.solo .pn-main{max-width:1180px;}
+
+.legend{padding:2px 0;}
+.lg-row{display:flex;align-items:center;gap:11px;margin:9px 0;font-size:15px;}
+.lg-chip{width:32px;height:22px;border-radius:6px;flex-shrink:0;border:1.5px solid var(--gln);background:#fff;}
+.lg-chip.act{border-left:4px solid var(--or);}
+.lg-chip.dec{border:2px solid var(--or);background:var(--or-tint);}
+.lg-chip.sys{border-left:4px solid var(--blu);background:var(--blu-tint);}
+.lg-chip.cli{border-left:4px solid #7A7A7A;background:#FAFAFA;}
+.lg-chip.ext{border:1.5px dashed var(--ye);background:var(--ye-tint);}
+.lg-chip.term{background:var(--bk);border:none;border-radius:999px;}
+.lg-chip.start{background:var(--or);border:none;border-radius:999px;}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:6px 0 20px;}
+.kpi div{background:#FAFAFA;border:1.5px solid var(--gln);border-radius:11px;padding:13px 15px;}
+.kpi .v{font-size:28px;font-weight:800;color:var(--or);line-height:1.05;}
+.kpi .l{font-size:12.5px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.07em;margin-top:3px;}
+.hint{font-size:15px;color:var(--ts);background:#FAFAFA;border:1.5px dashed var(--gln);border-radius:11px;padding:13px 15px;margin-top:16px;}
+
+/* ═══ MODAL: MAPA DEL FLUJO ═══ */
+.fs{position:fixed;inset:0;background:rgba(20,20,20,.74);z-index:80;display:none;padding:22px;}
+.fs.on{display:flex;flex-direction:column;}
+.fs-bar{display:flex;align-items:center;gap:12px;color:#fff;padding:0 4px 12px;}
+.fs-bar .t{font-size:17px;font-weight:700;}
+.fs-bar .cur{background:rgba(255,255,255,.13);border:1.5px solid rgba(255,255,255,.22);border-radius:999px;padding:4px 12px;font-size:13.5px;font-weight:600;max-width:420px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.fs-bar .sp{flex:1;}
+.fs-stage{flex:1;position:relative;overflow:hidden;background:
+  radial-gradient(circle,#DDD 1px,transparent 1px) 0 0/22px 22px,var(--bg);border-radius:14px;cursor:grab;}
+.fs-stage.drag{cursor:grabbing;}
+.zlvl{position:absolute;left:12px;bottom:12px;background:rgba(255,255,255,.94);border:1.5px solid var(--gln);border-radius:8px;padding:4px 10px;font-size:13px;font-weight:700;color:var(--ts);z-index:20;}
+.zoombox{position:absolute;right:12px;bottom:12px;display:flex;flex-direction:column;gap:5px;z-index:20;}
+.zb{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.94);border:1.5px solid var(--gln);font-size:17px;font-weight:800;color:var(--bk);cursor:pointer;transition:.16s;}
+.zb:hover{background:var(--or);border-color:var(--or);color:#fff;}
+.fs-leg{position:absolute;left:12px;top:12px;z-index:24;background:rgba(255,255,255,.97);border:1.5px solid var(--gln);
+  border-radius:11px;box-shadow:0 4px 16px rgba(0,0,0,.12);overflow:hidden;max-width:242px;}
+.fs-leg-h{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#FAFAFA;border:none;
+  border-bottom:1.5px solid var(--gln);padding:8px 12px;font-size:11px;font-weight:800;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ts);cursor:pointer;}
+.fs-leg-h .ch{transition:transform .2s;font-size:13px;}
+.fs-leg-b{padding:8px 12px 10px;}
+.fs-leg-b .lg-row{margin:6px 0;font-size:13.6px;}
+.fs-leg-b .lg-chip{width:26px;height:18px;}
+.fs-leg.mini .fs-leg-b{display:none;}
+.fs-leg.mini .fs-leg-h{border-bottom:none;}
+.fs-leg.mini .fs-leg-h .ch{transform:rotate(-90deg);}
+.sr{position:absolute;left:50%;transform:translateX(-50%);top:12px;background:var(--bk);color:#fff;font-size:13.5px;font-weight:600;padding:6px 13px;border-radius:999px;z-index:25;display:none;}
+
+#canvas{position:absolute;top:0;left:0;transform-origin:0 0;}
+#edges{position:absolute;top:0;left:0;overflow:visible;pointer-events:none;}
+#bands{position:absolute;top:0;left:0;}
+.band{position:absolute;border-radius:14px;border:1.5px dashed #D8D8D8;background:rgba(255,255,255,.55);}
+.band-lbl{position:absolute;font-size:13px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#A5A5A5;background:var(--bg);padding:2px 10px;border-radius:999px;}
+
+/* nodos del mapa */
+.node{position:absolute;width:230px;background:var(--wh);border:1.5px solid var(--gln);border-radius:10px;padding:9px 12px 9px 14px;
+  box-shadow:0 1px 3px rgba(0,0,0,.06);cursor:pointer;transition:box-shadow .16s,border-color .16s;
+  display:flex;flex-direction:column;gap:3px;justify-content:center;overflow:hidden;}
+.node:hover{box-shadow:0 6px 18px rgba(0,0,0,.14);border-color:#C9C9C9;z-index:5;}
+.node .nn{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--or);text-transform:uppercase;display:flex;align-items:center;gap:5px;}
+.node .nn .tg{background:var(--or-tint);color:var(--or-dark);border-radius:4px;padding:1px 5px;font-size:10.5px;}
+.node .nl{font-size:14.7px;font-weight:600;color:var(--bk);line-height:1.35;}
+.node .nb{display:flex;gap:4px;margin-top:2px;flex-wrap:wrap;}
+.pn-side .nb{display:inline-flex;gap:4px;}
+.nb i{font-style:normal;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:4px;}
+.nb .b-sp{background:var(--or-tint);color:var(--or-dark);}
+.nb .b-no{background:var(--ye-tint);color:#8A6100;}
+.nb .b-tp{background:#EFEFEF;color:#4A4A4A;}
+.nb .b-wr{background:#FEF2F2;color:#B91C1C;}
+.node.t-act{border-left:4px solid var(--or);}
+.node.t-dec{border:2px solid var(--or);background:var(--or-tint);}
+.node.t-dec .nl{font-weight:700;}
+.node.t-sys{border-left:4px solid var(--blu);background:var(--blu-tint);}
+.node.t-sys .nn{color:var(--blu);}
+.node.t-cli{border-left:4px solid #7A7A7A;background:#FAFAFA;}
+.node.t-cli .nn{color:#6B6B6B;}
+.node.t-ext{border:1.5px dashed var(--ye);background:var(--ye-tint);}
+.node.t-ext .nn{color:#8A6100;}
+.node.t-term{background:var(--bk);border:none;border-radius:999px;align-items:center;text-align:center;}
+.node.t-term .nl{color:#fff;font-weight:700;}
+.node.t-term .nn{color:var(--ye);}
+.node.t-start{background:var(--or);border:none;border-radius:999px;align-items:center;text-align:center;}
+.node.t-start .nl{color:#fff;font-weight:700;}
+.node.t-start .nn{color:#FFE2CE;}
+.node.sel{border-color:var(--or)!important;box-shadow:0 0 0 4px rgba(255,90,10,.35),0 8px 22px rgba(0,0,0,.16);z-index:7;}
+.node.hit{box-shadow:0 0 0 4px rgba(255,194,0,.75);z-index:6;}
+.canvas-dim .node{opacity:.24;}
+.canvas-dim .node.lit,.canvas-dim .node.sel{opacity:1;}
+.ed{fill:none;stroke:#B9B9B9;stroke-width:1.7;}
+.ed.dash{stroke-dasharray:6 5;stroke:#C4A63C;}
+.edl{font-size:12.5px;font-weight:700;fill:#4A4A4A;}
+.edl-bg{fill:#F5F5F5;stroke:#E2E2E2;stroke-width:1;}
+.eg.lit .ed{stroke:var(--or);stroke-width:2.6;}
+.eg.lit .edl{fill:var(--or-dark);}
+.eg.lit .edl-bg{fill:#FFF1E9;stroke:#FFCFB3;}
+.eg.lit .ah{fill:var(--or);}
+.canvas-dim .eg{opacity:.14;}
+.canvas-dim .eg.lit{opacity:1;}
+.ah{fill:#B9B9B9;}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:900px){
+  .body{flex-direction:column;height:calc(100vh - 105px);}
+  .ix{flex:0 0 auto;max-width:none;min-width:0;width:100%;border-right:none;border-bottom:1.5px solid var(--gln);max-height:52vh;display:none;}
+  body.ix-open .ix{display:flex;}
+  .ix-toggle{display:inline-block;}
+  .fh-title,.fh-code,.fh-chan{display:none;}
+  .flow-header{gap:8px;padding:10px 12px;}
+  .fh-search input{width:150px;}
+  .fh-search input:focus{width:170px;}
+  .fh-btn{padding:8px 10px;font-size:13.5px;}
+  .pn-head{padding:13px 18px;}
+  .pn-head .t{font-size:21px;}
+  .pn-grid{padding:18px 18px 60px;}
+  .crumb{padding:0 14px;}
+}
+
+/* ═══ UX / ACCESIBILIDAD ═══ */
+.fh-tt{flex:0 1 auto;overflow:hidden;}
+.fh-title{overflow:hidden;text-overflow:ellipsis;}
+.fh-chan{flex-shrink:0;}
+.sect{color:var(--or);font-weight:800;clear:both;}
+.pn-head .t{text-transform:uppercase;}
+.pn-main .note{float:right;width:320px;max-width:42%;margin:0 0 14px 20px;}
+@media(max-width:1240px){.pn-main .note{float:none;width:100%;max-width:none;margin:12px 0;}}
+.pn-main .dec-bar,.pn-main .tipif,.pn-main .tipif-list,.pn-main .warn{clear:both;}
+.speech{font-style:italic;text-align:center;margin:14px auto;max-width:720px;clear:both;position:relative;padding-left:44px;}
+.speech::before{content:'•';position:absolute;left:16px;top:12px;font-style:normal;color:var(--or);font-size:22px;font-weight:800;}
+.asesor-label{display:table;margin:16px auto 0;}
+.pn-side .speech{padding-left:30px;}
+.pn-side .speech::before{left:10px;top:7px;font-size:18px;}
+/* índice: progreso de etapas */
+.ctx-phb.done{background:rgba(30,158,90,.20);border-color:#1E9E5A;color:#0F0908;}
+.ctx-phb.done .d{border-color:#1E9E5A;color:#0F0908;}
+.ctx-phb.cur,.ctx-phb.cur:hover{background:var(--or);border-color:var(--or);color:#fff;box-shadow:0 4px 12px rgba(255,90,10,.35);transform:scale(1.02);}
+.ctx-phb.cur .d{border-color:#fff;color:#fff;}
+.ctx-fase .tt i{font-size:12px;}
+/* decisiones */
+.dec-k{font-size:20px;text-align:center;font-weight:800;letter-spacing:.06em;margin-bottom:14px;}
+.dec-b .lab{font-weight:500;font-size:16px;position:relative;padding-left:16px;}
+.dec-b .lab::before{content:'▪';position:absolute;left:0;top:0;color:var(--or);}
+.dec-b .cond{font-size:22px;letter-spacing:.02em;line-height:1.15;padding-right:22px;}
+.pn-nav{display:none;}
+/* tipificaciones en cuadrícula */
+.tipif-list{margin:16px 0;border:1.5px solid var(--gln);border-radius:12px;padding:14px;}
+.tipif-list .tl-h{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--or);margin-bottom:11px;}
+.tipif-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;}
+@media(max-width:900px){.tipif-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.tipif-grid{grid-template-columns:1fr;}}
+.tipif-card{font:inherit;font-size:14px;font-weight:700;text-align:left;cursor:pointer;background:#FAFAFA;border:1.5px solid var(--gln);
+  border-radius:10px;padding:11px 13px;color:#0F0908;line-height:1.3;transition:.16s;}
+.tipif-card:hover{border-color:var(--or);background:var(--or-tint);}
+.tipif-card.sel{background:var(--or);border-color:var(--or);color:#fff;}
+.tipif-detail{margin-top:12px;}
+.tipif-detail .tipif{margin:0;}
+/* barra superior */
+.fh-btn.start,.fh-btn.start.on,.fh-btn.start:hover{background:rgba(255,90,10,.8);border-color:rgba(255,90,10,.8);color:#000;}
+.fh-btn.start .n,.fh-btn.start.on .n,.fh-btn.start:hover .n{background:rgba(0,0,0,.15);color:#000;}
+@media(max-width:850px){.flow-header{flex-wrap:wrap;height:auto;row-gap:8px;}}
+/* volver al paso anterior */
+.dec-util .back-b{display:inline-flex;flex-direction:column;align-items:flex-start;gap:2px;cursor:pointer;font:inherit;font-weight:700;
+  padding:10px 16px;border-radius:10px;border:2px solid #FF5A00;background:#fff;color:#FF5A00;text-align:left}
+.dec-util .back-b:hover,.dec-util .back-b:focus-visible{background:#FF5A00;color:#fff;}
+.dec-util .back-n{font-weight:500;font-size:.85em;opacity:.9}
+</style>
+</head>
+<body>
+
+<div class="flow-header">
+  <div class="fh-logo"><img src="data:image/png;base64,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" alt="WIN"></div>
+  <div class="fh-tt">
+    <div class="fh-title">Soporte técnico SVA WINTV</div>
+  </div>
+  <div class="fh-chan">Canal VOZ</div>
+  <div class="fh-sp"></div>
+  <button class="fh-btn ix-toggle" onclick="document.body.classList.toggle('ix-open')">☰ Índice</button>
+  <div class="fh-search"><span class="ic">🔍</span>
+    <input id="q" placeholder="Buscar en todo el diagrama…" autocomplete="off">
+    <div class="sug" id="sug"></div>
+  </div>
+  <button class="fh-btn start" id="btnStart" onclick="goPhase(0)"></button>
+  <button class="fh-btn map" id="btnMap" onclick="openMap()">🗺 Mapa del flujo</button>
+  <button class="fh-btn" onclick="resetAll()">🏠 Reiniciar Diagrama</button>
+</div>
+
+<div class="crumb">
+  <span class="cph" id="crPh">Canal VOZ</span>
+  <span class="sep" id="crSep">›</span>
+  <span class="cst" id="crSt">Resumen del proceso</span>
+</div>
+
+<div class="body">
+
+  <!-- ═══ ÍNDICE INTERACTIVO ═══ -->
+  <nav class="ix">
+    <div class="ix-head">
+      <div class="ix-k">Índice del proceso</div>
+      <div class="ix-prog"><i id="ixBar"></i></div>
+      <div class="ix-pct" id="ixPct">Sin iniciar</div>
+    </div>
+    <div class="ix-body" id="ixBody"></div>
+  </nav>
+
+  <!-- ═══ DESCRIPCIÓN DEL PASO ═══ -->
+  <div class="panel">
+    <div class="pn-head" id="pnHead">
+      <div class="txt">
+        <div class="k" id="pnK">Diagrama de flujo</div>
+        <div class="t" id="pnT">Soporte técnico SVA WINTV</div>
+        <div class="m" id="pnM">Canal VOZ · elige una etapa en el índice o empieza el proceso de validación</div>
+      </div>
+      <div class="pn-nav">
+        <button id="btnPrev" onclick="goPrev()">← Anterior</button>
+        <button id="btnNext" onclick="goNext()">Siguiente →</button>
+      </div>
+    </div>
+    <div class="pn-scroll" id="pnScroll">
+      <div class="pn-grid" id="pnGrid">
+        <div class="pn-main" id="pnB"></div>
+        <div class="pn-side" id="pnS"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL MAPA DEL FLUJO ═══ -->
+<div class="fs" id="fs">
+  <div class="fs-bar">
+    <div class="t">🗺 Mapa del flujo — Canal VOZ</div>
+    <div class="cur" id="fsCur">Sin paso seleccionado</div>
+    <div class="sp"></div>
+    <button class="fh-btn" onclick="fitAll()">⤢ Ver todo</button>
+    <button class="fh-btn" onclick="closeMap()">✕ Cerrar y volver al paso</button>
+  </div>
+  <div class="fs-stage" id="fsStage">
+    <div id="canvas">
+      <div id="bands"></div>
+      <svg id="edges"></svg>
+      <div id="nodes"></div>
+    </div>
+    <div class="fs-leg" id="fsLeg">
+      <button class="fs-leg-h" onclick="document.getElementById('fsLeg').classList.toggle('mini')">
+        <span>Leyenda del mapa</span><span class="ch">▾</span></button>
+      <div class="fs-leg-b legend">
+        <div class="lg-row"><div class="lg-chip start"></div><div>Inicio del flujo</div></div>
+        <div class="lg-row"><div class="lg-chip cli"></div><div><b>Cliente</b> — acción del cliente</div></div>
+        <div class="lg-row"><div class="lg-chip act"></div><div><b>Actividad</b> del asesor</div></div>
+        <div class="lg-row"><div class="lg-chip dec"></div><div><b>Decisión</b> — el flujo se bifurca</div></div>
+        <div class="lg-row"><div class="lg-chip sys"></div><div><b>Automático</b> — lo ejecuta el sistema</div></div>
+        <div class="lg-row"><div class="lg-chip ext"></div><div><b>Otro proceso</b> — fuera de esta normativa</div></div>
+        <div class="lg-row"><div class="lg-chip term"></div><div>Fin del flujo</div></div>
+      </div>
+    </div>
+    <div class="sr" id="sr"></div>
+    <div class="zlvl" id="zlvl">100%</div>
+    <div class="zoombox">
+      <button class="zb" onclick="zoomBy(1.2)">+</button>
+      <button class="zb" onclick="zoomBy(.83)">−</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DATA = {"title": "Soporte técnico SVA WINTV", "code": "PR.ATCVOZ.016", "channel": "Canal VOZ", "phases": ["Fase 1 · Inicio y Saludo", "Fase 2 · Validación y Ejecución", "Fase 3 · Cierre"], "intro": "<div class=\"note\"><div class=\"ni\">📌</div><div><span class=\"tag t-no\">Nota</span><b>Alcance:</b> atención de soporte técnico del servicio de valor agregado <b>WINTV</b> en el canal de voz, desde la recepción de la llamada hasta la tipificación, el ticket a AT/VT y el cierre.</div></div>", "nodes": [{"id": "a1_1", "num": "1.1", "l": "Ingreso de comunicación a nuestro canal de voz", "actor": "Cliente", "p": 0, "d": "<p>El proceso de soporte se inicia a partir de la comunicación del cliente con nuestros canales de atención de voz. Para ello, el cliente deberá contactarse con la Central de Atención al Cliente a través del número (01) 707 3000 o la línea gratuita 0 800 74100.</p><div class=\"info\">📞 <b>Central de Atención al Cliente:</b> (01) 707 3000<br>📞 <b>Línea gratuita:</b> 0 800 74100</div>", "t": "start", "badges": [], "r": 0, "c": 2, "h": 78}, {"id": "a1_2", "num": "1.2", "l": "Marcar opciones de derivación a un asesor", "actor": "Cliente", "p": 0, "d": "<div class=\"warn\"><span class=\"tag t-wr\">Ojo</span>La normativa indica que el cliente marque la <b>opción 1 (Información de facturación)</b> del segundo menú; para soporte técnico la opción listada es la <b>3 (Asistencia técnica)</b>. Validar con el área dueña del proceso.</div><p>Cuando ingresa la comunicación a nuestra Central de Atención al Cliente, se despliegan 3 vertientes de comunicación:</p><ul><li>Opción 1: Estado de instalación</li><li>Opción 2: Consultas sobre tu servicio</li><li>Opción 3: Contratación de algún producto</li></ul><p>El cliente debe marcar la opción 2 y seguido de esto se le pedirá que ingrese el DNI del titular del servicio seguido de la tecla numeral (#).</p><p>Una vez ingresado el DNI, se detallarán otro grupo de opciones:</p><ul><li>Opción 1: Información de facturación</li><li>Opción 2: Solicitud de incremento de plan o servicio adicional</li><li>Opción 3: Asistencia técnica</li><li>Opción 4: Otras consultas, suspensiones o Reclamo</li></ul><p>El cliente debe marcar la opción 1. Aquí, un asesor de primera línea (ATC) tomará el caso e iniciará las validaciones correspondientes.</p>", "t": "cli", "badges": [["wr", "OJO"]], "r": 1, "c": 2, "h": 78}, {"id": "a2_1", "num": "2.1", "l": "Recepción de comunicación", "actor": "Asesor ATC 1ª línea", "p": 0, "d": "<p>El Asesor de primera línea (ATC) recibe la derivación del cliente.</p>", "t": "act", "badges": [], "r": 2, "c": 2, "h": 60}, {"id": "a2_2", "num": "2.2", "l": "Inicio de grabación de llamada", "actor": "Sistema InConcert", "p": 0, "d": "<p>De forma automática, el sistema InConcert registra e inicia la grabación de la llamada desde el inicio de la comunicación, garantizando la trazabilidad y respaldo de la atención brindada.</p>", "t": "sys", "badges": [], "r": 3, "c": 2, "h": 60}, {"id": "a2_3", "num": "2.3", "l": "Solicitar datos del cliente", "actor": "Asesor ATC 1ª línea", "p": 0, "d": "<p>En esta actividad, el asesor debe iniciar la interacción con el saludo correspondiente, conforme a lo establecido en el documento</p><div class=\"asesor-label\">🗣️ Speech:</div><div class=\"speech\">“Buenos(as) días/tardes/noches, ¡bienvenido a WIN!\nTe saluda (Nombre del asesor), ¿con quién tengo el gusto de conversar?”</div><div class=\"sect\">Después de respuesta del cliente</div><ul><li>¡Gracias (Nombre del cliente)! Para continuar, por favor confírmame si usted es el titular del servicio a consultar</li></ul><p><b>SI ---- Solicitar  el documento de identidad al Cliente</b></p><div class=\"asesor-label\">🗣️ Speech sugerido:</div><div class=\"speech\">“Por favor, indícame tu número de documento de identidad para continuar con la validación.”</div><ul><li>NO ------ Solicitar documento de identidad del Titular</li></ul><div class=\"asesor-label\">🗣️ Speech sugerido:</div><div class=\"speech\">“Por favor, indícame el número de documento de identidad del titular del servicio para continuar con la validación.”</div>", "t": "act", "badges": [["sp", "SPEECH"]], "r": 4, "c": 2, "h": 60}, {"id": "a2_4", "num": "2.4", "l": "Búsqueda del cliente en CRM Experiencia", "actor": "Asesor ATC 1ª línea", "p": 0, "d": "<p><b>En caso no se tenga el sistema de CRM Experiencia abierto, se deberá abrir el link y el sistema mostrará las siguientes opciones de logueo:</b></p><ul><li>Iniciar con Microsoft</li><li>Iniciar con Google</li></ul><p>Una vez cargado el sistema, seleccionaremos CRM ATC bandeja de contactos y el sistema devolverá el formulario de búsqueda de cliente el cual tendrá las siguientes opciones de búsqueda:</p><ul><li>Teléfono</li><li>ID Customer DirecTV</li><li>Tipo de Documento (DNI – PTP – otros)</li><li>Código de Pedido</li></ul><p>El tipo de búsqueda que viene marcado por default es “Tipo de Documento (DNI – PTP - otros)”.</p><p>Ingresaremos el dato brindado por el cliente y obtendremos la información registrada en nuestros sistemas del titular del servicio.</p>", "t": "act", "badges": [], "r": 5, "c": 2, "h": 78}, {"id": "a2_5", "num": "2.5", "l": "Identificar el motivo de la llamada", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<ul><li>El asesor verificará el motivo de la llamada guiándose por el documento</li></ul><p><b>Si es preferente:</b></p><div class=\"asesor-label\">🗣️ Speech:</div><div class=\"speech\">\"¡De acuerdo, (nombre del cliente)! Es un gusto poder atenderte.\nCuéntame, ¿cómo te puedo ayudar el día de hoy?\"</div><p><b>Si es elite:</b></p><div class=\"asesor-label\">🗣️ Asesor — qué decir:</div><div class=\"speech\">\"¡Nos alegra darte la bienvenida al canal de atención especializada de WIN!\nCuéntame, ¿cómo te puedo ayudar el día de hoy?\"</div><p>➜ <b>Continuar con la actividad 2.6. <i>(Validar estado del servicio)</i></b></p>", "t": "act", "badges": [["sp", "SPEECH"]], "r": 6, "c": 2, "h": 78}, {"id": "a2_6", "num": "2.6", "l": "Validar estado del servicio", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>El asesor debe iniciar debe dirigirse al módulo Contactos en CRM ATC del CRM Experiencia e ingresar el número de documento del cliente.</p><p>Una vez cargada la información del cliente, ir al panel de “Información del cliente” y abrir la vista extendida del pedido correspondiente. Seleccionar “Consultar datos de la ONT”. Revisar dentro de la Información Técnica los valores del Estado de Red y Estado de ONT.</p><p>➜ <b>Si el estado de red del cliente se muestra como Inactiva, o si se muestra como Active, pero la ONT aparece como Offline, ir a la actividad 2.7. <i>(Derivamos al Diagramas de Soporte primera linea)</i></b></p><p>➜ <b>Si el estado de Red del cliente se muestra Activa y el estado de la ONT se encuentra Online, continuar con la actividad 2.11. <i>(Validar si el cliente tiene una avería masiva)</i></b></p>", "t": "dec", "badges": [], "r": 7, "c": 2, "h": 60}, {"id": "a2_7", "num": "2.7", "l": "Derivamos al Diagramas de Soporte primera linea", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<div class=\"warn\"><span class=\"tag t-wr\">Ojo</span>Las ramas se muestran tal como las numera la normativa (Inactive/Offline → 2.8 · power failure → 2.9 · Fiber issues/Online → 2.10). Validar con el área dueña si la correspondencia es correcta.</div><p>Al verificar que tenemos un escenario de red “Inactive” o estado de ONT “Offline” El asesor debe seguir en el “PROCESO SOPORTE AT PRIMERA LINEA</p><p>El asesor ingresara a el valor indicado en el campo MAC dentro de la Información Técnica en CRM Experiencia. Luego, ingresar a la plataforma del NCE y dirigirse a la opción de “Network Management”.</p><p>En el lado derecho superior ubicar la opción de buscar, pegar el valor de la MAC y hacer clic en enter.</p><p>Dentro del menú superior, seleccionar la opción ONU para que se muestren los atributos que se desean buscar. Elegir la opción SN y hacer clic en Search.</p><p>De esta manera, una vez cargado el registro, seleccionar ONU LIST y esperar la carga.</p><p>Finalmente, una vez completada la carga ir a la pestaña GPON ONU y revisar el texto indicado en la opción de Status, según la siguiente leyenda de estados:</p><p>➜ <b>Si el estado de RED es Active y el estado de ONT es online, pero al ingresar en NCE se muestra el estado Fiber issues,  o se muestra Online ir a la actividad 2.10. <i>(Escalar caso con Supervisor ATC)</i></b></p><p>➜ <b>Si el estado de RED es Active y el estado de ONT es offiline, pero al ingresar en NCE se muestra el estado Offline due to power failure, ir a la actividad 2.9. <i>(Validar si el cliente presenta deuda)</i></b></p><p>➜ <b>Si el estado de RED es Inactivé y el estado de ONT es offline, ir a la actividad 2.8. <i>(Descartar fallas eléctricas en la ONT)</i></b></p>", "t": "dec", "badges": [["wr", "OJO"]], "r": 8, "c": 2, "h": 78}, {"id": "a2_8", "num": "2.8", "l": "Descartar fallas eléctricas en la ONT", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<ul><li>El asesor de ATC deberá validar que el router (ONT) se encuentre correctamente encendido en conjunto con el cliente</li></ul><div class=\"sect\">Verificar el botón ON/OFF</div><p>Confirmar con el cliente que el botón de encendido esté presionado.</p><p>➜ <b>Si el problema se soluciona, ir a la actividad 2.54. <i>(Realizar tipificación en sistema)</i></b></p><p><b>Si el equipo sigue sin encender, continuar con la siguiente validación.</b></p><div class=\"sect\">Validar conexión eléctrica</div><p>Confirmar que el equipo esté correctamente enchufado.</p><p>Solicitar al cliente realizar pruebas con otro tomacorriente o verificar si hay interrupciones de energía en su domicilio.</p><p>Para ello, utilizar el speech del documento “Speeches ATC Voz” (hoja PR.ATCVOZ.016).</p><p>➜ <b>Si el equipo funciona correctamente, ir a la actividad 2.54. <i>(Realizar tipificación en sistema)</i></b></p><p>➜ <b>Si el equipo sigue sin encender tras estas validaciones, ir a la actividad 2.63. <i>(Crear ticket para VT)</i> (Generar cambio de ONT).</b></p>", "t": "dec", "badges": [], "r": 9, "c": 1, "h": 78}, {"id": "a2_9", "num": "2.9", "l": "Validar si el cliente presenta deuda", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>Dentro de CRM Experiencia, ir a la opción Recibos y validar el estado del último recibo generado, considerando la fecha de vencimiento.</p><p>De esta manera, si se valida que el cliente está suspendido, considerar lo siguiente:</p><p>➜ <b>Si la suspensión es por deuda, ir a al proceso PR.ATCVOZ.022. PROCESO DE CONSULTAS DE FACTURACIÓN</b></p><p>➜ <b>Si el cliente realizo el pago y está dentro de las 24 horas de realizado el pago, ir a al proceso PR.ATCVOZ.022. PROCESO DE CONSULTAS DE FACTURACIÓN</b></p><p>➜ <b>Si el cliente no presenta deuda y está fuera de las 24 horas luego de haber realizado el pago del servicio, ir a la actividad 2.10. <i>(Escalar caso con Supervisor ATC)</i></b></p>", "t": "dec", "badges": [], "r": 9, "c": 2, "h": 78}, {"id": "a2_10", "num": "2.10", "l": "Escalar caso con Supervisor ATC", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>El asesor deberá escalar el caso a su Supervisor ATC, quien será el responsable de generar un ticket MDA para solicitar la regularización del estado del cliente en la plataforma y dar seguimiento al termino de esta.</p><p>➜ <b>Continuar con la actividad. 2.54. <i>(Realizar tipificación en sistema)</i></b></p>", "t": "act", "badges": [], "r": 10, "c": 3, "h": 78}, {"id": "a2_11", "num": "2.11", "l": "Validar si el cliente tiene una avería masiva", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>Para validar si el servicio del cliente se encuentra en masivo, ingresar al enlace REGISTRO DE MASIVOS - AQUI PODRÁS GUIARTE Y EVITAR VT INNECESARIAS (USO EXCLUSIVO DE ATC)  y  Buscar masivos de WinTv para confirmar si el Sva figura en el listado.</p><p>➜ <b>Si se trata de un cliente masivo, continuar con la actividad 2.12. <i>(Comunicar speech de falla masiva al cliente)</i></b></p><p><b>Si no se trata de masivo consultar al cliente</b></p><div class=\"asesor-label\">🗣️ Speech sugerido:</div><div class=\"speech\">“¿Puede ingresar a YouTube, reproducir un video o aplicación de streaming desde su móvil o TV conectado a la red de WIN?”</div><p>➜ <b>Si el cliente indica que NO puede navegar , continuar con la actividad 2.13. <i>(Validar marca de la ONT)</i></b></p><p>➜ <b>Si el cliente indica que si puede navegar, continuar con la actividad 2.14. <i>(Validar si el cliente tiene el SVA contratado)</i></b></p>", "t": "dec", "badges": [["sp", "SPEECH"]], "r": 8, "c": 3, "h": 78}, {"id": "a2_12", "num": "2.12", "l": "Comunicar speech de falla masiva al cliente", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<ul><li>El asesor deberá guiarse del</li></ul><div class=\"asesor-label\">🗣️ Speech:</div><div class=\"speech\">“En estos momentos, la plataforma WINTV está presentando inconvenientes. Nuestro equipo técnico ya se encuentra trabajando para resolverlo lo más pronto posible. Agradecemos tu paciencia y comprensión, y lamentamos sinceramente las molestias ocasionadas.”</div><div class=\"tipif\"><div class=\"tipif-title\">Tipificación · Avería Masiva  afectando solo 1 canal</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Sin acceso a un canal del Plan – Masivo Declarado</span></div></div><div class=\"tipif\"><div class=\"tipif-title\">Tipificación · Avería Masiva  sin acceso en general</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Sin acceso– Masivo Declarado</span></div></div><p>➜ <b>Luego, continuar con la actividad 2.55 <i>(Brindar el código ID de atención)</i></b></p>", "t": "act", "badges": [["sp", "SPEECH"], ["tp", "TIPIFICA"]], "r": 9, "c": 3, "h": 78}, {"id": "a2_13", "num": "2.13", "l": "Validar marca de la ONT", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>El asesor deberá ingresar al CRM Experiencia, seleccionar el pedido del cliente y revisar el campo “Información Técnica”, donde se indicará la marca de la ONT:</p><p>➜ <b>Si la marca de la ONT corresponde a ZTE ir a al proceso. DIAGRAMA DE SOPORTE TECNICO PRIMERA LINEA (ZTE).</b></p><p>➜ <b>Si la marca de la ONT corresponde a HUAWEI ir a al proceso DIAGRAMA DE SOPORTE TECNICO PRIMERA LINEA (HUAWEI).</b></p>", "t": "dec", "badges": [], "r": 9, "c": 4, "h": 60}, {"id": "a2_14", "num": "2.14", "l": "Validar si el cliente tiene el SVA contratado", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>Para validar el servicio activo, ir a la sección de Servicios Contratados dentro de la bandeja de Contactos y revisar el producto adquirido.</p><p><b>De ser contratado el SVA  Verificar si el servicio esta activo:</b></p><ul><li>ir a la sección de Servicios Contratados dentro de la bandeja de Contactos y revisar el producto adquirido</li></ul><p>➜ <b>En caso de tener el SVA WinTV activo, continuar con la actividad 2.15 <i>(Validar que el cliente no tenga suspensiones recientes)</i></b></p><p><b>En caso tener WinTv App ( solo tiene el servicio de streaming  mas no cuenta con el servicio de internet) derivar la atención al canal especializado al numero 933801459 ( solo por Whatsapp )</b></p><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WinTv</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problemas</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivos</span><span class=\"tipif-v\">Según casuistica</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Comentario</span><span class=\"tipif-v\">Indicar de fue por WinTv App</span></div></div><p>➜ <b>Luego, continuar con la actividad 2.55 <i>(Brindar el código ID de atención)</i></b></p><p><b>Si no se cuenta con el SVA WinTv activo, continuar</b></p><p><b>Ante un escenario de Sevicio Bloqueado, se deberán identificar la siguiente casuística para determinar la gestión y derivación correspondiente:</b></p><div class=\"sect\">Escenario : Servicio Bloqueado por suspensión por deuda</div><p>Cuando se identifique que la cuenta se encuentra inactiva como consecuencia de una suspensión por deuda, se deberá:</p><p>Validar que la cuenta haya pasado previamente por una suspensión por deuda.</p><p>Ingresar a CRM – ve a la sección “Información del Cliente” validar si el servicio ha pasado por una suspensión en las últimas 24 horas (clic en lupa de  Consultas OT)</p><div class=\"asesor-label\">🗣️ Speech:</div><div class=\"speech\">“(Nombre del cliente), recuerde que, debido a la reciente reactivación de su servicio, es necesario esperar un plazo máximo de 24 horas para que la aplicación WinTv vuelva a encontrarse disponible.”</div><p>El asesor deberá escalar el caso a su Supervisor ATC, quien será el responsable de generar un ticket MDA para solicitar la regularización del estado del cliente en la plataforma y dar seguimiento al termino de esta.</p><div class=\"sect\">la información enviada al supervisor</div><div class=\"tipif\"><div class=\"tipif-title\">Plantilla para mandar al supervisor</div><div class=\"tipif-code\">Cod De Pedido::\nDNI:\nNOMBRES:\nCorreo del Cliente:\nPlan SVA:\nObservación: (Problema)\nImagen de sustento:</div></div><div class=\"asesor-label\">🗣️ Speech del asesor:</div><div class=\"speech\">“(Nombre del cliente), voy a derivar su caso al área correspondiente para que puedan gestionar su acceso a la aplicación WinTv a la brevedad posible.”</div><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WinTv</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problemas</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivos</span><span class=\"tipif-v\">(Según casuística)</span></div></div><p>➜ <b>ir al paso 2.55 <i>(Brindar el código ID de atención)</i></b></p><div class=\"note\"><div class=\"ni\">📌</div><div><span class=\"tag t-no\">Nota</span>Tener en cuenta que el plazo de activación de WinTv es de 24 horas hábiles.</div></div>", "t": "dec", "badges": [["sp", "SPEECH"], ["tp", "TIPIFICA"], ["no", "NOTA"]], "r": 9, "c": 5, "h": 78}, {"id": "a2_15", "num": "2.15", "l": "Validar que el cliente no tenga suspensiones recientes", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>El asesor debe ingresar al CRM Experiencia, en la sección Información del cliente, y seleccionar el botón “Lupa Consultas OT”, donde se puede revisar el estado de la OT.</p><p>En el campo Fecha de reconexión, el asesor deberá verificar que el cliente no cuente con suspensiones recientes. En caso de existir una reconexión, se deberá validar que hayan transcurrido más de 24 horas.</p><p><b>Si el cliente cuenta con una reconexión reciente y no se han cumplido las 24 horas, explicar al cliente que la reactivación del SVA puede demorar este plazo.</b></p><div class=\"asesor-label\">🗣️ Speech sugerido:</div><div class=\"speech\">“(Nombre del cliente) recuerda que el plazo de reactivación de tus servicios es de 24 horas desde el momento que hiciste el pago”</div><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WinTv</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problemas</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivos</span><span class=\"tipif-v\">(Según casuística)</span></div></div><p>➜ <b>Continuar con la actividad. 2.55. <i>(Brindar el código ID de atención)</i></b></p><p>➜ <b>En caso el cliente se encuentre crítico o que ya hayan pasado las 24 horas, continuar con la actividad 2.16. <i>(Escalar caso con Supervisor ATC)</i></b></p><p>➜ <b>Si el cliente no presenta suspensiones recientes o la reconexión es mayor a 24 horas, continuar con la actividad 2.17. <i>(Identificar tipo de problema)</i></b></p>", "t": "dec", "badges": [["sp", "SPEECH"], ["tp", "TIPIFICA"]], "r": 10, "c": 5, "h": 78}, {"id": "a2_16", "num": "2.16", "l": "Escalar caso con Supervisor ATC", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>El asesor deberá escalar el caso a su Supervisor ATC, quien será el responsable de generar un ticket MDA para solicitar la regularización del estado del cliente en la plataforma y dar seguimiento al termino de esta.</p><div class=\"sect\">Cod De Pedido</div><div class=\"sect\">DNI</div><div class=\"sect\">NOMBRES</div><div class=\"sect\">Correo del Cliente</div><div class=\"sect\">Plan SVA</div><ul><li>Observación: (Problema)</li></ul><div class=\"sect\">Imagen de sustento</div><div class=\"asesor-label\">🗣️ Speech del asesor:</div><div class=\"speech\">“(Nombre del cliente), voy a derivar su caso al área correspondiente para que puedan gestionar su acceso a la aplicación WinTv a la brevedad posible.”</div><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problemas</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivos</span><span class=\"tipif-v\">(Según casuística)</span></div></div><p>➜ <b>Continuar con la actividad. 2.55. <i>(Brindar el código ID de atención)</i></b></p>", "t": "act", "badges": [["sp", "SPEECH"], ["tp", "TIPIFICA"]], "r": 11, "c": 6, "h": 78}, {"id": "a2_17", "num": "2.17", "l": "Identificar tipo de problema", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<div class=\"warn\"><span class=\"tag t-wr\">Ojo</span>Para <b>Grabar programa</b>, la normativa deriva a la actividad 2.33 desde Smart TV, Celular y PC. Las actividades de grabación desarrolladas para celular (2.44 a 2.47) y PC (2.53) no reciben derivación explícita.</div><p>Con lo mencionado por el cliente, determinar el tipo de consulta o incidencia presentada, entre las cuales se tienen:</p><div class=\"sect\">Problemas generales</div><p>➜ <b>Dispositivos registrados, ir a la actividad 2.18. <i>(Validar dispositivos registrados)</i></b></p><p>➜ <b>Dispositivos compatibles, ir a la actividad 2.19. <i>(Informar sobre dispositivos compatibles)</i></b></p><p>➜ <b>Canales disponibles, ir a la actividad 2.20. <i>(Informar parrilla de canales)</i></b></p><p>➜ <b>Contraseña olvidada/ Sin credenciales , ir a la actividad 2.21. <i>(Verificar correo del cliente)</i></b></p><div class=\"sect\">Smart TV</div><p>➜ <b>Acceso a WINTV / Problemas de logueo, ir a la actividad 2.26. <i>(Validar que tenga credenciales)</i></b></p><p>➜ <b>Grabar programa, ir a la actividad 2.33. <i>(Consultar canal a grabar)</i></b></p><p>➜ <b>Pantalla negra, ir a la actividad 2.36. <i>(Solicitar desinstalar el aplicativo)</i></b></p><div class=\"sect\">Celular o Tablet</div><p>➜ <b>Acceso a WINTV/ Problemas de logueo, ir a la actividad 2.39 <i>(Validar que tenga credenciales)</i></b></p><p>➜ <b>Grabar programa, ir a la actividad 2.33. <i>(Consultar canal a grabar)</i></b></p><div class=\"sect\">PC / Laptop</div><p>➜ <b>Acceso a WINTV/ Problemas de logueo, ir a la actividad 2.48. <i>(Validar que tenga credenciales)</i></b></p><p>➜ <b>Grabar programa, ir a la actividad 2.33. <i>(Consultar canal a grabar)</i></b></p><div class=\"sect\">WINBOX</div><p>➜ <b>Problemas con el Winbox, Ir al proceso PR.ATCVOZ.017 PROCESO DE SOPORTE SVA FONOWIN, WINBOX, MESH</b></p>", "t": "dec", "badges": [["wr", "OJO"]], "r": 11, "c": 4, "h": 60}, {"id": "a2_18", "num": "2.18", "l": "Validar dispositivos registrados", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>Indicar al cliente que ingrese a la página https://go.wintv.pe/, luego dirija a la opción donde aparece el ícono con el nombre del cliente y seleccione “Configuración de la cuenta”.</p><p>Solicitar al cliente que se dirija a la parte inferior de la página, donde podrá visualizar los dispositivos que se encuentran en uso simultáneo y, más abajo, los dispositivos registrados.</p><p>Preguntar al cliente la cantidad de dispositivos que desea utilizar. Tener en cuenta lo siguiente:</p><ul><li>WINTV</li></ul><div class=\"sect\">Beneficios</div><p>Ver programas favoritos desde diferentes dispositivos y sin dispositivos cableados.</p><p>Retroceder programación hasta máximo 7 días.</p><p>Contenido en la nube de hasta 3 meses y grabación de 5 horas.</p><p>Guía de TV disponible las 24 horas y canales de contenido nacional e internacional.</p><div class=\"sect\">Planes</div><p>WINTV Básico: Permite hasta 2 dispositivos en simultáneo Incluye 50 canales locales e internacionales.</p><p>WINTV Plus: Permite hasta 4 dispositivos en simultáneo Incluye 68 canales locales e internacionales.</p><p>WINTV Premium: Permite hasta 4 dispositivos en simultáneo e incluye más de 80 canales locales e internacionales.</p><p>WINTV L1 Max: Permite hasta 3 dispositivos en simultáneo e incluye 50 canales locales e internacionales.</p><p>WinTV L1MAX Premium Upselling: Permite hasta 4 dispositivos en simultaneo e Incluye más de 90 Canales.</p><ul><li>WinTV L1MAX Upselling: Permite hasta 3 dispositivos en simultaneo e Incluye más de 50 Canales</li><li>Para ello, es necesario aplicar el speech correspondiente del documento</li></ul><div class=\"asesor-label\">🗣️ Speech:</div><div class=\"speech\">“(Nombre del cliente), validemos juntos los dispositivos registrados. Para ello, por favor ingresa a tu cuenta de WINTV desde la web y dirígete a la opción Configuración de la cuenta. ¿Lo logras visualizar?\nPerfecto. En la parte inferior podrás ver los dispositivos en uso simultáneo y, más abajo, los dispositivos registrados. ¿Me indicas cuántos aparecen?\nRecuerda que solo puedes tener hasta X dispositivos en uso al mismo tiempo. Si deseas registrar uno adicional, será necesario cerrar sesión en alguno de los actuales. ¿De acuerdo?”</div><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">Servicios de Valor Agregado</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Informativo</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Uso/WinTv</span></div></div><p>➜ <b>Continuar con la actividad 2.55. <i>(Brindar el código ID de atención)</i></b></p>", "t": "act", "badges": [["sp", "SPEECH"], ["tp", "TIPIFICA"]], "r": 12, "c": 0, "h": 78}, {"id": "a2_19", "num": "2.19", "l": "Informar sobre dispositivos compatibles", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p><b>En caso de Tv o TvBox</b></p><p><b>Si en la tienda de aplicaciones de su dispositivo aparece el app de WinTv el dispositivo es compatible.</b></p><ul><li>Sistemas operativos compatibles para TV o TvBox</li><li>Samsung Tizen (2018)</li><li>LG (WebOS 2018)</li><li>Android TV/Gloogle TV</li><li>TvBox con Android TV SO v11/Gloogle TV</li></ul><p><b>En caso de los sistemas compatibles son celulares y tablets.</b></p><div class=\"sect\">Sistemas operativos compatibles</div><p>Android: A partir de la versión SO 11.</p><ul><li>iOS: Disponible a través de App Store. y iOS 13.5</li></ul><div class=\"sect\">Pasos para validar el sistema en Android</div><p>Abrir la aplicación Configuración o Ajustes del teléfono.</p><p>Buscar la opción “Acerca del dispositivo”, “Acerca del teléfono” o “Información del teléfono”.</p><p>Verificar la versión de Android instalada.</p><div class=\"sect\">Pasos para validar el sistema en IOS</div><ul><li>Ir a Ajustes o Configuración</li></ul><div class=\"sect\">Buscar el apartado General</div><ul><li>Ir a la opción Acerca de o Información</li></ul><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Limite de dispositivos-información comercial</span></div></div><p>➜ <b>Continuar con la actividad 2.55. <i>(Brindar el código ID de atención)</i></b></p>", "t": "act", "badges": [["tp", "TIPIFICA"]], "r": 12, "c": 1, "h": 78}, {"id": "a2_20", "num": "2.20", "l": "Informar parrilla de canales", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>La parrilla de canales disponible dependerá del plan WINTV contratado por el cliente.</p><div class=\"asesor-label\">🗣️ Speech:</div><div class=\"speech\">“(Nombre), le comento que la parrilla de canales disponible dependerá del plan WinTV que tenga contratado. En este caso, su plan [nombre del plan] cuenta con [cantidad de canales] canales y permite [cantidad de dispositivos en simultáneo, si corresponde].”</div><p>WINTV Básico: Permite hasta 2 dispositivos en simultáneo Incluye 50 canales locales e internacionales.</p><p>WINTV Plus: Permite hasta 4 dispositivos en simultáneo Incluye 68 canales locales e internacionales.</p><p>WINTV Premium: Permite hasta 4 dispositivos en simultáneo e incluye más de 80 canales locales e internacionales.</p><p>WINTV L1 Max: Permite hasta 3 dispositivos en simultáneo e incluye 50 canales locales e internacionales.</p><p>WinTV L1MAX Premium Upselling: Permite hasta 4 dispositivos en simultaneo e Incluye más de 90 Canales.</p><ul><li>WinTV L1MAX Upselling: Permite hasta 3 dispositivos en simultaneo e Incluye más de 50 Canales</li></ul><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Limite de dispositivos-información comercial</span></div></div><p>➜ <b>Continuar con la actividad 2.55. <i>(Brindar el código ID de atención)</i></b></p>", "t": "act", "badges": [["sp", "SPEECH"], ["tp", "TIPIFICA"]], "r": 12, "c": 2, "h": 60}, {"id": "a2_21", "num": "2.21", "l": "Verificar correo del cliente", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>Con el correo electrónico brindado por el cliente, revisar en CRM Experiencia, en la sección Información del cliente, si este coincide con el correo registrado.</p><p>➜ <b>Si el correo electrónico es correcto, continuar con la actividad 2.22. <i>(Ofrecer cambio de contraseña)</i></b></p><p>➜ <b>Si el correo registrado no es correcto, ir a la actividad 2.24. <i>(Indicar actualización de correo)</i></b></p>", "t": "dec", "badges": [], "r": 12, "c": 3, "h": 60}, {"id": "a2_22", "num": "2.22", "l": "Ofrecer cambio de contraseña", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>El cambio se realizará a través de WINTV, siguiendo los pasos detallados a continuación:</p><p>Como descarte, el asesor deberá ingresar al botón Actualización de Datos. para corroborar que el correo este ingresado correctamente (Solo si hubiesen ‘espacios’ incluidos en el correo se deberá actualizar y continuar con el ofrecimiento de cambio de contraseña)</p><div class=\"asesor-label\">🗣️ Speech:</div><div class=\"speech\">“(Nombre del cliente), para continuar, podemos hacer el cambio de tu contraseña para que puedas volver a ingresar. No te preocupes, yo te guío con el paso a paso, ¿te parece?”</div><p>Ingresar a WINTV y hacer clic en la opción “Contraseña olvidada”.</p><p>Ingresar el número de documento de identidad del titular del servicio.</p><p>Hacer clic en la opción “Enviar un enlace de recuperación”.</p><p>Registrar la nueva contraseña.</p><p><b>Si el problema se soluciona,</b></p><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Sin acceso – Portal Win-Clave incorrecta</span></div></div><p>➜ <b>continuar con la actividad 2.55. <i>(Brindar el código ID de atención)</i></b></p><p>➜ <b>Si el problema persiste, continuar con la actividad 2.23. <i>(Validar el dominio del correo)</i></b></p>", "t": "dec", "badges": [["sp", "SPEECH"], ["tp", "TIPIFICA"]], "r": 13, "c": 3, "h": 60}, {"id": "a2_23", "num": "2.23", "l": "Validar el dominio del correo", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>Verificar el dominio del correo electrónico proporcionado por el cliente.</p><p>Informar al cliente que, para ciertos dominios de correo electrónico, se pueden presentar inconvenientes en la recepción de mensajes.</p><div class=\"asesor-label\">🗣️ Speech sugerido:</div><div class=\"speech\">“(Nombre), en algunos casos ciertos dominios de correo pueden presentar inconvenientes para recibir nuestros mensajes. Si el inconveniente continúa, podemos intentar con otro correo electrónico.”</div><div class=\"note\"><div class=\"ni\">📌</div><div><span class=\"tag t-no\">Nota</span>Si el correo corresponde al dominio Hotmail, recomendar al cliente registrar un correo electrónico alternativo con un dominio distinto.</div></div><p>➜ <b>Continuar con la actividad 2.24. <i>(Indicar actualización de correo)</i></b></p>", "t": "act", "badges": [["sp", "SPEECH"], ["no", "NOTA"]], "r": 14, "c": 4, "h": 60}, {"id": "a2_24", "num": "2.24", "l": "Indicar actualización de correo", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>Indicar al cliente la necesidad de realizar la actualización del correo electrónico para evitar inconvenientes en la recepción de comunicaciones.</p><p>➜ <b>Para este caso, el asesor deberá continuar con el proceso Actualización de Datos.</b></p><ul><li>Para ello, es necesario aplicar el speech correspondiente del documento</li></ul><p>(Nombre del cliente), para evitar inconvenientes en la recepción de comunicaciones sobre tu WINTV y de tu servicio en general, es preferible actualizar el correo registrado. ¿De acuerdo?</p><p><b>Si el inconveniente fue solucionado</b></p><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Sin acceso – Portal Win-No recibió usuario y contraseña</span></div></div><p>➜ <b>continuar con la actividad 2.55. <i>(Brindar el código ID de atención)</i></b></p><p>➜ <b>Si el cliente no ha recibido las credenciales, continuar con la actividad 2.25. <i>(Indicar al cliente que revise Spam o correo no deseado)</i></b></p>", "t": "dec", "badges": [["tp", "TIPIFICA"]], "r": 15, "c": 4, "h": 78}, {"id": "a2_25", "num": "2.25", "l": "Indicar al cliente que revise Spam o correo no deseado", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>El asesor deberá indicar al cliente que revise la bandeja de Spam o Correo no deseado, a fin de validar si el mensaje se encuentra en dicha bandeja.</p><div class=\"asesor-label\">🗣️ Speech sugerido:</div><div class=\"speech\">“Para asegurarnos de que pueda recibir la información correctamente, le recomiendo revisar también su bandeja de spam o correo no deseado.”</div><p><b>Si el cliente logra acceder con las credenciales recepcionadas,</b></p><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Sin acceso – Portal Win-No recibió usuario y contraseña</span></div></div><p>➜ <b>continuar con la actividad 2.55 <i>(Brindar el código ID de atención)</i></b></p><p><b>Si el cliente aún no tiene las credenciales y presenta problemas de acceso o no tiene otro correo</b></p><div class=\"tipif\"><div class=\"tipif-title\">Enviar un Ticket a AT</div><div class=\"tipif-row\"><span class=\"tipif-k\">Canal</span><span class=\"tipif-v\">Soporte Tecnológico</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">.SVA</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">WIN TV</span></div><div class=\"tipif-code\">|Fecha de activación de SVA|\n|Tipo de WINTV| Básico/Plus\n|Correo donde desea le lleguen las credenciales|\n|Observaciones| Cliente ya esperó el plazo de 48 horas hábiles de envío de credenciales a su correo electrónico</div></div><p>➜ <b>continuar con la actividad 2.65. <i>(Informar que se contactarán a la brevedad)</i></b></p>", "t": "dec", "badges": [["sp", "SPEECH"], ["tp", "TIPIFICA"]], "r": 16, "c": 4, "h": 78}, {"id": "a2_26", "num": "2.26", "l": "Validar que tenga credenciales", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>Preguntar al cliente si cuenta con las credenciales para acceder a su cuenta de WINTV.</p><p>Asimismo, solicitarle que tenga a la mano otro dispositivo para poder ingresar el código o escanear el QR.</p><p>➜ <b>Si el cliente cuenta con sus credenciales, continuar con la actividad 2.27. <i>(Consultar si la app figura en la TV para descarga)</i></b></p><p>➜ <b>Si el cliente no cuenta con sus credenciales, continuar con la actividad 2.21. <i>(Verificar correo del cliente)</i></b></p>", "t": "dec", "badges": [], "r": 12, "c": 4, "h": 60}, {"id": "a2_27", "num": "2.27", "l": "Consultar si la app figura en la TV para descarga", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>Pedirle ingresar a la tienda de aplicaciones de su TV y buscar la app de WINTV. Tener presente que la app es compatible con todos los equipos en los que se pueda descargar Wintv de su tienda de aplicaciones.</p><p>➜ <b>Si la TV es compatible, ir a la actividad 2.29. <i>(Orientar pasos de descarga)</i></b></p><p>➜ <b>Si la TV no es compatible, ir a la actividad 2.28. <i>(Ofrecer WINBOX)</i></b></p>", "t": "dec", "badges": [], "r": 13, "c": 4, "h": 78}, {"id": "a2_28", "num": "2.28", "l": "Ofrecer WINBOX", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>El asesor de ATC ofrece el equipo WINBOX (en alquiler). Asimismo, informa al cliente sobre los beneficios y planes de contratar este servicio.</p><div class=\"sect\">Beneficios WINBOX</div><p>Equipo con sistema Android TV Smart 4K.</p><p>Conexión vía Wifi o cable Ethernet.</p><p>Capacidad de almacenamiento de 8GB.</p><p>Acceso a apps como DGO, WINTV, Netflix, YouTube, Disney+, entre otros.</p><p>Control remoto por búsqueda de voz.</p><p>Alquiler del equipo incluido en el recibo del servicio de internet.</p><div class=\"sect\">Precio</div><ul><li>1 Winbox por 20 soles mensuales</li><li>2 Winbox por 40 soles mensuales</li><li>Para ello, es necesario aplicar el speech correspondiente del documento</li></ul><div class=\"asesor-label\">🗣️ Speech:</div><div class=\"speech\">“(Nombre del cliente), te comento que, en este caso, tu TV no es compatible con WINTV. No te preocupes, para poder disfrutar del servicio necesitas un WINBOX. Este equipo convierte tu televisor en Smart y te permite acceder no solo a WINTV, sino también a distintas apps de TV digital. ¿Te gustaría que te cuente un poco más sobre el producto?”</div><p>➜ <b>Si el cliente acepta contratar el equipo (Winbox), ir a al proceso PROCESOS CROSS Y SOLICITUDES.</b></p><p><b>Si el cliente no acepta</b></p><ul><li>Aplicamos</li></ul><div class=\"asesor-label\">🗣️ Speech sugerido:</div><div class=\"speech\">“(Nombre del cliente), hemos realizado la validación y confirmamos que el dispositivo que estás utilizando no es compatible con la aplicación WINTV. No te preocupes, puedes seguir disfrutando de todos los beneficios de tu servicio desde otro dispositivo que sea compatible con la aplicación.”</div><p>➜ <b>Si el cliente solicita la baja del servicio, ir a al proceso PROCESO DE BAJA</b></p><p>➜ <b>Solicita la baja del SVA WINTV, ir a al proceso PROCESO DE DESUSCRIPCIÓN SVA ATC VOZ PLAN RESIDENCIAL WINTV.</b></p><ul><li>NO solicita la baja indicarle que lo puede ver por otros dispositivos</li></ul><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">TV no compatible – Se ofrece Win box – cliente no acepta</span></div></div><p>➜ <b>continuar con la actividad 2.55. <i>(Brindar el código ID de atención)</i></b></p>", "t": "dec", "badges": [["sp", "SPEECH"], ["tp", "TIPIFICA"]], "r": 14, "c": 5, "h": 60}, {"id": "a2_29", "num": "2.29", "l": "Orientar pasos de descarga", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>Guiar al cliente con los pasos para descargar WINTV en su TV.</p><p>Seleccionar la opción Conectar.</p><p>Emparejar el dispositivo (será necesario otro dispositivo para escanear el QR).</p><p><b>Si se solucionó el problema,</b></p><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Sin acceso – Cómo configurar TV</span></div></div><p>➜ <b>ir a la actividad 2.55. <i>(Brindar el código ID de atención)</i></b></p><p>➜ <b>Si no se solucionó el problema, ir a la actividad 2.30. <i>(Consultar dispositivos que desean loguearse)</i></b></p>", "t": "dec", "badges": [["tp", "TIPIFICA"]], "r": 14, "c": 3, "h": 60}, {"id": "a2_30", "num": "2.30", "l": "Consultar dispositivos que desean loguearse", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>El asesor debe considerar que, el cliente que solo se puede tener un (1) servicio WINTV por DNI/CE o RUC, independientemente de la cantidad de servicios o direcciones que tenga registradas.</p><p><b>En caso el cliente cuente con dos o más servicios activos en distintas direcciones, no será posible contratar ni activar un WINTV adicional, ni ampliar la cantidad de dispositivos en simultáneo, ya que el beneficio se asigna por cliente y no por dirección.</b></p><p>Preguntar al cliente cuántos dispositivos desea registrar o loguear en su cuenta de WINTV.</p><div class=\"sect\">Recordar al cliente los límites según el plan contratado</div><p>WINTV Básico: Hasta 2 dispositivos simultáneos.</p><p>WINTV Plus: Hasta 4 dispositivos simultáneos.</p><p>WINTV Premium: Hasta 4 dispositivos simultáneos.</p><p>WINTV L1 Max: Hasta 3 dispositivos simultáneos.</p><p>WINTV L1 Max Premium: Hasta 4 dispositivos simultáneos.</p><ul><li>WinTV L1MAX Premium Upselling: Permite hasta 4 dispositivos en simultaneo</li><li>WinTV L1MAX Upselling: Permite hasta 3 dispositivos en simultaneo</li></ul><p>Con base en la información del cliente, continuar con el flujo correspondiente para validación y registro de dispositivos.</p><p>➜ <b>Si el cliente está dentro de la cantidad permitida, ir a la actividad 2.31. <i>(Solicitar acceder con otro dispositivo)</i></b></p><p><b>Si pasa la cantidad en base al plan</b></p><ul><li>Aplicar</li></ul><div class=\"asesor-label\">🗣️ Speech sugerido:</div><div class=\"speech\">“(Nombre Cliente), tu plan WIN TV (tipo plan) permite el acceso a una cantidad limitada de dispositivos. En este momento, estás intentando ingresar desde más dispositivos de los permitidos. Te recomendamos cerrar sesión en alguno para poder ingresar.”</div><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">Servicios de Valor Agregado</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Informativo</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Uso/WIN TV</span></div></div><p>➜ <b>continuar con la actividad 2.55 <i>(Brindar el código ID de atención)</i></b></p>", "t": "dec", "badges": [["sp", "SPEECH"], ["tp", "TIPIFICA"]], "r": 15, "c": 5, "h": 78}, {"id": "a2_31", "num": "2.31", "l": "Solicitar acceder con otro dispositivo", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>Solicitar al cliente que intente acceder a la aplicación WINTV desde otro dispositivo (teléfono móvil, Tablet o computador).</p><p><b>Si el cliente logra acceder correctamente desde otro dispositivo, confirmar la forma de acceso utilizada en el Smart TV (usuario y contraseña, emparejamiento por QR o código).</b></p><p><b>Si el cliente no logra acceder desde ningún otro dispositivo, validar posibles inconvenientes con la cuenta WINTV. (Validar masivos de Wintv)</b></p><p>(Para validar si el servicio del cliente se encuentra en masivo, ingresar al enlace REGISTRO DE MASIVOS - AQUI PODRÁS GUIARTE Y EVITAR VT INNECESARIAS (USO EXCLUSIVO DE ATC)  y  Buscar masivos de WinTv para confirmar si el SVA figura en el listado)</p><p><b>Si es falla masiva,</b></p><ul><li>El asesor deberá decir el siguiente Speech</li></ul><div class=\"asesor-label\">🗣️ Speech:</div><div class=\"speech\">“En estos momentos, la plataforma WINTV está presentando inconvenientes. Nuestro equipo técnico ya se encuentra trabajando para resolverlo lo más pronto posible. Agradecemos tu paciencia y comprensión, y lamentamos sinceramente las molestias ocasionadas.”</div><div class=\"tipif\"><div class=\"tipif-title\">Tipificación · Avería Masiva afectando solo 1 canal</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Sin acceso a un canal del Plan – Masivo Declarado</span></div></div><div class=\"tipif\"><div class=\"tipif-title\">Tipificación · Avería Masiva sin acceso en general</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Sin acceso– Masivo Declarado</span></div></div><p>➜ <b>Luego, continuar con la actividad 2.55 <i>(Brindar el código ID de atención)</i></b></p><p><b>Si se brindó acceso,</b></p><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Sin acceso – Otros dispositivos</span></div></div><p>➜ <b>ir a la actividad 2.55 <i>(Brindar el código ID de atención)</i></b></p><p><b>Si no se brindó acceso,</b></p><div class=\"tipif\"><div class=\"tipif-title\">Generar ticket a AT</div><div class=\"tipif-row\"><span class=\"tipif-k\">Canal</span><span class=\"tipif-v\">Soporte Tecnológico</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">SVA</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">WIN TV</span></div><div class=\"tipif-code\">|Problemas con el app|\n|Descartes|\n|Motivo del problema|</div></div><p>➜ <b>ir a la actividad 2.65 <i>(Informar que se contactarán a la brevedad)</i></b></p>", "t": "dec", "badges": [["sp", "SPEECH"], ["tp", "TIPIFICA"]], "r": 16, "c": 5, "h": 78}, {"id": "a2_32", "num": "2.32", "l": "Confirmar acceso a WINTV", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<div class=\"warn\"><span class=\"tag t-wr\">Ojo</span>Ninguna actividad de la normativa deriva explícitamente a este paso; se incluye para no perder su contenido.</div><p>Verificar con el cliente si puede acceder correctamente a su cuenta de WINTV con las credenciales proporcionadas.</p><p>➜ <b>Si el cliente puede ingresar correctamente, continuar con la actividad 2.33. <i>(Consultar canal a grabar)</i></b></p>", "t": "act", "badges": [["wr", "OJO"]], "r": 17, "c": 2, "h": 60}, {"id": "a2_33", "num": "2.33", "l": "Consultar canal a grabar", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>Preguntar al cliente qué canal desea grabar. Informar al cliente que el único canal que no cuenta con la opción de grabación es WILLAX, así como aquellos que se encuentren bloqueados temporalmente. (Bloqueo generado por Producto)</p><p>➜ <b>Si el canal mencionado permite grabación, continuar con la actividad 2.35. <i>(Orientar con los pasos para grabación)</i></b></p><p>➜ <b>Si el canal no permite grabación, continuar con la actividad 2.34. <i>(Comunicar Speech de canales no permitidos para grabación)</i></b></p>", "t": "dec", "badges": [], "r": 18, "c": 2, "h": 60}, {"id": "a2_34", "num": "2.34", "l": "Comunicar Speech de canales no permitidos para grabación", "actor": "Sistema InConcert", "p": 1, "d": "<ul><li>El asesor deberá guiarse del</li></ul><p>Speech Sugerido.</p><div class=\"asesor-label\">🗣️ Asesor — qué decir:</div><div class=\"speech\">“(Nombre Cliente), entiendo que deseas grabar este contenido. Sin embargo, este canal no permite realizar grabaciones. Puedes continuar disfrutándolo en vivo con normalidad.”</div><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Limite de dispositivos-información comercial</span></div></div><ul><li>Y en observaciones colocar canal no permitido para la grabación</li></ul><p>➜ <b>Luego, continuar con la actividad 2.55 <i>(Brindar el código ID de atención)</i></b></p>", "t": "sys", "badges": [["sp", "SPEECH"], ["tp", "TIPIFICA"]], "r": 19, "c": 3, "h": 78}, {"id": "a2_35", "num": "2.35", "l": "Orientar con los pasos para grabación", "actor": "Sistema InConcert", "p": 1, "d": "<p>Guiar al cliente con los pasos a realizar para grabar su programa, canal o película:</p><ul><li>1. Grabación desde la App WIN TV</li></ul><p>Aplica cuando el cliente utiliza la aplicación WIN TV desde un Smart TV o celular.</p><ul><li>Paso 1</li></ul><p>Ingresar a la App WIN TV.</p><ul><li>Paso 2</li></ul><p>En la parte superior derecha, junto al nombre del usuario, seleccionar el ícono de tres puntos / tres líneas.</p><ul><li>Paso 3</li></ul><p>Ingresar a la sección de Programación, donde se visualizará la programación disponible.</p><ul><li>Paso 4</li></ul><p>Seleccionar el canal o programa que el cliente desea grabar.</p><ul><li>Paso 5</li></ul><p>Al seleccionar el programa, se mostrará una pantalla con la información correspondiente y las opciones de grabación:</p><p>Grabar programa: permite grabar únicamente el programa seleccionado y su duración programada.</p><p>Grabar serie: permite programar la grabación de los siguientes capítulos de la misma serie, de acuerdo con su programación.</p><ul><li>Consideración</li></ul><p>La opción Grabar serie se utiliza cuando el cliente desea registrar automáticamente los capítulos que continúen emitiéndose del mismo programa.</p><ul><li>2. Grabación desde la Web WIN TV</li><li>Paso 1</li></ul><p>Ingresar a la plataforma web de WIN TV.</p><ul><li>Paso 2</li></ul><p>Seleccionar la opción Programación, ubicada en la parte superior.</p><ul><li>Paso 3</li></ul><p>Seleccionar el canal que el cliente desea consultar.</p><ul><li>Paso 4</li></ul><p>Seleccionar el programa que desea grabar.</p><ul><li>Paso 5</li></ul><p>Se mostrarán las opciones disponibles para el contenido seleccionado:</p><p>Reproducir: permite reproducir el contenido disponible.</p><p>Ver en directo: permite visualizar la transmisión en vivo.</p><p>Grabar capítulo: permite grabar el capítulo seleccionado.</p><p>Grabar toda la serie: permite programar la grabación de los capítulos siguientes de la misma serie.</p><ul><li>Consideración</li></ul><p>La opción Grabar toda la serie permite registrar automáticamente los capítulos que se emitan posteriormente, de acuerdo con la programación.</p><ul><li>3. Canal no habilitado para grabación</li></ul><div class=\"warn\"><span class=\"tag t-wr\">Ojo</span>El canal Willax no permite realizar grabaciones.</div><p><b>En caso el cliente intente grabar contenido de este canal, se deberá informar que la opción de grabación no se encuentra disponible para dicho canal.</b></p><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">Servicios de Valor Agregado</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Informativo</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Uso/WIN TV</span></div></div><p>➜ <b>Continuar con la actividad 2.55. <i>(Brindar el código ID de atención)</i></b></p>", "t": "sys", "badges": [["tp", "TIPIFICA"], ["wr", "OJO"]], "r": 19, "c": 2, "h": 78}, {"id": "a2_36", "num": "2.36", "l": "Solicitar desinstalar el aplicativo", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<ul><li>Pedir al cliente que desinstale el aplicativo. y lo vuelva a instalar</li></ul><p>➜ <b>Ir al paso 2.37 <i>(Verificar credenciales de acceso)</i></b></p>", "t": "act", "badges": [], "r": 12, "c": 6, "h": 78}, {"id": "a2_37", "num": "2.37", "l": "Verificar credenciales de acceso", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>Preguntar al cliente si cuenta con las credenciales para acceder a su cuenta de WINTV.</p><p>Asimismo, solicitarle que tenga a la mano otro dispositivo para poder ingresar el código o escanear el QR.</p><p>➜ <b>Si el cliente cuenta con sus credenciales, continuar con la actividad 2.38. <i>(Solicitar acceder con sus credenciales)</i></b></p><p>➜ <b>Si el cliente no cuenta con sus credenciales, continuar con la actividad 2.21. <i>(Verificar correo del cliente)</i></b></p>", "t": "dec", "badges": [], "r": 13, "c": 6, "h": 78}, {"id": "a2_38", "num": "2.38", "l": "Solicitar acceder con sus credenciales", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>Pedir al cliente que ingrese a su WINTV mediante las credenciales de acceso.</p><p><b>Si no funciona:</b></p><div class=\"sect\">Desenergizar el televisor o el Winbox</div><ul><li>Apagar el televisor</li><li>Desconecta el televisor por 1 min</li><li>Volver a conectarlo</li><li>Encender el televisor</li><li>Ingresar nuevamente  a WinTv</li></ul><p><b>Si se soluciona :</b></p><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Sin acceso – Cómo configurar TV</span></div></div><p>➜ <b>ir a la actividad 2.55. <i>(Brindar el código ID de atención)</i></b></p><p><b>Si no se soluciona</b></p><p><b>Si no funciona solicitar que utilice otro dispositivo:</b></p><div class=\"asesor-label\">🗣️ Speech sugerido:</div><div class=\"speech\">“(Nombre), para ayudarte a identificar dónde se presenta el inconveniente, ¿podrías probar ingresar a WIN TV desde otro dispositivo, por favor? Así validamos si el inconveniente continúa.”</div><p><b>Si se soluciona:</b></p><div class=\"asesor-label\">🗣️ Speech sugerido:</div><div class=\"speech\">“(Nombre), hemos validado que WIN TV funciona correctamente desde otro dispositivo. Por ello, el inconveniente estaría relacionado con tu televisor. Te recomendamos comunicarte con el servicio técnico de la marca para que puedan revisar el equipo.”</div><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Sin acceso – Cómo configurar TV</span></div></div><p>➜ <b>ir a la actividad 2.55. <i>(Brindar el código ID de atención)</i></b></p><p><b>Si no se soluciona</b></p><div class=\"asesor-label\">🗣️ Speech sugerido:</div><div class=\"speech\">“(Nombre), entiendo el inconveniente. Como ya realizamos las validaciones y necesitamos una revisión más especializada, voy a generar un ticket para derivar tu caso al área correspondiente. Ellos continuarán con la revisión y te brindarán la atención necesaria.”</div><ul><li>y envía un ticket a AT</li></ul><div class=\"tipif\"><div class=\"tipif-title\">Ticket / tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Canal</span><span class=\"tipif-v\">Soporte Tecnológico</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">.SVA</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">WIN TV</span></div><div class=\"tipif-code\">|Fecha de activación de SVA|\n|Tipo de WINTV| Básico/Plus\n|Correo donde desea le lleguen las credenciales|\n|Observaciones| Cliente ya esperó el plazo de 48 horas hábiles de envío de credenciales a su correo electrónico</div></div><p>➜ <b>Si no se solucionó la incidencia, ir a la actividad 2.59. <i>(Realizar transferencia con AT)</i></b></p>", "t": "dec", "badges": [["sp", "SPEECH"], ["tp", "TIPIFICA"]], "r": 14, "c": 6, "h": 78}, {"id": "a2_39", "num": "2.39", "l": "Validar que tenga credenciales", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>Preguntar al cliente si cuenta con las credenciales para acceder a su cuenta de WINTV. Asimismo, solicitarle otro dispositivo a la mano para poder ingresar el código o escanear el QR.</p><p>➜ <b>Si el cliente cuenta con sus credenciales, ir a la actividad 2.40. <i>(Validar sistema operativo)</i></b></p><p>➜ <b>Si el cliente no cuenta con sus credenciales, ir a la actividad 2.21. <i>(Verificar correo del cliente)</i></b></p>", "t": "dec", "badges": [], "r": 12, "c": 7, "h": 60}, {"id": "a2_40", "num": "2.40", "l": "Validar sistema operativo", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>Confirmar si el dispositivo del cliente posee un sistema compatible con el aplicativo WINTV.</p><div class=\"sect\">Sistemas operativos compatibles</div><p>Android: A partir de la versión SO 11.</p><ul><li>iOS: Disponible a través de App Store. y iOS 13.5</li></ul><div class=\"sect\">Pasos para validar el sistema en Android</div><p>Abrir la aplicación Configuración o Ajustes del teléfono.</p><p>Buscar la opción “Acerca del dispositivo”, “Acerca del teléfono” o “Información del teléfono”.</p><p>Verificar la versión de Android instalada.</p><div class=\"sect\">Pasos para validar el sistema en IOS</div><ul><li>Ir a Ajustes o Configuración</li></ul><div class=\"sect\">Buscar el apartado General</div><ul><li>Ir a la opción Acerca de o Información</li><li>Para ello, es necesario aplicar el speech del documento</li></ul><div class=\"asesor-label\">🗣️ Speech:</div><div class=\"speech\">“(Nombre del cliente), para seguir con las validaciones, ¿me podrías indicar qué sistema operativo y versión tiene tu dispositivo, por favor? Si necesitas ayuda, yo puedo guiarte con el paso a paso.</div><p><b>Si no es compatible, indicarle: Te comento que la versión del sistema operativo de tu dispositivo no es compatible con WINTV. Te sugiero actualizarlo, de ser posible, ya que WINTV está disponible desde la versión (indicar).”</b></p><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Celular no compatible – Información comercial</span></div></div><p>➜ <b>Si el celular o Tablet no es compatible, ir a la actividad 2.55 <i>(Brindar el código ID de atención)</i></b></p><p>➜ <b>Si el celular o Tablet es compatible, continuar con la actividad 2.41. <i>(Orientar pasos para acceder)</i></b></p>", "t": "dec", "badges": [["sp", "SPEECH"], ["tp", "TIPIFICA"]], "r": 13, "c": 7, "h": 60}, {"id": "a2_41", "num": "2.41", "l": "Orientar pasos para acceder", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<div class=\"sect\">Guiar al cliente con los pasos para descargar la app WINTV</div><p>Ingresar a Google Play o App Store.</p><p>Buscar y descargar el aplicativo.</p><p>Completar usuario y contraseña.</p><p>Seleccionar el botón Conectar.</p><p><b>Si se solucionó la incidencia,</b></p><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Celular no compatible – Información comercial</span></div></div><p>➜ <b>continuar con la actividad 2.55. <i>(Brindar el código ID de atención)</i></b></p><p>➜ <b>Si cliente no tiene acceso, ir a la actividad 2.42. <i>(Consultar dispositivos que desean loguearse)</i></b></p>", "t": "dec", "badges": [["tp", "TIPIFICA"]], "r": 14, "c": 7, "h": 60}, {"id": "a2_42", "num": "2.42", "l": "Consultar dispositivos que desean loguearse", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>El asesor debe considerar que, el cliente que solo se puede tener un (1) servicio WINTV por DNI/CE o RUC, independientemente de la cantidad de servicios o direcciones que tenga registradas.</p><p><b>En caso el cliente cuente con dos o más servicios activos en distintas direcciones, no será posible contratar ni activar un WINTV adicional, ni ampliar la cantidad de dispositivos en simultáneo, ya que el beneficio se asigna por cliente y no por dirección.</b></p><p>Preguntar al cliente cuántos dispositivos desea registrar o loguear en su cuenta de WINTV.</p><div class=\"sect\">Recordar al cliente los límites según el plan contratado</div><p>WINTV Básico: Hasta 2 dispositivos simultáneos.</p><p>WINTV Plus: Hasta 4 dispositivos simultáneos.</p><p>WINTV Premium: Hasta 4 dispositivos simultáneos.</p><p>WINTV L1 Max: Hasta 3 dispositivos simultáneos.</p><p>WINTV L1 Max Premium: Hasta 4 dispositivos simultáneos.</p><ul><li>WinTV L1MAX Premium Upselling: Permite hasta 4 dispositivos en simultaneo</li><li>WinTV L1MAX Upselling: Permite hasta 3 dispositivos en simultaneo</li></ul><p>Con base en la información del cliente, continuar con el flujo correspondiente para validación y registro de dispositivos.</p><p>➜ <b>Si el cliente está dentro de la cantidad permitida, ir a la actividad 2.43. <i>(Solicitar acceder con otro equipo)</i></b></p><p><b>Si pasa la cantidad en base al plan</b></p><ul><li>Aplicar</li></ul><div class=\"asesor-label\">🗣️ Speech sugerido:</div><div class=\"speech\">“(Nombre Cliente), tu plan WIN TV permite el acceso desde una cantidad limitada de dispositivos. En este momento, estás intentando ingresar desde más dispositivos de los permitidos. Te recomendamos cerrar sesión en alguno para poder ingresar.”</div><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">Servicios de Valor Agregado</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Informativo</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Uso/WIN TV</span></div></div><p>➜ <b>continuar con la actividad 2.55 <i>(Brindar el código ID de atención)</i></b></p>", "t": "dec", "badges": [["sp", "SPEECH"], ["tp", "TIPIFICA"]], "r": 15, "c": 8, "h": 78}, {"id": "a2_43", "num": "2.43", "l": "Solicitar acceder con otro equipo", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>Solicitar al cliente loguearse con otro dispositivo. Si el cliente puede acceder con otro dispositivo, confirmar cómo está accediendo a la app WINTV desde su celular/Tablet.</p><ul><li>Para ello, es necesario aplicar el speech del documento</li></ul><div class=\"asesor-label\">🗣️ Speech:</div><div class=\"speech\">“(Nombre del cliente), ¿podrías intentar ingresar a WINTV desde otro dispositivo, por favor? Así validamos si el servicio funciona correctamente.”</div><p><b>Si se solucionó la incidencia,</b></p><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Sin acceso – Otros dispositivos</span></div></div><p>➜ <b>ir a la actividad 2.55. <i>(Brindar el código ID de atención)</i></b></p><p><b>Si persiste la incidencia,</b></p><div class=\"tipif\"><div class=\"tipif-title\">Enviar un ticket a el área de AT</div><div class=\"tipif-row\"><span class=\"tipif-k\">Canal</span><span class=\"tipif-v\">Soporte Tecnológico</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">.SVA</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">WIN TV</span></div><div class=\"tipif-code\">|Problemas con el app|\n|Descartes|\n|Motivo del problema|</div></div><p>➜ <b>ir a la actividad 2.59 <i>(Realizar transferencia con AT)</i></b></p>", "t": "dec", "badges": [["sp", "SPEECH"], ["tp", "TIPIFICA"]], "r": 16, "c": 8, "h": 78}, {"id": "a2_44", "num": "2.44", "l": "Confirmar acceso a WINTV", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<div class=\"warn\"><span class=\"tag t-wr\">Ojo</span>Ninguna actividad de la normativa deriva explícitamente a este paso; se incluye para no perder su contenido.</div><p>Verificar con el cliente si puede acceder correctamente a su cuenta de WINTV con las credenciales proporcionadas.</p><p>➜ <b>Si el cliente puede ingresar correctamente, continuar con la actividad 2.45. <i>(Consultar canal a grabar)</i></b></p>", "t": "act", "badges": [["wr", "OJO"]], "r": 20, "c": 2, "h": 60}, {"id": "a2_45", "num": "2.45", "l": "Consultar canal a grabar", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>Preguntar al cliente qué canal desea grabar. Informar al cliente que el único canal que no cuenta con la opción de grabación es WILLAX, así como aquellos que se encuentren bloqueados temporalmente.</p><p>➜ <b>Si el canal mencionado permite grabación, continuar con la actividad 2.47. <i>(Orientar con los pasos para grabación)</i></b></p><p>➜ <b>Si el canal no permite grabación, continuar con la actividad 2.46. <i>(Comunicar Speech de canales no permitidos para grabación)</i></b></p>", "t": "dec", "badges": [], "r": 21, "c": 2, "h": 60}, {"id": "a2_46", "num": "2.46", "l": "Comunicar Speech de canales no permitidos para grabación", "actor": "Sistema InConcert", "p": 1, "d": "<p>El asesor deberá guiarse del “Speeches ATC Digital” (hoja PL5) para comunicar el speech correspondiente.</p><p>➜ <b>Luego, continuar con la actividad 2.54. <i>(Realizar tipificación en sistema)</i></b></p>", "t": "sys", "badges": [], "r": 22, "c": 3, "h": 78}, {"id": "a2_47", "num": "2.47", "l": "Orientar con los pasos para grabación", "actor": "Sistema InConcert", "p": 1, "d": "<p>Guiar al cliente con los pasos a realizar para grabar su programa, canal o película:</p><p>Seleccionar el programa, canal o película que desea grabar.</p><p>Seleccionar los 3 puntos que figuran en la parte superior de la programación .</p><p>Seleccionar el programa o canal que desea grabar.</p><p>Seleccionar el ícono de grabar, ícono redondo con un punto en el centro .</p><p>➜ <b>Continuar con la actividad 2.54. <i>(Realizar tipificación en sistema)</i></b></p><div class=\"note\"><div class=\"ni\">📌</div><div><span class=\"tag t-no\">Nota</span>El único canal que no se puede grabar es WILLAX.</div></div>", "t": "sys", "badges": [["no", "NOTA"]], "r": 22, "c": 2, "h": 78}, {"id": "a2_48", "num": "2.48", "l": "Validar que tenga credenciales", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>Preguntar al cliente si cuenta con las credenciales para acceder a su cuenta de WINTV. Asimismo, solicitarle otro dispositivo a la mano para poder ingresar el código o escanear el QR.</p><p>➜ <b>Si el cliente cuenta con sus credenciales, ir a la actividad 2.49. <i>(Validar navegador en uso)</i></b></p><p>➜ <b>Si el cliente no cuenta con sus credenciales, ir a la actividad 2.21. <i>(Verificar correo del cliente)</i></b></p>", "t": "dec", "badges": [], "r": 12, "c": 8, "h": 60}, {"id": "a2_49", "num": "2.49", "l": "Validar navegador en uso", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>Confirmar si el navegador con el cual está ingresando el cliente posee es compatible con el aplicativo WINTV.</p><ul><li>Los navegadores compatibles son: Google Chrome y Mozilla Firefox</li></ul><p>➜ <b>Si el navegador es compatible, continuar con la actividad 2.50. <i>(Orientar pasos para acceder)</i></b></p><p><b>Si el navegador no es compatible,</b></p><ul><li>Aplicar el siguiente speech y tipificar</li></ul><div class=\"asesor-label\">🗣️ Speech sugerido:</div><div class=\"speech\">“(Nombre), hemos validado que el navegador que estás utilizando actualmente no es compatible con WIN TV. Te recomendamos ingresar desde Google Chrome o Mozilla Firefox para que puedas disfrutar del servicio correctamente.”</div><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Sin acceso – Otros dispositivos</span></div></div><p>➜ <b>ir a la actividad 2.55. <i>(Brindar el código ID de atención)</i></b></p>", "t": "dec", "badges": [["sp", "SPEECH"], ["tp", "TIPIFICA"]], "r": 13, "c": 8, "h": 60}, {"id": "a2_50", "num": "2.50", "l": "Orientar pasos para acceder", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<div class=\"sect\">Guiar al cliente con los pasos para acceder a WINTV</div><ul><li>Ingresar a https://go.wintv.pe/</li><li>En la parte superior derecha seleccionar el idioma (español / inglés)</li><li>Ir al recuadro conectar</li></ul><p>Completar Documento de Identidad/usuario y contraseña.</p><p>Seleccionar el botón Conectar.</p><p><b>Si se solucionó la incidencia,</b></p><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Sin acceso – Otros dispositivos</span></div></div><p>➜ <b>ir a la actividad 2.55. <i>(Brindar el código ID de atención)</i></b></p><p>➜ <b>Si la incidencia persiste, ir a la actividad 2.51. <i>(Validar cantidad dispositivos conectados)</i></b></p>", "t": "dec", "badges": [["tp", "TIPIFICA"]], "r": 14, "c": 8, "h": 60}, {"id": "a2_51", "num": "2.51", "l": "Validar cantidad dispositivos conectados", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>El asesor debe considerar que, el cliente que solo se puede tener un (1) servicio WINTV por DNI/CE o RUC, independientemente de la cantidad de servicios o direcciones que tenga registradas.</p><p><b>En caso el cliente cuente con dos o más servicios activos en distintas direcciones, no será posible contratar ni activar un WINTV adicional, ni ampliar la cantidad de dispositivos en simultáneo, ya que el beneficio se asigna por cliente y no por dirección.</b></p><p>Preguntar al cliente cuántos dispositivos desea registrar o loguear en su cuenta de WINTV.</p><div class=\"sect\">Recordar al cliente los límites según el plan contratado</div><p>WINTV Básico: Hasta 2 dispositivos simultáneos.</p><p>WINTV Plus: Hasta 4 dispositivos simultáneos.</p><p>WINTV Premium: Hasta 4 dispositivos simultáneos.</p><p>WINTV L1 Max: Hasta 3 dispositivos simultáneos.</p><p>WINTV L1 Max Premium: Hasta 4 dispositivos simultáneos.</p><ul><li>WinTV L1MAX Premium Upselling: Permite hasta 4 dispositivos en simultaneo</li><li>WinTV L1MAX Upselling: Permite hasta 3 dispositivos en simultaneo</li></ul><p>Con base en la información del cliente, continuar con el flujo correspondiente para validación y registro de dispositivos.</p><p>➜ <b>Si está dentro de la cantidad permitida, ir a la actividad 2.52. <i>(Solicitar acceder con otro equipo)</i></b></p><p><b>Si pasa la cantidad en base al plan</b></p><ul><li>Aplicar</li></ul><div class=\"asesor-label\">🗣️ Speech sugerido:</div><div class=\"speech\">“(Nombre Cliente), tu plan WIN TV permite el acceso desde una cantidad limitada de dispositivos. En este momento, estás intentando ingresar desde más dispositivos de los permitidos. Te recomendamos cerrar sesión en alguno para poder ingresar.”</div><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">Servicios de Valor Agregado</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Informativo</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Uso/WIN TV</span></div></div><p>➜ <b>continuar con la actividad 2.55 <i>(Brindar el código ID de atención)</i></b></p>", "t": "dec", "badges": [["sp", "SPEECH"], ["tp", "TIPIFICA"]], "r": 15, "c": 9, "h": 78}, {"id": "a2_52", "num": "2.52", "l": "Solicitar acceder con otro equipo", "actor": "Asesor ATC 1ª línea", "p": 1, "d": "<p>Solicitar al cliente loguearse con otro dispositivo. Si el cliente puede acceder con otro dispositivo, confirmar cómo está accediendo a la app WINTV desde su pc/laptop.</p><div class=\"asesor-label\">🗣️ Speech:</div><div class=\"speech\">“(Nombre del cliente), ¿podrías intentar ingresar a WINTV desde otro dispositivo, por favor? Así validamos si el servicio funciona correctamente.”</div><p><b>Si se solucionó la incidencia,</b></p><div class=\"tipif\"><div class=\"tipif-title\">Tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Sin acceso – Otros dispositivos</span></div></div><p>➜ <b>ir a la actividad 2.55. <i>(Brindar el código ID de atención)</i></b></p><p><b>Si persiste la incidencia,</b></p><div class=\"tipif\"><div class=\"tipif-title\">Enviar un ticket a el área de AT</div><div class=\"tipif-row\"><span class=\"tipif-k\">Canal</span><span class=\"tipif-v\">Soporte Tecnológico</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">.SVA</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">WIN TV</span></div><div class=\"tipif-code\">|Problemas con el app|\n|Descartes|\n|Motivo del problema|</div></div><p>➜ <b>ir a la actividad 2.59. <i>(Realizar transferencia con AT)</i></b></p>", "t": "dec", "badges": [["sp", "SPEECH"], ["tp", "TIPIFICA"]], "r": 16, "c": 9, "h": 78}, {"id": "a2_53", "num": "2.53", "l": "Orientar con los pasos para grabación", "actor": "Sistema InConcert", "p": 1, "d": "<div class=\"warn\"><span class=\"tag t-wr\">Ojo</span>Ninguna actividad de la normativa deriva explícitamente a este paso; se incluye para no perder su contenido.</div><p>Guiar al cliente con los pasos a realizar para grabar su programa, canal o película:</p><p>Seleccionar el programa, canal o película que desea grabar.</p><p>Seleccionar los 3 puntos que figuran en la parte superior de la programación .</p><p>Seleccionar el programa o canal que desea grabar.</p><p>Seleccionar el ícono de grabar, ícono redondo con un punto en el centro .</p><p>➜ <b>Continuar con la actividad 2.54. <i>(Realizar tipificación en sistema)</i></b></p><div class=\"note\"><div class=\"ni\">📌</div><div><span class=\"tag t-no\">Nota</span>El único canal que no se puede grabar es WILLAX.</div></div>", "t": "sys", "badges": [["no", "NOTA"], ["wr", "OJO"]], "r": 23, "c": 2, "h": 78}, {"id": "a2_54", "num": "2.54", "l": "Realizar tipificación en sistema", "actor": "Asesor ATC 1ª línea", "p": 2, "d": "<p>Se deberá dejar una tipificación en CRM Experiencia según corresponda:</p><div class=\"tipif\"><div class=\"tipif-title\">Descartes físicos realizados (2.8. Descartar fallas eléctricas en la ONT)</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">Internet con cable</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">LOS Verde – Ancho de banda – Descartes físicos</span></div></div><div class=\"tipif\"><div class=\"tipif-title\">Cliente presenta deuda (2.9. Validar si el cliente presenta deuda)</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">Recibo</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Informativo</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Importe pendiente de pago / Monto a pagar – Servicio Suspendido</span></div></div><div class=\"tipif\"><div class=\"tipif-title\">Cliente no presenta deuda (2.9. Validar si el cliente presenta deuda)</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">Recibo</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Informativo</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Importe pendiente de pago / Monto a pagar – Servicio Activo</span></div></div><div class=\"tipif\"><div class=\"tipif-title\">Cliente no presenta deuda (2.10. Escalar caso con Supervisor ATC)</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">Pagos</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Pago realizado impacto en sistema- solicita reconexión</span></div><div class=\"tipif-code\">|Número de contacto|\n|Número adicional|\n|Fecha de pago\n|Monto pagado|\n|Observación|\n|Tipo de agente|*Bodega pepito*</div></div><div class=\"tipif\"><div class=\"tipif-title\">Avería Masiva (2.12. Comunicar speech de falla masiva al cliente)</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">Internet con cable</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Masivo caída total</span></div></div><div class=\"tipif\"><div class=\"tipif-title\">Cantidad de equipos conectados/ Equipos compatibles (2.14 Validar si el cliente tiene el SVA contratado; 2.18 Validar dispositivos registrados; 2.35. Orientar con los pasos para grabación)</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">Servicios de Valor Agregado</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Informativo</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Uso/WIN TV</span></div></div><div class=\"tipif\"><div class=\"tipif-title\">Información comercial (2.19 Informar sobre dispositivos compatibles; 2.20 Informar parrilla de canales; 2.34. Comunicar Speech de canales no permitidos para grabación; 2.46. Comunicar Speech de canales no permitidos; 2.47 Orientar con los pasos para grabación; 2.53. Orientar con los pasos para grabación)</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Limite de dispositivos-información comercial</span></div></div><div class=\"tipif\"><div class=\"tipif-title\">Contraseña olvidada (2.22 Ofrecer cambio de contraseña)</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Sin acceso – Portal Win-Clave incorrecta</span></div></div><div class=\"tipif\"><div class=\"tipif-title\">Envío de credenciales (2.24 Indicar actualización de correo; 2.25. Indicar al cliente que revise Spam o correo no deseado)</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Sin acceso – Portal Win-No recibió usuario y contraseña</span></div></div><div class=\"tipif\"><div class=\"tipif-title\">Sin Acceso – Como configurar TV (2.29. Orientar pasos de descarga; 2.31 Solicitar acceder con otro dispositivo; 2.38 Solicitar acceder con sus credenciales)</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Sin acceso – Cómo configurar TV</span></div></div><div class=\"tipif\"><div class=\"tipif-title\">TV no compatible (2.16. Escalar caso con Supervisor ATC; 2.28 Ofrecer WINBOX; 2.30 Consultar dispositivos que desean loguearse; 2.31 Solicitar acceder con otro dispositivo)</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">TV no compatible – Se ofrece WINBOX</span></div></div><div class=\"tipif\"><div class=\"tipif-title\">Celular no compatible (2.16. Escalar caso con Supervisor ATC; 2.30 Consultar dispositivos que desean loguearse; 2.31 Solicitar acceder con otro dispositivo; 2.40 Validar sistema operativo; 2.41 Orientar pasos para acceder; 2.43. Solicitar acceder con otro equipo)</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Celular no compatible – Información comercial</span></div></div><div class=\"tipif\"><div class=\"tipif-title\">Navegador no compatible (2.16. Escalar caso con Supervisor ATC; 2.31 Solicitar acceder con otro dispositivo; 2.42. Consultar dispositivos que desean loguearse ; 2.43. Solicitar acceder con otro equipo; 2.49 Validar navegador en uso; 2.50. Orientar pasos para acceder; 2.52. Solicitar acceder con otro equipo)</div><div class=\"tipif-row\"><span class=\"tipif-k\">Medio</span><span class=\"tipif-v\">WINTV</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Problema</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Sin acceso – Otros dispositivos</span></div></div>", "t": "act", "badges": [["tp", "TIPIFICA"]], "r": 24, "c": 2, "h": 78}, {"id": "a2_55", "num": "2.55", "l": "Brindar el código ID de atención", "actor": "Asesor ATC 1ª línea", "p": 2, "d": "<p>Se debe informar al cliente que se ha concluido con la asistencia brindada, y recordarle nuevamente el código ID de atención para su referencia.</p><ul><li>Tener en cuenta usar el Speech identificado en el documento</li></ul><div class=\"asesor-label\">🗣️ Speech:</div><div class=\"speech\">“Tu código de solicitud es el [Indicar ID de CRM]”</div><p><b>En caso se trate de un cliente masivo usar el Speech identificado en el documento</b></p><div class=\"sect\">Sin mención de la regulación OSIPTEL</div><div class=\"asesor-label\">🗣️ Speech:</div><div class=\"speech\">“Lamentamos las molestias ocasionadas. Actualmente, los inconvenientes que estás presentando se deben a factores externos a WIN. Sin embargo, nuestros técnicos especializados ya están revisando todo a detalle y están trabajando para solucionarlo lo más pronto posible.”</div><div class=\"sect\">Con mención de la regulación OSIPTEL</div><div class=\"asesor-label\">🗣️ Speech:</div><div class=\"speech\">“Entiendo completamente tu malestar y lamento sinceramente los inconvenientes que esto pueda estar generando. En WIN, nos importa muchísimo tu experiencia, por eso estamos dando seguimiento prioritario para resolver esta situación lo antes posible. Si bien la afectación proviene de causas externas a nuestra red, queremos asegurarteque evaluaremos la posibilidad de compensarte por las molestias ocasionadas”</div><p>➜ <b>Continuar con la actividad 2.56. <i>(Culminar atención)</i></b></p>", "t": "act", "badges": [["sp", "SPEECH"]], "r": 25, "c": 2, "h": 78}, {"id": "a2_56", "num": "2.56", "l": "Culminar atención", "actor": "Asesor ATC 1ª línea", "p": 2, "d": "<ul><li>Utilizar el speech de cierre</li></ul><div class=\"asesor-label\">🗣️ Speech:</div><div class=\"speech\">“¡Ha sido un gusto atenderte hoy (Nombre del cliente)!\nRecuerda que siempre puedes comunicarte con nosotros cuando lo necesites.</div><p>Te voy a transferir a una breve encuesta para que califiques tu experiencia con esta atención, tu opinión nos ayudará muchísimo a seguir mejorando.</p><ul><li>¡Muchas gracias, que tengas un(a) excelente día/tarde/noche!”</li></ul><p>➜ <b>Ir al paso 2.57 <i>(Finalizar grabación de la llamada)</i></b></p>", "t": "act", "badges": [["sp", "SPEECH"]], "r": 26, "c": 2, "h": 60}, {"id": "a2_57", "num": "2.57", "l": "Finalizar grabación de la llamada", "actor": "Sistema InConcert", "p": 2, "d": "<p>VOZ: Al colgar con el cliente se ejecutará la finalización de la grabación de manera automática.</p><ul><li>(*) Fin de la operativa</li></ul>", "t": "sys", "badges": [], "r": 27, "c": 2, "h": 78}, {"id": "a2_58", "num": "2.58", "l": "Crear ticket para AT", "actor": "Asesor ATC 1ª línea", "p": 2, "d": "<div class=\"warn\"><span class=\"tag t-wr\">Ojo</span>Ninguna actividad de la normativa deriva explícitamente a este paso; se incluye para no perder su contenido. Los tickets AT se generan dentro de cada paso. Úsalo como catálogo de plantillas.</div><p>En CRM Experiencia, dentro del módulo de Contactos, en el panel de “Registro de llamada recibida” hacer clic en el botón Escalar. A continuación, en el desplegable Tipo usuario, seleccionar Cliente. Ingresar el número de documento del cliente y seleccionar la dirección del pedido en donde se presenta la incidencia y esperar que carguen los demás campos.</p><div class=\"tipif\"><div class=\"tipif-title\">No llegan credenciales (2.25. Indicar al cliente que revise Spam o correo no deseado; 2.38 Solicitar acceder con sus credenciales)</div><div class=\"tipif-row\"><span class=\"tipif-k\">Canal</span><span class=\"tipif-v\">Soporte Tecnológico</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">.SVA</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">WIN TV</span></div><div class=\"tipif-code\">|Fecha de activación de SVA|\n|Tipo de WINTV| Básico/Plus\n|Correo donde desea le lleguen las credenciales|\n|Observaciones| Cliente ya esperó el plazo de 48 horas hábiles de envío de credenciales a su correo electrónico</div></div><div class=\"tipif\"><div class=\"tipif-title\">Problemas con el APP WINTV (2.31 Solicitar acceder con otro dispositivo; 2.43. Solicitar acceder con otro equipo; 2.52. Solicitar acceder con otro equipo)</div><div class=\"tipif-row\"><span class=\"tipif-k\">Canal</span><span class=\"tipif-v\">Soporte Tecnológico</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">.SVA</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">WIN TV</span></div><div class=\"tipif-code\">|Problemas con el app|\n|Descartes|\n|Motivo del problema|</div></div>", "t": "act", "badges": [["tp", "TIPIFICA"], ["wr", "OJO"]], "r": 28, "c": 2, "h": 60}, {"id": "a2_59", "num": "2.59", "l": "Realizar transferencia con AT", "actor": "Asesor ATC 1ª línea", "p": 2, "d": "<p>Realizar el intento de transferencia de 20 segundos al equipo de Atención Tecnológica.</p><p>➜ <b>En caso de transferencia exitosa, ir a la actividad 2.60. <i>(Brindar datos de cliente a AT)</i></b></p><p>➜ <b>En caso de transferencia no exitosa, ir a la actividad 2.65. <i>(Informar que se contactarán a la brevedad)</i></b></p><p>Tener en cuenta usar el Speech identificado en el documento “Speeches ATC Voz” (hoja PL4).</p>", "t": "dec", "badges": [], "r": 29, "c": 2, "h": 60}, {"id": "a2_60", "num": "2.60", "l": "Brindar datos de cliente a AT", "actor": "Asesor ATC 1ª línea", "p": 2, "d": "<p>Luego de realizar la transferencia con el área especializada, el asesor de ATC debe brindarle la información del cliente (Nombres), además del número de ticket.</p><p>➜ <b>Continuar con la actividad 2.61. <i>(Ceder comunicación)</i></b></p>", "t": "act", "badges": [], "r": 30, "c": 2, "h": 60}, {"id": "a2_61", "num": "2.61", "l": "Ceder comunicación", "actor": "Asesor ATC 1ª línea", "p": 2, "d": "<p>Ceder comunicación a la segunda línea.</p><ul><li>(*) Fin de la operativa</li></ul>", "t": "act", "badges": [], "r": 31, "c": 2, "h": 60}, {"id": "a2_62", "num": "2.62", "l": "Finalizar grabación de llamada", "actor": "Sistema InConcert", "p": 2, "d": "<p>Al colgar con el cliente se ejecutará la finalización de la grabación de manera automática.</p><p>(*) Fin de la operativa.</p>", "t": "sys", "badges": [], "r": 32, "c": 2, "h": 60}, {"id": "a2_63", "num": "2.63", "l": "Crear ticket para VT", "actor": "Asesor ATC 1ª línea", "p": 2, "d": "<p>Indicar al cliente que se derivará su caso con el área especializada, en donde posiblemente será necesario realizar una visita técnica a su domicilio.</p><p>En base a ello, en el CRM Experiencia, dentro del módulo de Contactos, en el panel de “Registro de llamada recibida” hacer clic en el botón Escalar.</p><p>A continuación, en el desplegable Tipo usuario, seleccionar Cliente. Ingresar el número de documento del cliente y seleccionar la dirección del pedido en donde se presenta la incidencia y esperar que carguen los demás campos. Luego, completar los siguientes campos dependiendo de la casuística:</p><p>Problemas con el Equipo ONT (2.8. Descartar fallas eléctricas en la ONT).</p><div class=\"tipif\"><div class=\"tipif-title\">Ticket / tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Canal</span><span class=\"tipif-v\">Soporte Tecnologico</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Mejora Tecnológica</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Cambio de Router</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Canal</span><span class=\"tipif-v\">Soporte Tecnologico</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Router no enciende</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Equipo no enciende</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Canal</span><span class=\"tipif-v\">Soporte Tecnologico</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Router no enciende</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">Equipo dañado por Cliente Plantilla:</span></div><div class=\"tipif-code\">|Observación| Detalles o por menores del caso o si el cliente detalla horario específico.\n|Observación| Detalles o por menores del caso o si el cliente detalla horario específico.</div></div><div class=\"tipif\"><div class=\"tipif-title\">|Observación| Detalles o por menores del caso o si el cliente detalla horario específico</div><div class=\"tipif-row\"><span class=\"tipif-k\">Canal</span><span class=\"tipif-v\">Soporte Tecnologico</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Visita Técnica</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">CAMBIO DE ONT</span></div><div class=\"tipif-code\">|Observación| Detalles o por menores del caso o si el cliente detalla horario específico</div></div><div class=\"tipif\"><div class=\"tipif-title\">Ticket / tipificación</div><div class=\"tipif-row\"><span class=\"tipif-k\">Canal</span><span class=\"tipif-v\">Soporte Tecnologico</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Visita Técnica</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">CAMBIO DE ONT 1 SOL</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Canal</span><span class=\"tipif-v\">Soporte Tecnologico</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Visita Técnica</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">CAMBIO DE ONT 50%</span></div><div class=\"tipif-code\">|Observación| Detalles o por menores del caso o si el cliente detalla horario específico.\n|Observación| Detalles o por menores del caso o si el cliente detalla horario específico.</div></div><div class=\"tipif\"><div class=\"tipif-title\">ONT en LOS Rojo (2.11. Validar si el cliente tiene una avería masiva)</div><div class=\"tipif-row\"><span class=\"tipif-k\">Canal</span><span class=\"tipif-v\">Soporte tecnológico</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Tipo</span><span class=\"tipif-v\">Visita Técnica</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Motivo</span><span class=\"tipif-v\">LOS ROJO</span></div><div class=\"tipif-row\"><span class=\"tipif-k\">Conexión</span><span class=\"tipif-v\">Alámbrica</span></div><div class=\"tipif-code\">|Observación| Detalles o por menores del caso o si el cliente detalla horario específico.</div></div><p>Asimismo, al enviar un ticket de VT, se registrará una tipificación de forma automática en el “Histórico de Llamadas”. En esta tipificación se incluye el código ID de atención y el número de ticket generado.</p><p>Por otro lado, en caso de presentar inconvenientes para el agendamiento, reportarlo con el supervisor.</p><p>Por último, tener en cuenta usar el Speech identificado en el documento “Speeches ATC Voz” (hoja PL6).</p><p>➜ <b>Continuar con la actividad 2.64. <i>(Seleccionar fecha y tramo horario)</i></b></p>", "t": "act", "badges": [["tp", "TIPIFICA"]], "r": 10, "c": 2, "h": 60}, {"id": "a2_64", "num": "2.64", "l": "Seleccionar fecha y tramo horario", "actor": "Asesor ATC 1ª línea", "p": 2, "d": "<div class=\"warn\"><span class=\"tag t-wr\">Ojo</span>La normativa indica continuar con la actividad 2.65 (<i>Informar que se contactarán</i>), que corresponde a la transferencia no exitosa; por secuencia se enlaza (línea punteada) con el paso de número de ticket.</div><p>Sugerir al cliente la fecha propuesta en la cual podría recibir la visita técnica (solo se podrá programar hasta en un rango de 3 días posteriores, incluyendo la fecha de la llamada).</p><p>Considerar dentro de la programación, tres tramos horarios durante el día:</p><ul><li>8:00 a 11:59</li><li>12:00 a 15:59</li><li>16:00 a 20:00</li></ul><p>Asimismo, no aparecerán los tramos pasados o aquellos sin disponibilidad de cupos.</p><p>De esta manera, seleccionar un tramo horario disponible dentro de los que figuran en la ventana y hacer clic en Guardar.</p><p>Tener en cuenta usar el Speech identificado en el documento “Speeches ATC Voz” (hoja PL6).</p><p>➜ <b>Continuar con la actividad 2.65. <i>(Informar que se contactarán a la brevedad)</i>.</b></p>", "t": "act", "badges": [["wr", "OJO"]], "r": 11, "c": 2, "h": 78}, {"id": "a2_65", "num": "2.65", "l": "Informar que se contactarán a la brevedad", "actor": "Asesor ATC 1ª línea", "p": 2, "d": "<p>Indicar al cliente que no ha sido posible completar la transferencia en estos momentos.</p><ul><li>Dentro de horario laboral de AT</li></ul><div class=\"asesor-label\">🗣️ Speech:</div><div class=\"speech\">“(Nombre del cliente), en este momento, todos nuestros especialistas están en atención. Así que voy a registrar tu ticket N.º XXX para que se comuniquen contigo apenas quede uno disponible, dentro de un máximo de 20 minutos. ¿Te parece bien?”</div><ul><li>Fuera de horario laboral</li></ul><div class=\"asesor-label\">🗣️ Speech sugerido:</div><div class=\"speech\">“(Nombre del cliente), en este momento, todos nuestros especialistas están en atención. Así que voy a registrar tu ticket N.º XXX para que se comuniquen en el horario de atención. De 8:00 a 23:00  ¿Te parece bien?”</div><p>➜ <b>Ir al punto 2.67 <i>(Culminar atención)</i></b></p>", "t": "act", "badges": [["sp", "SPEECH"]], "r": 30, "c": 3, "h": 78}, {"id": "a2_66", "num": "2.66", "l": "Brindar número de ticket generado [título no indicado en la normativa]", "actor": "Asesor ATC 1ª línea", "p": 2, "d": "<div class=\"warn\"><span class=\"tag t-wr\">Ojo</span>Esta actividad <b>no tiene título</b> en la normativa: <i>[completar título]</i>. Por su contenido corresponde a <b>Brindar número de ticket generado</b>.</div><p>Indicar al cliente el número de atención generado de forma automática en la actividad 2.67.</p>", "t": "act", "badges": [["wr", "OJO"]], "r": 12, "c": 5, "h": 96}, {"id": "a2_67", "num": "2.67", "l": "Culminar atención", "actor": "Asesor ATC 1ª línea", "p": 2, "d": "<p>Antes de culminar la atención, indicarle al cliente el número del ticket generado en la atención realizada.</p><ul><li>Tener en cuenta usar el Speech identificado en el documento</li></ul><ul><li>Tu código de solicitud es el [Indicar ID de CRM]</li><li>Utilizar el speech de cierre</li></ul><div class=\"asesor-label\">🗣️ Speech:</div><div class=\"speech\">“¡Ha sido un gusto atenderte hoy (Nombre del cliente)!\nRecuerda que siempre puedes comunicarte con nosotros cuando lo necesites.</div><p>Te voy a transferir a una breve encuesta para que califiques tu experiencia con esta atención, tu opinión nos ayudará muchísimo a seguir mejorando.</p><ul><li>¡Muchas gracias, que tengas un(a) excelente día/tarde/noche!”</li></ul><p>➜ <b>Ir al paso 2.68 <i>(Finalizar grabación de llamada)</i></b></p>", "t": "act", "badges": [["sp", "SPEECH"]], "r": 31, "c": 3, "h": 60}, {"id": "a2_68", "num": "2.68", "l": "Finalizar grabación de llamada", "actor": "Sistema InConcert", "p": 2, "d": "<p>VOZ: Al colgar con el cliente se ejecutará la finalización de la grabación de manera automática.</p><ul><li>(*) Fin de la operativa</li></ul>", "t": "sys", "badges": [], "r": 32, "c": 3, "h": 60}, {"id": "x022", "l": "PR.ATCVOZ.022 · Proceso de consultas de facturación", "t": "ext", "actor": "Otro proceso", "p": 1, "d": "<p>La atención continúa en <b>PR.ATCVOZ.022 · Proceso de consultas de facturación</b>. Este diagrama no desarrolla ese proceso.</p>", "badges": [], "r": 10, "c": 1, "h": 78}, {"id": "xzte", "l": "Soporte técnico primera línea (ZTE)", "t": "ext", "actor": "Otro proceso", "p": 1, "d": "<p>La atención continúa en <b>Soporte técnico primera línea (ZTE)</b>. Este diagrama no desarrolla ese proceso.</p>", "badges": [], "r": 10, "c": 4, "h": 78}, {"id": "xhua", "l": "Soporte técnico primera línea (HUAWEI)", "t": "ext", "actor": "Otro proceso", "p": 1, "d": "<p>La atención continúa en <b>Soporte técnico primera línea (HUAWEI)</b>. Este diagrama no desarrolla ese proceso.</p>", "badges": [], "r": 10, "c": 6, "h": 78}, {"id": "x017", "l": "PR.ATCVOZ.017 · Soporte SVA Fonowin, Winbox, Mesh", "t": "ext", "actor": "Otro proceso", "p": 1, "d": "<p>La atención continúa en <b>PR.ATCVOZ.017 · Soporte SVA Fonowin, Winbox, Mesh</b>. Este diagrama no desarrolla ese proceso.</p>", "badges": [], "r": 12, "c": 9, "h": 78}, {"id": "xact", "l": "Proceso de Actualización de datos", "t": "ext", "actor": "Otro proceso", "p": 1, "d": "<p>La atención continúa en <b>Proceso de Actualización de datos</b>. Este diagrama no desarrolla ese proceso.</p>", "badges": [], "r": 16, "c": 6, "h": 78}, {"id": "xcross", "l": "Procesos Cross y Solicitudes", "t": "ext", "actor": "Otro proceso", "p": 1, "d": "<p>La atención continúa en <b>Procesos Cross y Solicitudes</b>. Este diagrama no desarrolla ese proceso.</p>", "badges": [], "r": 15, "c": 3, "h": 60}, {"id": "xbaja", "l": "Proceso de Baja", "t": "ext", "actor": "Otro proceso", "p": 1, "d": "<p>La atención continúa en <b>Proceso de Baja</b>. Este diagrama no desarrolla ese proceso.</p>", "badges": [], "r": 15, "c": 6, "h": 60}, {"id": "xdesus", "l": "Proceso de desuscripción SVA ATC VOZ Plan Residencial WINTV", "t": "ext", "actor": "Otro proceso", "p": 1, "d": "<p>La atención continúa en <b>Proceso de desuscripción SVA ATC VOZ Plan Residencial WINTV</b>. Este diagrama no desarrolla ese proceso.</p>", "badges": [], "r": 15, "c": 7, "h": 96}, {"id": "fin", "l": "Fin de la atención", "t": "term", "actor": "—", "p": 2, "d": "<p>Fin del flujo de atención en el canal de voz.</p>", "badges": [], "r": 33, "c": 2, "h": 60}], "edges": [{"f": "a1_1", "t": "a1_2", "l": "", "k": ""}, {"f": "a1_2", "t": "a2_1", "l": "", "k": ""}, {"f": "a2_1", "t": "a2_2", "l": "", "k": ""}, {"f": "a2_2", "t": "a2_3", "l": "", "k": ""}, {"f": "a2_3", "t": "a2_4", "l": "", "k": ""}, {"f": "a2_4", "t": "a2_5", "l": "", "k": ""}, {"f": "a2_5", "t": "a2_6", "l": "", "k": ""}, {"f": "a2_6", "t": "a2_7", "l": "Red inactiva u ONT offline", "k": ""}, {"f": "a2_6", "t": "a2_11", "l": "Red activa y ONT online", "k": ""}, {"f": "a2_7", "t": "a2_8", "l": "Inactive + Offline", "k": ""}, {"f": "a2_7", "t": "a2_9", "l": "Offline due to power failure", "k": ""}, {"f": "a2_7", "t": "a2_10", "l": "Fiber issues u Online en NCE", "k": ""}, {"f": "a2_8", "t": "a2_54", "l": "El equipo enciende", "k": ""}, {"f": "a2_8", "t": "a2_63", "l": "Sigue sin encender · cambio de ONT", "k": ""}, {"f": "a2_9", "t": "x022", "l": "Suspensión por deuda / pago < 24 h", "k": ""}, {"f": "a2_9", "t": "a2_10", "l": "Sin deuda y pago > 24 h", "k": ""}, {"f": "a2_10", "t": "a2_54", "l": "", "k": ""}, {"f": "a2_11", "t": "a2_12", "l": "Cliente en masivo", "k": ""}, {"f": "a2_11", "t": "a2_13", "l": "No masivo · no puede navegar", "k": ""}, {"f": "a2_11", "t": "a2_14", "l": "No masivo · sí navega", "k": ""}, {"f": "a2_12", "t": "a2_55", "l": "", "k": ""}, {"f": "a2_13", "t": "xzte", "l": "ONT ZTE", "k": ""}, {"f": "a2_13", "t": "xhua", "l": "ONT HUAWEI", "k": ""}, {"f": "a2_14", "t": "a2_15", "l": "SVA WinTV activo", "k": ""}, {"f": "a2_14", "t": "a2_55", "l": "WinTV App / servicio bloqueado por deuda", "k": ""}, {"f": "a2_15", "t": "a2_17", "l": "Sin suspensiones o reconexión > 24 h", "k": ""}, {"f": "a2_15", "t": "a2_55", "l": "Reconexión < 24 h", "k": ""}, {"f": "a2_15", "t": "a2_16", "l": "Cliente crítico o > 24 h", "k": ""}, {"f": "a2_16", "t": "a2_55", "l": "", "k": ""}, {"f": "a2_17", "t": "a2_18", "l": "Dispositivos registrados", "k": ""}, {"f": "a2_17", "t": "a2_19", "l": "Dispositivos compatibles", "k": ""}, {"f": "a2_17", "t": "a2_20", "l": "Canales disponibles", "k": ""}, {"f": "a2_17", "t": "a2_21", "l": "Contraseña olvidada / sin credenciales", "k": ""}, {"f": "a2_17", "t": "a2_26", "l": "Smart TV · acceso / logueo", "k": ""}, {"f": "a2_17", "t": "a2_33", "l": "Grabar programa (Smart TV · Celular · PC)", "k": ""}, {"f": "a2_17", "t": "a2_36", "l": "Smart TV · pantalla negra", "k": ""}, {"f": "a2_17", "t": "a2_39", "l": "Celular o Tablet · acceso / logueo", "k": ""}, {"f": "a2_17", "t": "a2_48", "l": "PC / Laptop · acceso / logueo", "k": ""}, {"f": "a2_17", "t": "x017", "l": "Problemas con el Winbox", "k": ""}, {"f": "a2_18", "t": "a2_55", "l": "", "k": ""}, {"f": "a2_19", "t": "a2_55", "l": "", "k": ""}, {"f": "a2_20", "t": "a2_55", "l": "", "k": ""}, {"f": "a2_21", "t": "a2_22", "l": "Correo correcto", "k": ""}, {"f": "a2_21", "t": "a2_24", "l": "Correo incorrecto", "k": ""}, {"f": "a2_22", "t": "a2_55", "l": "Cambio de contraseña exitoso", "k": ""}, {"f": "a2_22", "t": "a2_23", "l": "El problema persiste", "k": ""}, {"f": "a2_23", "t": "a2_24", "l": "", "k": ""}, {"f": "a2_24", "t": "a2_55", "l": "Recibió las credenciales", "k": ""}, {"f": "a2_24", "t": "a2_25", "l": "No recibió las credenciales", "k": ""}, {"f": "a2_24", "t": "xact", "l": "Actualizar correo", "k": ""}, {"f": "a2_25", "t": "a2_55", "l": "Accede con las credenciales", "k": ""}, {"f": "a2_25", "t": "a2_65", "l": "Sin credenciales · ticket AT", "k": ""}, {"f": "a2_26", "t": "a2_27", "l": "Cuenta con credenciales", "k": ""}, {"f": "a2_26", "t": "a2_21", "l": "No cuenta con credenciales", "k": ""}, {"f": "a2_27", "t": "a2_29", "l": "TV compatible", "k": ""}, {"f": "a2_27", "t": "a2_28", "l": "TV no compatible", "k": ""}, {"f": "a2_28", "t": "xcross", "l": "Acepta el Winbox", "k": ""}, {"f": "a2_28", "t": "xbaja", "l": "Solicita baja del servicio", "k": ""}, {"f": "a2_28", "t": "xdesus", "l": "Solicita baja del SVA WINTV", "k": ""}, {"f": "a2_28", "t": "a2_55", "l": "No acepta · no solicita baja", "k": ""}, {"f": "a2_29", "t": "a2_55", "l": "Solucionado", "k": ""}, {"f": "a2_29", "t": "a2_30", "l": "No solucionado", "k": ""}, {"f": "a2_30", "t": "a2_31", "l": "Dentro de la cantidad permitida", "k": ""}, {"f": "a2_30", "t": "a2_55", "l": "Excede la cantidad del plan", "k": ""}, {"f": "a2_31", "t": "a2_55", "l": "Masivo / se brindó acceso", "k": ""}, {"f": "a2_31", "t": "a2_65", "l": "Sin acceso · ticket AT", "k": ""}, {"f": "a2_32", "t": "a2_33", "l": "Puede ingresar", "k": ""}, {"f": "a2_33", "t": "a2_35", "l": "Canal permite grabación", "k": ""}, {"f": "a2_33", "t": "a2_34", "l": "Canal no permite grabación", "k": ""}, {"f": "a2_34", "t": "a2_55", "l": "", "k": ""}, {"f": "a2_35", "t": "a2_55", "l": "", "k": ""}, {"f": "a2_36", "t": "a2_37", "l": "", "k": ""}, {"f": "a2_37", "t": "a2_38", "l": "Cuenta con credenciales", "k": ""}, {"f": "a2_37", "t": "a2_21", "l": "No cuenta con credenciales", "k": ""}, {"f": "a2_38", "t": "a2_55", "l": "Se soluciona", "k": ""}, {"f": "a2_38", "t": "a2_59", "l": "No se soluciona · ticket AT", "k": ""}, {"f": "a2_39", "t": "a2_40", "l": "Cuenta con credenciales", "k": ""}, {"f": "a2_39", "t": "a2_21", "l": "No cuenta con credenciales", "k": ""}, {"f": "a2_40", "t": "a2_41", "l": "Celular o Tablet compatible", "k": ""}, {"f": "a2_40", "t": "a2_55", "l": "No compatible", "k": ""}, {"f": "a2_41", "t": "a2_55", "l": "Solucionado", "k": ""}, {"f": "a2_41", "t": "a2_42", "l": "Sin acceso", "k": ""}, {"f": "a2_42", "t": "a2_43", "l": "Dentro de la cantidad permitida", "k": ""}, {"f": "a2_42", "t": "a2_55", "l": "Excede la cantidad del plan", "k": ""}, {"f": "a2_43", "t": "a2_55", "l": "Solucionado", "k": ""}, {"f": "a2_43", "t": "a2_59", "l": "Persiste · ticket AT", "k": ""}, {"f": "a2_44", "t": "a2_45", "l": "Puede ingresar", "k": ""}, {"f": "a2_45", "t": "a2_47", "l": "Canal permite grabación", "k": ""}, {"f": "a2_45", "t": "a2_46", "l": "Canal no permite grabación", "k": ""}, {"f": "a2_46", "t": "a2_54", "l": "", "k": ""}, {"f": "a2_47", "t": "a2_54", "l": "", "k": ""}, {"f": "a2_48", "t": "a2_49", "l": "Cuenta con credenciales", "k": ""}, {"f": "a2_48", "t": "a2_21", "l": "No cuenta con credenciales", "k": ""}, {"f": "a2_49", "t": "a2_50", "l": "Navegador compatible", "k": ""}, {"f": "a2_49", "t": "a2_55", "l": "Navegador no compatible", "k": ""}, {"f": "a2_50", "t": "a2_55", "l": "Solucionado", "k": ""}, {"f": "a2_50", "t": "a2_51", "l": "Persiste", "k": ""}, {"f": "a2_51", "t": "a2_52", "l": "Dentro de la cantidad permitida", "k": ""}, {"f": "a2_51", "t": "a2_55", "l": "Excede la cantidad del plan", "k": ""}, {"f": "a2_52", "t": "a2_55", "l": "Solucionado", "k": ""}, {"f": "a2_52", "t": "a2_59", "l": "Persiste · ticket AT", "k": ""}, {"f": "a2_53", "t": "a2_54", "l": "", "k": ""}, {"f": "a2_54", "t": "a2_55", "l": "", "k": ""}, {"f": "a2_55", "t": "a2_56", "l": "", "k": ""}, {"f": "a2_56", "t": "a2_57", "l": "", "k": ""}, {"f": "a2_57", "t": "fin", "l": "", "k": ""}, {"f": "a2_58", "t": "a2_59", "l": "", "k": "dash"}, {"f": "a2_59", "t": "a2_60", "l": "Transferencia exitosa", "k": ""}, {"f": "a2_59", "t": "a2_65", "l": "Transferencia no exitosa", "k": ""}, {"f": "a2_60", "t": "a2_61", "l": "", "k": ""}, {"f": "a2_61", "t": "a2_62", "l": "", "k": ""}, {"f": "a2_62", "t": "fin", "l": "", "k": ""}, {"f": "a2_63", "t": "a2_64", "l": "", "k": ""}, {"f": "a2_64", "t": "a2_66", "l": "", "k": "dash"}, {"f": "a2_65", "t": "a2_67", "l": "", "k": ""}, {"f": "a2_66", "t": "a2_67", "l": "", "k": ""}, {"f": "a2_67", "t": "a2_68", "l": "", "k": ""}, {"f": "a2_68", "t": "fin", "l": "", "k": ""}]};
+const NODES = DATA.nodes, EDGES = DATA.edges, PHASES = DATA.phases;
+const NMAP = {}; NODES.forEach(n => NMAP[n.id] = n);
+const OUT = {}, IN = {};
+EDGES.forEach((e,i)=>{ e._i=i; (OUT[e.f]=OUT[e.f]||[]).push(e); (IN[e.t]=IN[e.t]||[]).push(e); });
+const ORDER = {}; NODES.forEach((n,i)=>ORDER[n.id]=i);
+const PHNODES = PHASES.map((_,i)=>NODES.filter(n=>n.p===i));
+
+/* ── layout del mapa ── */
+const W=230, COLW=300, X0=60, ROWGAP=62;
+const rows={}; NODES.forEach(n=>{ rows[n.r]=Math.max(rows[n.r]||0,n.h); });
+const rowKeys=Object.keys(rows).map(Number).sort((a,b)=>a-b);
+const rowY={}; let acc=70;
+rowKeys.forEach(r=>{ rowY[r]=acc; acc+=rows[r]+ROWGAP; });
+const CH=acc+60;
+let maxCol=0; NODES.forEach(n=>maxCol=Math.max(maxCol,n.c));
+const CW=X0+(maxCol+1)*COLW+200;
+NODES.forEach(n=>{ n.x=X0+n.c*COLW; n.y=rowY[n.r]+(rows[n.r]-n.h)/2; n.cx=n.x+W/2; n.cy=n.y+n.h/2; });
+
+const bands=document.getElementById('bands');
+PHASES.forEach((p,i)=>{
+  const ns=PHNODES[i]; if(!ns.length) return;
+  const top=Math.min(...ns.map(n=>n.y))-34, bot=Math.max(...ns.map(n=>n.y+n.h))+20;
+  const d=document.createElement('div'); d.className='band';
+  d.style.cssText=`left:14px;top:${top}px;width:${CW-60}px;height:${bot-top}px;`; bands.appendChild(d);
+  const l=document.createElement('div'); l.className='band-lbl';
+  l.style.cssText=`left:34px;top:${top-13}px;`; l.textContent=p; bands.appendChild(l);
+});
+
+const nodesEl=document.getElementById('nodes');
+NODES.forEach(n=>{
+  const d=document.createElement('div');
+  d.className='node t-'+n.t; d.id='n_'+n.id;
+  d.style.cssText=`left:${n.x}px;top:${n.y}px;height:${n.h}px;`;
+  const bg=(n.badges&&n.badges.length)?'<div class="nb">'+n.badges.map(b=>`<i class="b-${b[0]}">${b[1]}</i>`).join('')+'</div>':'';
+  d.innerHTML=`<div class="nn">${n.num?`<span class="tg">${n.num}</span>`:''}${n.actor||''}</div><div class="nl">${n.l}</div>${bg}`;
+  d.onclick=ev=>{ ev.stopPropagation(); select(n.id); closeMap(); };
+  nodesEl.appendChild(d);
+});
+
+const svg=document.getElementById('edges');
+svg.setAttribute('width',CW); svg.setAttribute('height',CH);
+const gut={}, lslot={};
+function lane(k){ gut[k]=(gut[k]||0)+1; return ((gut[k]-1)%5-2)*11; }
+function pathFor(e){
+  const s=NMAP[e.f], t=NMAP[e.t]; if(!s||!t) return null;
+  const sB=s.y+s.h, tT=t.y;
+  if(t.r>s.r){
+    if(s.c===t.c){
+      const off=lane('v'+s.c+'_'+s.r+'_'+t.r);
+      if(t.r-s.r===1&&Math.abs(off)<1) return {d:`M ${s.cx} ${sB} L ${t.cx} ${tT}`, ar:[t.cx,tT,'d']};
+      const chX=s.cx+off;
+      return {d:`M ${s.cx} ${sB} L ${s.cx} ${sB+20} L ${chX} ${sB+20} L ${chX} ${tT-24} L ${t.cx} ${tT-24} L ${t.cx} ${tT}`, ar:[t.cx,tT,'d']};
+    }
+    const gcol=t.c>s.c?s.c:s.c-1;
+    const gx=X0+gcol*COLW+W+(COLW-W)/2+lane('g'+gcol);
+    return {d:`M ${s.cx} ${sB} L ${s.cx} ${sB+20} L ${gx} ${sB+20} L ${gx} ${tT-24} L ${t.cx} ${tT-24} L ${t.cx} ${tT}`, ar:[t.cx,tT,'d']};
+  }
+  const right=t.c>=s.c;
+  const railX=right?(X0+(maxCol+1)*COLW+40+lane('rr')):(X0-34+lane('rl'));
+  const sX=right?s.x+W:s.x, tX=right?t.x+W:t.x;
+  return {d:`M ${sX} ${s.cy} L ${railX} ${s.cy} L ${railX} ${t.cy} L ${tX} ${t.cy}`, ar:[tX,t.cy,right?'l':'r']};
+}
+const AR={d:'0,-9 5.5,0 -5.5,0', l:'9,0 0,5.5 0,-5.5', r:'-9,0 0,5.5 0,-5.5'};
+EDGES.forEach(e=>{
+  const p=pathFor(e); if(!p) return;
+  const NS='http://www.w3.org/2000/svg';
+  const g=document.createElementNS(NS,'g');
+  g.setAttribute('class','eg'); g.setAttribute('data-i',e._i);
+  const path=document.createElementNS(NS,'path');
+  path.setAttribute('d',p.d); path.setAttribute('class','ed'+(e.k==='dash'?' dash':''));
+  g.appendChild(path);
+  const ar=document.createElementNS(NS,'polygon');
+  ar.setAttribute('class','ah'); ar.setAttribute('points',AR[p.ar[2]]);
+  ar.setAttribute('transform',`translate(${p.ar[0]},${p.ar[1]})`); g.appendChild(ar);
+  if(e.l){
+    const pts=p.d.split('L').map(s=>s.replace('M','').trim().split(' ').map(Number));
+    let mid=null, hs=[];
+    for(let i=0;i<pts.length-1;i++){ const a=pts[i],b=pts[i+1];
+      if(Math.abs(a[1]-b[1])<1&&Math.abs(a[0]-b[0])>14) hs.push([(a[0]+b[0])/2,a[1]]); }
+    if(hs.length){ const L=hs[hs.length-1]; lslot[e.t]=(lslot[e.t]||0)+1; mid=[L[0],L[1]-1-(lslot[e.t]-1)*20]; }
+    else { const a=pts[0],b=pts[pts.length-1]; mid=[(a[0]+b[0])/2,(a[1]+b[1])/2]; }
+    const tw=e.l.length*5.5+12;
+    const bgr=document.createElementNS(NS,'rect');
+    bgr.setAttribute('class','edl-bg'); bgr.setAttribute('rx','5');
+    bgr.setAttribute('x',mid[0]-tw/2); bgr.setAttribute('y',mid[1]-9);
+    bgr.setAttribute('width',tw); bgr.setAttribute('height',18); g.appendChild(bgr);
+    const tx=document.createElementNS(NS,'text');
+    tx.setAttribute('class','edl'); tx.setAttribute('x',mid[0]); tx.setAttribute('y',mid[1]+4);
+    tx.setAttribute('text-anchor','middle'); tx.textContent=e.l; g.appendChild(tx);
+  }
+  svg.appendChild(g);
+});
+
+/* ── zoom / pan del mapa ── */
+const canvas=document.getElementById('canvas'), fsStage=document.getElementById('fsStage');
+let z=1, tx=0, ty=0;
+function apply(){ canvas.style.transform=`translate(${tx}px,${ty}px) scale(${z})`;
+  document.getElementById('zlvl').textContent=Math.round(z*100)+'%'; }
+function zoomBy(f,ox,oy){
+  const r=fsStage.getBoundingClientRect();
+  ox=ox===undefined?r.width/2:ox; oy=oy===undefined?r.height/2:oy;
+  const nz=Math.max(.08,Math.min(2.4,z*f));
+  tx=ox-(ox-tx)*(nz/z); ty=oy-(oy-ty)*(nz/z); z=nz; apply();
+}
+function fitAll(){
+  const r=fsStage.getBoundingClientRect(); if(!r.width) return;
+  z=Math.min((r.width-40)/CW,(r.height-40)/CH,1.2);
+  tx=(r.width-CW*z)/2; ty=(r.height-CH*z)/2; apply();
+}
+function centerOn(n){
+  const r=fsStage.getBoundingClientRect(); if(!r.width) return;
+  tx=r.width/2-n.cx*z; ty=r.height/2-n.cy*z; apply();
+}
+(function(){
+  let dg=false,px=0,py=0;
+  fsStage.addEventListener('mousedown',e=>{ if(e.target.closest('.node'))return; dg=true;px=e.clientX;py=e.clientY;fsStage.classList.add('drag'); });
+  window.addEventListener('mousemove',e=>{ if(!dg)return; tx+=e.clientX-px; ty+=e.clientY-py; px=e.clientX;py=e.clientY; apply(); });
+  window.addEventListener('mouseup',()=>{ dg=false; fsStage.classList.remove('drag'); });
+  fsStage.addEventListener('wheel',e=>{ e.preventDefault(); const r=fsStage.getBoundingClientRect();
+    zoomBy(e.deltaY<0?1.12:0.89, e.clientX-r.left, e.clientY-r.top); },{passive:false});
+})();
+
+let mapOpen=false;
+function openMap(){
+  mapOpen=true;
+  document.getElementById('fs').classList.add('on');
+  document.getElementById('btnMap').classList.add('on');
+  requestAnimationFrame(()=>{ if(cur){ z=.8; centerOn(NMAP[cur]); } else fitAll(); });
+}
+function closeMap(){
+  if(!mapOpen) return;
+  mapOpen=false;
+  document.getElementById('fs').classList.remove('on');
+  document.getElementById('btnMap').classList.remove('on');
+}
+
+/* ── ÍNDICE ── */
+function phShort(t){ const i=t.indexOf('·'); return (i>=0?t.slice(i+1):t).trim(); }
+const ixBody=document.getElementById('ixBody');
+function buildIndex(){ paintIndex(); }
+
+function goPhase(i){
+  const ns=PHNODES[i]; if(!ns.length) return;
+  const inPh = cur && NMAP[cur].p===i;
+  select(inPh?cur:ns[0].id);
+  flash(document.getElementById('pnHead'));
+
+}
+function flash(el){ if(!el) return; el.classList.add('flash'); setTimeout(()=>el.classList.remove('flash'),1100); }
+
+function stepBtn(n, cls, cond, arrow){
+  return `<button class="ctx-s ${cls}" onclick="select('${n.id}')">
+    ${arrow?`<span class="ar">${arrow}</span>`:''}
+    <span class="tx"><span class="sl">${n.l}</span>
+    ${cond?`<span class="cd">${cond}</span>`:''}</span></button>`;
+}
+function phaseBtns(ph){
+  // gris = pendiente · verde 20% = recorrida · naranja = etapa actual
+  return `<div class="ctx-ph">${PHASES.map((p,i)=>{
+      if(i===0) return '';
+      const st = ph==null ? '' : (i<ph?' done':(i===ph?' cur':''));
+      return `<button class="ctx-phb${st}" onclick="goPhase(${i})">
+        <span class="d">${String(i+1).padStart(2,'0')}</span>${phShort(p)}${i===ph?' · estás aquí':''}</button>`;
+    }).join('')}</div>`;
+}
+function paintIndex(){
+  const bs=document.getElementById('btnStart');
+  bs.innerHTML=`<span class="n">01</span>${phShort(PHASES[0]).toUpperCase()}`;
+  bs.classList.toggle('on', cur? NMAP[cur].p===0 : false);
+
+  const box=document.getElementById('ixBody');
+  if(!cur){
+    document.getElementById('ixBar').style.width='0%';
+    document.getElementById('ixPct').textContent='Sin iniciar';
+    box.innerHTML=`<div class="ctx-empty">Elige un paso para ver aquí tu posición en el proceso:
+      la <b>etapa</b>, el <b>paso actual</b>, de dónde llegaste y a dónde continúa.</div>
+      <div class="ctx-k">Etapas del proceso</div>${phaseBtns(null)}`;
+    return;
+  }
+  const n=NMAP[cur], ph=n.p, ord=ORDER[cur];
+  const pct=Math.round(((ord+1)/NODES.length)*100);
+  document.getElementById('ixBar').style.width=pct+'%';
+  document.getElementById('ixPct').textContent=`Etapa ${ph+1} de ${PHASES.length} · paso ${ord+1} de ${NODES.length}`;
+
+  const ins=IN[cur]||[], outs=OUT[cur]||[];
+  let h='';
+  // (a) etapa actual
+  h+=`<div class="ctx-k cur">Etapa actual</div>
+      <div class="ctx-fase"><span class="d">${String(ph+1).padStart(2,'0')}</span>
+       <span class="tt"><b>${phShort(PHASES[ph])}</b><i>${PHASES[ph].split('·')[0].trim()} · estás aquí</i></span></div>`;
+  // (b) de dónde llegué
+  h+='<div class="ctx-k">De dónde llegué</div>';
+  h+= ins.length ? ins.map(e=>stepBtn(NMAP[e.f],'prev', e.l, '↑')).join('')
+                 : '<div class="ctx-none">Inicio del flujo — no hay paso anterior.</div>';
+  // (c) paso actual
+  h+='<div class="ctx-k cur">Paso actual</div>';
+  h+=`<div class="ctx-now">
+      <span class="sl">${n.l}</span><span class="ac">${n.actor||''}</span></div>`;
+  h+=`<div class="ix-secs" id="ixsec_${cur}" style="display:none"></div>`;
+  // (d) a dónde continúa
+  h+='<div class="ctx-k">A dónde continúa</div>';
+  h+= outs.length ? outs.map(e=>stepBtn(NMAP[e.t],'next', e.l, '↓')).join('')
+                  : '<div class="ctx-none">Fin del flujo — no continúa en esta normativa.</div>';
+  // (e) etapas del proceso
+  h+='<div class="ctx-k" style="margin-top:22px">Etapas del proceso</div>'+phaseBtns(ph);
+  box.innerHTML=h;
+}
+/* sub-secciones del paso activo + scroll-spy */
+let SECS=[];
+function buildSecs(){
+  SECS=[];
+  const holder=document.getElementById('ixsec_'+cur); if(!holder) return;
+  const list=[...document.querySelectorAll('#pnB .sect')];
+  if(!list.length){ holder.style.display='none'; holder.innerHTML=''; return; }
+  let h='';
+  list.forEach((s,i)=>{ s.id='sec_'+i; SECS.push(s);
+    h+=`<button class="ix-sec" id="ixs2_${i}" onclick="goSec(${i})">${s.textContent}</button>`; });
+  holder.innerHTML=h; holder.style.display='block';
+  spy();
+}
+function goSec(i){
+  const s=SECS[i]; if(!s) return;
+  s.scrollIntoView({block:'start',behavior:'smooth'}); flash(s);
+}
+function spy(){
+  if(!SECS.length) return;
+  const top=document.getElementById('pnScroll').scrollTop;
+  let act=-1;
+  SECS.forEach((s,i)=>{ if(s.offsetTop-140<=top) act=i; });
+  SECS.forEach((s,i)=>{ const b=document.getElementById('ixs2_'+i);
+    if(b) b.classList.toggle('on', i===act); });
+}
+document.getElementById('pnScroll').addEventListener('scroll',()=>{ requestAnimationFrame(spy); });
+
+/* ── selección ── */
+let cur=null;
+let HIST=[], _back=false;
+function clearHi(){
+  document.querySelectorAll('.node').forEach(d=>d.classList.remove('sel','lit'));
+  document.querySelectorAll('.eg').forEach(g=>g.classList.remove('lit'));
+  canvas.classList.remove('canvas-dim');
+}
+function select(id){
+  const n=NMAP[id]; if(!n) return;
+  if(cur && cur!==id && !_back) HIST.push(cur);
+  cur=id; clearHi();
+  document.getElementById('n_'+id).classList.add('sel','lit');
+  (OUT[id]||[]).forEach(e=>{ const g=svg.querySelector(`[data-i="${e._i}"]`); if(g)g.classList.add('lit');
+    const d=document.getElementById('n_'+e.t); if(d)d.classList.add('lit'); });
+  (IN[id]||[]).forEach(e=>{ const g=svg.querySelector(`[data-i="${e._i}"]`); if(g)g.classList.add('lit');
+    const d=document.getElementById('n_'+e.f); if(d)d.classList.add('lit'); });
+  canvas.classList.add('canvas-dim');
+  renderDetail(n);
+  document.getElementById('pnScroll').scrollTop=0;
+  document.getElementById('crPh').textContent=PHASES[n.p];
+  document.getElementById('crSt').textContent=n.l;
+  document.getElementById('fsCur').textContent='Paso actual: '+n.l;
+  paintIndex(); buildSecs();
+  if(mapOpen) centerOn(n);
+  if(window.innerWidth<=900) document.body.classList.remove('ix-open');
+}
+function goNext(){ if(!cur){ select(NODES[0].id); return; } const o=OUT[cur]||[]; if(o.length) select(o[0].t); }
+function prevTarget(){ if(HIST.length) return HIST[HIST.length-1]; const i=IN[cur]||[]; return i.length?i[0].f:null; }
+function goBack(){ if(!cur) return; const t=prevTarget(); if(!t) return; if(HIST.length) HIST.pop();
+  _back=true; try{ select(t); } finally { _back=false; } }
+function goPrev(){ goBack(); }
+
+const TYPEL={act:'Actividad del asesor',dec:'Punto de decisión',sys:'Acción automática del sistema',cli:'Acción del cliente',ext:'Deriva a otro proceso',term:'Fin del flujo',start:'Inicio del flujo'};
+const BADGEL={sp:'Tiene speech textual',no:'Tiene nota o condición',tp:'Requiere tipificación',wr:'Advertencia / inconsistencia'};
+
+function normT(t){ return norm(t).replace(/[^a-z0-9ñ ]/g,' ').replace(/\s+/g,' ').trim(); }
+function stripRedundantOptionList(container, outs){
+  if(outs.length<2) return;
+  const labs=outs.map(e=>normT(e.l||'')).filter(Boolean);
+  if(labs.length!==outs.length) return;
+  container.querySelectorAll('ul').forEach(ul=>{
+    const lis=[...ul.querySelectorAll(':scope > li')];
+    if(lis.length!==outs.length) return;
+    const ok=lis.every(li=>{
+      const b=li.querySelector('b'); const t=normT((b?b.textContent:li.textContent).split('→')[0]);
+      return t && labs.some(l=>t.includes(l)||l.includes(t));
+    });
+    if(!ok) return;
+    const prev=ul.previousElementSibling;
+    if(prev && prev.classList.contains('sect')) prev.remove();
+    ul.remove();
+  });
+}
+function enhanceTipifs(container){
+  const all=[...container.querySelectorAll('.tipif')];
+  if(all.length<=2) return;
+  // agrupa tipificaciones contiguas; las aisladas quedan junto a su contexto
+  const runs=[]; let run=[];
+  all.forEach(t=>{
+    if(run.length && run[run.length-1].nextElementSibling===t) run.push(t);
+    else { if(run.length) runs.push(run); run=[t]; }
+  });
+  if(run.length) runs.push(run);
+  runs.filter(r=>r.length>=2).forEach(r=>{
+    const box=document.createElement('div'); box.className='tipif-list';
+    box.innerHTML='<div class="tl-h">Tipificaciones disponibles · elige la que corresponda</div><div class="tipif-grid"></div><div class="tipif-detail"></div>';
+    const grid=box.querySelector('.tipif-grid'), det=box.querySelector('.tipif-detail');
+    r[0].parentNode.insertBefore(box, r[0]);
+    r.forEach(t=>{
+      const ti=t.querySelector('.tipif-title');
+      const b=document.createElement('button'); b.type='button'; b.className='tipif-card';
+      b.textContent=ti?ti.textContent:'Tipificación';
+      const clone=t.cloneNode(true);
+      b.onclick=()=>{
+        const on=b.classList.contains('sel');
+        grid.querySelectorAll('.tipif-card').forEach(x=>x.classList.remove('sel'));
+        det.innerHTML='';
+        if(!on){ b.classList.add('sel'); det.appendChild(clone.cloneNode(true)); det.scrollIntoView({block:'nearest',behavior:'smooth'}); }
+      };
+      grid.appendChild(b); t.remove();
+    });
+  });
+}
+function renderDetail(n){
+  document.getElementById('pnK').textContent=PHASES[n.p];
+  document.getElementById('pnT').textContent=n.l;
+  document.getElementById('pnM').textContent=(n.actor||'—')+' · '+TYPEL[n.t];
+  const outs=OUT[n.id]||[], ins=IN[n.id]||[];
+
+  const tmp=document.createElement('div');
+  tmp.innerHTML=n.d||'<p style="color:#595959">Sin detalle adicional en la normativa.</p>';
+  stripRedundantOptionList(tmp, outs);
+  let body=tmp.innerHTML;
+  body+='<div class="dec-bar">';
+  if(outs.length){
+    body+=`<div class="dec-k">${outs.length>1?'Decisión · elige la ruta que corresponda':'Continúa con'}</div>`;
+    body+='<div class="dec-row">';
+    let k=0;
+    outs.forEach(e=>{ const t=NMAP[e.t]; if(!t) return;
+      body+=`<button class="dec-b c${k++%3}${outs.length>1?' multi':''}" onclick="select('${t.id}')">
+        ${e.l?`<span class="cond">${e.l}</span>`:'<span class="cond">Siguiente paso</span>'}
+        <span class="lab">${t.l}</span>
+        <span class="arr">→</span></button>`; });
+    body+='</div>';
+  } else {
+    body+='<div class="dec-k">Cierre</div><div class="dec-end">■ Este paso cierra el flujo. No continúa con otra actividad dentro de esta normativa.</div>';
+  }
+  const pt=prevTarget();
+  body+=`<div class="dec-util">${pt&&NMAP[pt]?`<button class="back-b" onclick="goBack()">← Volver al paso anterior<span class="back-n">${NMAP[pt].l}</span></button>`:''}</div></div>`;
+  const pnB=document.getElementById('pnB');
+  pnB.innerHTML=body;
+  enhanceTipifs(pnB);
+  document.getElementById('pnS').innerHTML='';
+  document.getElementById('pnGrid').classList.add('solo');
+  document.getElementById('btnPrev').disabled=!(HIST.length||ins.length);
+  document.getElementById('btnNext').disabled=!outs.length;
+}
+
+function clearSel(){
+  HIST=[]; cur=null; clearHi(); renderHome();
+  document.getElementById('crPh').textContent=DATA.channel;
+  document.getElementById('crSt').textContent='Resumen del proceso';
+  document.getElementById('fsCur').textContent='Sin paso seleccionado';
+  paintIndex(); SECS=[];
+  document.getElementById('pnScroll').scrollTop=0;
+}
+
+function renderHome(){
+  document.getElementById('pnK').textContent='Diagrama de flujo';
+  document.getElementById('pnT').textContent=DATA.title;
+  document.getElementById('pnM').textContent=DATA.channel+' · elige una etapa en el índice o empieza el proceso de validación';
+  const c={act:0,dec:0,sys:0}; NODES.forEach(n=>{ if(c[n.t]!==undefined)c[n.t]++; });
+  document.getElementById('pnB').innerHTML=`
+    ${DATA.intro||''}
+    <div class="sect">Cómo se usa</div>
+    <p>El <b>índice de la izquierda</b> te sitúa en el proceso: la <b>etapa</b> en la que estás, el
+    <b>paso actual</b> destacado, los pasos <b>de dónde llegaste</b> y el o los pasos que <b>continúan</b>
+    directamente. Todos son navegables con un clic. Toda la <b>descripción operativa</b> —speech, acciones,
+    notas, plazos y tipificaciones— se lee aquí.</p>
+    <div class="sect">El mapa del flujo</div>
+    <p>El flujograma completo se abre con el botón <b>🗺 Mapa del flujo</b> de la barra superior, con su
+    <b>leyenda</b> dentro del propio mapa. Al cerrarlo vuelves exactamente al paso en el que estabas; si haces
+    clic en un nodo del mapa, el mapa se cierra y la descripción salta a ese paso.</p>
+    <div class="hint">🖱️ Usa los <b>botones de decisión</b> al pie de cada paso (o las flechas ← → del teclado) para recorrer
+    el flujo; <b>← Volver al paso anterior</b> te regresa al paso del que vienes. El <b>buscador</b> revisa títulos, speeches, notas y tipificaciones de todo el diagrama
+    y despliega las 5 mejores sugerencias con el fragmento donde coincide.</div>`;
+  document.getElementById('pnS').innerHTML=`
+    <div class="box"><div class="bt">Marcas de los pasos</div><div class="bb"><div class="legend">
+      <div class="lg-row"><span class="nb"><i class="b-sp">SPEECH</i></span><div>Tiene speech textual</div></div>
+      <div class="lg-row"><span class="nb"><i class="b-tp">TIPIFICA</i></span><div>Requiere tipificar en CRM</div></div>
+      <div class="lg-row"><span class="nb"><i class="b-no">NOTA</i></span><div>Nota o condición especial</div></div>
+      <div class="lg-row"><span class="nb"><i class="b-wr">OJO</i></span><div>Advertencia o inconsistencia</div></div>
+    </div></div></div>
+    <button class="gobtn" style="text-align:center;font-weight:700" onclick="goPhase(1)">▶ Empezar el Proceso de Validación</button>`;
+  document.getElementById('pnGrid').classList.remove('solo');
+  document.getElementById('btnPrev').disabled=true;
+  document.getElementById('btnNext').disabled=false;
+}
+
+/* ── buscador con sugerencias ── */
+function norm(t){ return (t||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
+const SIDX=NODES.map(n=>({
+  id:n.id,
+  num:norm(n.num||''),
+  lab:norm(n.l),
+  act:norm(n.actor||''),
+  ph:norm(PHASES[n.p]),
+  det:norm((n.d||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ')),
+  raw:(n.d||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ')
+}));
+function subseq(hay,needle){ let k=0; for(let i=0;i<hay.length&&k<needle.length;i++) if(hay[i]===needle[k])k++; return k===needle.length; }
+function scoreOne(o,t){
+  let sc=0, where='';
+  if(o.num.startsWith(t)) sc+=14;
+  else if(o.num.includes(t)) sc+=8;
+  if(o.lab.includes(t)){ sc+=10; if(o.lab.startsWith(t)) sc+=4; where=where||'titulo'; }
+  if(o.act.includes(t)) sc+=4;
+  if(o.ph.includes(t)) sc+=2;
+  if(o.det.includes(t)){ sc+=3; where=where||'detalle'; }
+  if(!sc && t.length>=4 && subseq(o.lab,t)) sc+=2;
+  return {sc,where};
+}
+function search(q){
+  const toks=norm(q).split(/\s+/).filter(t=>t.length>0);
+  if(!toks.length) return [];
+  const res=[];
+  SIDX.forEach(o=>{
+    let total=0, hits=0, where='';
+    toks.forEach(t=>{ const r=scoreOne(o,t); if(r.sc){ hits++; total+=r.sc; where=where||r.where; } });
+    if(!hits) return;
+    if(hits===toks.length) total+=6*toks.length;      // coinciden todas las palabras
+    res.push({id:o.id, sc:total, hits, where, o});
+  });
+  res.sort((a,b)=> b.hits-a.hits || b.sc-a.sc || ORDER[a.id]-ORDER[b.id]);
+  return res;
+}
+function snippet(o,q){
+  const toks=norm(q).split(/\s+/).filter(Boolean);
+  for(const t of toks){
+    const k=o.det.indexOf(t);
+    if(k>=0){
+      const a=Math.max(0,k-45), b=Math.min(o.raw.length,k+t.length+55);
+      let txt=o.raw.slice(a,b).trim();
+      const re=new RegExp('('+t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+      return (a>0?'… ':'')+txt.replace(re,'<mark>$1</mark>')+(b<o.raw.length?' …':'');
+    }
+  }
+  return '';
+}
+const sug=document.getElementById('sug'), qEl=document.getElementById('q'), sr=document.getElementById('sr');
+let SUG=[], sugI=-1;
+function renderSug(q){
+  const all=search(q);
+  SUG=all.slice(0,5); sugI=-1;
+  document.querySelectorAll('.node').forEach(d=>d.classList.remove('hit'));
+  all.forEach(r=>{ const d=document.getElementById('n_'+r.id); if(d) d.classList.add('hit'); });
+  if(mapOpen){ sr.style.display='block';
+    sr.textContent=all.length?`${all.length} coincidencia(s) resaltada(s)`:'Sin resultados'; }
+  if(!SUG.length){
+    sug.innerHTML=`<div class="sg-none">Sin resultados para “${q}”</div>`;
+    sug.classList.add('on'); return;
+  }
+  sug.innerHTML=SUG.map((r,i)=>{
+    const n=NMAP[r.id], sn=snippet(r.o,q);
+    return `<button class="sg" data-i="${i}" onclick="pickSug(${i})">
+      <span class="sg-b"><span class="sg-t">${n.l}</span>
+      <span class="sg-m">${PHASES[n.p]} · ${n.actor||''}</span>
+      ${sn?`<span class="sg-s">${sn}</span>`:''}</span></button>`;
+  }).join('') + (all.length>5?`<div class="sg-more">+${all.length-5} coincidencia(s) más · abre el <b>Mapa del flujo</b> para verlas resaltadas</div>`:'');
+  sug.classList.add('on');
+}
+function pickSug(i){
+  const r=SUG[i]; if(!r) return;
+  select(r.id); closeSug();
+}
+function closeSug(){ sug.classList.remove('on'); sugI=-1; }
+function moveSug(d){
+  if(!SUG.length) return;
+  sugI=(sugI+d+SUG.length)%SUG.length;
+  [...sug.querySelectorAll('.sg')].forEach((b,i)=>b.classList.toggle('on',i===sugI));
+}
+qEl.addEventListener('input',ev=>{
+  const q=ev.target.value.trim();
+  if(q.length<2){ closeSug(); sr.style.display='none';
+    document.querySelectorAll('.node').forEach(d=>d.classList.remove('hit')); return; }
+  renderSug(q);
+});
+qEl.addEventListener('keydown',ev=>{
+  if(ev.key==='ArrowDown'){ ev.preventDefault(); moveSug(1); }
+  else if(ev.key==='ArrowUp'){ ev.preventDefault(); moveSug(-1); }
+  else if(ev.key==='Enter'){ ev.preventDefault(); pickSug(sugI>=0?sugI:0); }
+  else if(ev.key==='Escape'){ closeSug(); }
+});
+qEl.addEventListener('focus',()=>{ if(qEl.value.trim().length>=2) renderSug(qEl.value.trim()); });
+document.addEventListener('click',ev=>{ if(!ev.target.closest('.fh-search')) closeSug(); });
+
+function resetAll(){ qEl.value=''; sr.style.display='none'; closeSug();
+  document.querySelectorAll('.node').forEach(d=>d.classList.remove('hit'));
+  closeMap(); clearSel(); }
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){ closeMap(); return; }
+  if(document.activeElement&&document.activeElement.id==='q') return;
+  if(e.key==='ArrowRight') goNext();
+  if(e.key==='ArrowLeft') goPrev();
+});
+
+renderHome(); paintIndex();
+</script>
+</body>
+</html>
